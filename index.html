@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Aurum Bespoke – Tailoring Redefined. Luxury menswear at your doorstep." />
+  <title>Aurum Bespoke – Fit That Speaks</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/logos/aurum-logo-gold.png">
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="Aurum Bespoke – Fit That Speaks">
+  <meta property="og:description" content="Luxury menswear at your doorstep.">
+  <meta property="og:image" content="https://aurumbespoke.com/assets/logos/aurum-logo-gold.png">
+  <meta property="og:url" content="https://aurumbespoke.com/">
+  <meta property="og:type" content="website">
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Aurum Bespoke – Fit That Speaks">
+  <meta name="twitter:description" content="Luxury menswear at your doorstep.">
+  <meta name="twitter:image" content="https://aurumbespoke.com/assets/logos/aurum-logo-gold.png">
+  <!-- Fonts and CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Inter&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0e0d0d;
+      color: #e4e4e4;
+    }
+    h1, h2, h3 {
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .gold-text { color: #c99e67; }
+    .gold-bg { background-color: #c99e67; }
+    .section-dark { background-color: #141414; }
+    .hero-overlay {
+      background: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.9));
+    }
+    .btn-glow {
+      background-color: #c99e67;
+      color: #0e0d0d;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    .btn-glow:hover {
+      box-shadow: 0 0 15px #c99e67;
+      transform: translateY(-2px);
+    }
+    .gallery-item:hover {
+      transform: scale(1.03);
+      transition: 0.3s ease;
+    }
+    .whatsapp-chat {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+    }
+    .whatsapp-chat img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      cursor: pointer;
+      transition: box-shadow 0.2s;
+      padding: 4px;
+      background: #25D366;
+    }
+    .whatsapp-chat img:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    }
+    .social-icon {
+      width: 24px;
+      height: 24px;
+      filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
+      transition: all 0.3s ease;
+    }
+    .social-icon:hover {
+      filter: invert(68%) sepia(41%) saturate(464%) hue-rotate(13deg) brightness(105%) contrast(92%);
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body class="overflow-x-hidden">
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-90 text-white px-6 py-4" aria-label="Main navigation">
+    <div class="flex items-center justify-between max-w-7xl mx-auto">
+      <!-- Logo on top left -->
+      <a href="#home" aria-label="Aurum Bespoke Home">
+        <img src="assets/logos/aurum-logo-gold.png" alt="Aurum Logo" class="w-16 h-16 object-contain" style="border-radius:50%;">
+      </a>
+      <div class="md:hidden">
+        <button onclick="document.getElementById('mobileMenu').classList.toggle('hidden')" class="focus:outline-none" aria-label="Open menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+      </div>
+      <div class="hidden md:flex space-x-6">
+        <a href="#home" class="hover:gold-text">Home</a>
+        <a href="#services" class="hover:gold-text">Services</a>
+        <a href="#gallery" class="hover:gold-text">Gallery</a>
+        <a href="#testimonials" class="hover:gold-text">Testimonials</a>
+        <a href="#contact" class="hover:gold-text">Contact</a>
+      </div>
+    </div>
+    <div id="mobileMenu" class="md:hidden hidden mt-2 px-6">
+      <a href="#home" class="block py-2 border-b border-gray-600 hover:gold-text">Home</a>
+      <a href="#services" class="block py-2 border-b border-gray-600 hover:gold-text">Services</a>
+      <a href="#gallery" class="block py-2 border-b border-gray-600 hover:gold-text">Gallery</a>
+      <a href="#testimonials" class="block py-2 border-b border-gray-600 hover:gold-text">Testimonials</a>
+      <a href="#contact" class="block py-2 hover:gold-text">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="home" class="w-full min-h-screen flex flex-col items-center justify-center text-center p-6 bg-black relative pt-16">
+    <video autoplay loop muted playsinline preload="auto" class="absolute top-0 left-0 w-full h-full object-cover opacity-20 z-0">
+      <source src="assets/background/hero-loop.mp4" type="video/mp4">
+    </video>
+    <div class="z-10 max-w-2xl mx-auto">
+      <h1 class="text-4xl md:text-6xl gold-text mb-4" data-aos="fade-up">Aurum Bespoke ✨</h1>
+      <p class="text-lg text-gray-300 mb-6" data-aos="fade-up" data-aos-delay="200">Luxury Tailoring at Your Doorstep – Bangalore Exclusive 🧵</p>
+      <a href="https://wa.me/918105508503" class="btn-glow px-6 py-3 rounded-full inline-block" data-aos="zoom-in" data-aos-delay="400">Book Appointment ➡️</a>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="py-20 px-6 section-dark">
+    <h2 class="text-center text-3xl gold-text mb-10" data-aos="fade-down">Our Signature Offerings 👔</h2>
+    <div class="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+      <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center" data-aos="fade-up">
+        <img src="assets/images/services/suit.jpg" alt="Suit" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+        <h3 class="text-xl gold-text mb-2">Bespoke Suits</h3>
+        <p class="text-gray-400">Two & three-piece precision suits to dominate every room 💼</p>
+      </div>
+      <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center" data-aos="fade-up" data-aos-delay="100">
+        <img src="assets/images/services/sherwani.jpg" alt="Sherwani" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+        <h3 class="text-xl gold-text mb-2">Elegant Sherwanis</h3>
+        <p class="text-gray-400">Traditional sherwanis with a modern twist for your special day 👰‍♂️</p>
+      </div>
+      <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center" data-aos="fade-up" data-aos-delay="200">
+        <img src="assets/images/services/blazer.jpg" alt="Blazer" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+        <h3 class="text-xl gold-text mb-2">Custom Blazers</h3>
+        <p class="text-gray-400">Chic, tailored blazers for that perfect fit and flair 🎩</p>
+      </div>
+      <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center" data-aos="fade-up" data-aos-delay="300">
+        <img src="assets/images/services/shirt.jpg" alt="Shirt" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+        <h3 class="text-xl gold-text mb-2">Premium Shirts</h3>
+        <p class="text-gray-400">Crisp shirts with a fine balance of comfort and style 👔</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section id="gallery" class="py-20 px-6">
+    <h2 class="text-center text-3xl gold-text mb-10" data-aos="fade-down">Gallery</h2>
+    <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="gallery-item" data-aos="fade-up">
+        <img src="assets/images/gallery/gallery1.jpg" alt="Gallery Image 1" class="rounded-lg shadow-lg w-full h-72 object-cover">
+      </div>
+      <div class="gallery-item" data-aos="fade-up" data-aos-delay="100">
+        <img src="assets/images/gallery/gallery2.jpg" alt="Gallery Image 2" class="rounded-lg shadow-lg w-full h-72 object-cover">
+      </div>
+      <div class="gallery-item" data-aos="fade-up" data-aos-delay="200">
+        <img src="assets/images/gallery/gallery3.jpg" alt="Gallery Image 3" class="rounded-lg shadow-lg w-full h-72 object-cover">
+      </div>
+      <div class="gallery-item" data-aos="fade-up" data-aos-delay="300">
+        <img src="assets/images/gallery/gallery4.jpg" alt="Gallery Image 4" class="rounded-lg shadow-lg w-full h-72 object-cover">
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Media Links Section -->
+  <section id="social" class="py-12 bg-black text-center">
+    <h2 class="text-2xl gold-text mb-6">Follow Us</h2>
+    <div class="flex justify-center space-x-6">
+      <a href="https://instagram.com" target="_blank">
+        <img src="assets/images/social-icons/instagram.svg" alt="Instagram" class="social-icon">
+      </a>
+      <a href="https://facebook.com" target="_blank">
+        <img src="assets/images/social-icons/facebook.svg" alt="Facebook" class="social-icon">
+      </a>
+      <a href="https://youtube.com" target="_blank">
+        <img src="assets/images/social-icons/youtube.svg" alt="YouTube" class="social-icon">
+      </a>
+      <a href="https://linkedin.com" target="_blank">
+        <img src="assets/images/social-icons/x.svg" alt="LinkedIn" class="social-icon">
+      </a>
+    </div>
+  </section>
+
+  <!-- WhatsApp Button -->
+  <a href="https://wa.me/918105508503" class="whatsapp-chat" aria-label="WhatsApp Chat">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5d/WhatsApp.svg" alt="WhatsApp" />
+  </a>
+
+  <!-- Footer -->
+  <footer class="py-10 bg-black text-center text-gray-400">
+    <p>&copy; 2025 Aurum Bespoke | All Rights Reserved</p>
+  </footer>
+
+  <!-- AOS Animation Initialization -->
+  <script>
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+    });
+  </script>
+</body>
+</html>
