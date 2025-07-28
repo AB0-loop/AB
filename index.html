@@ -65,8 +65,8 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.18);
       cursor: pointer;
       transition: box-shadow 0.2s;
-      padding: 4px;
-      background: #25D366;
+      padding: 8px;
+      background: #c99e67;
     }
     .whatsapp-chat img:hover {
       box-shadow: 0 4px 16px rgba(0,0,0,0.25);
@@ -74,11 +74,11 @@
     .social-icon {
       width: 24px;
       height: 24px;
-      filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
       transition: all 0.3s ease;
+      opacity: 0.8;
     }
     .social-icon:hover {
-      filter: invert(68%) sepia(41%) saturate(464%) hue-rotate(13deg) brightness(105%) contrast(92%);
+      opacity: 1;
       transform: scale(1.1);
     }
   </style>
@@ -136,75 +136,102 @@
       </div>
       <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center" data-aos="fade-up" data-aos-delay="100">
         <img src="assets/images/services/sherwani.jpg" alt="Sherwani" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
-        <h3 class="text-xl gold-text mb-2">Elegant Sherwanis</h3>
-        <p class="text-gray-400">Traditional sherwanis with a modern twist for your special day 👰‍♂️</p>
+        <h3 class="text-xl gold-text mb-2">Sherwanis</h3>
+        <p class="text-gray-400">Regal silhouettes and modern elegance for celebrations 👑</p>
       </div>
       <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center" data-aos="fade-up" data-aos-delay="200">
         <img src="assets/images/services/blazer.jpg" alt="Blazer" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
-        <h3 class="text-xl gold-text mb-2">Custom Blazers</h3>
-        <p class="text-gray-400">Chic, tailored blazers for that perfect fit and flair 🎩</p>
+        <h3 class="text-xl gold-text mb-2">Tuxedos & Blazers</h3>
+        <p class="text-gray-400">Evening wear that commands presence with quiet confidence 🕴️</p>
       </div>
       <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center" data-aos="fade-up" data-aos-delay="300">
         <img src="assets/images/services/shirt.jpg" alt="Shirt" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
-        <h3 class="text-xl gold-text mb-2">Premium Shirts</h3>
-        <p class="text-gray-400">Crisp shirts with a fine balance of comfort and style 👔</p>
+        <h3 class="text-xl gold-text mb-2">Tailored Shirts</h3>
+        <p class="text-gray-400">Subtle details, perfect fit, daily elegance—custom shirts, redefined ✨</p>
       </div>
     </div>
   </section>
 
   <!-- Gallery Section -->
-  <section id="gallery" class="py-20 px-6">
-    <h2 class="text-center text-3xl gold-text mb-10" data-aos="fade-down">Gallery</h2>
-    <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-      <div class="gallery-item" data-aos="fade-up">
-        <img src="assets/images/gallery/gallery1.jpg" alt="Gallery Image 1" class="rounded-lg shadow-lg w-full h-72 object-cover">
+  <section id="gallery" class="py-20 px-6 bg-black">
+    <h2 class="text-center text-3xl gold-text mb-10" data-aos="fade-down">Gallery 📸</h2>
+    <div class="flex overflow-x-auto space-x-6 pb-4">
+      <img src="assets/images/gallery/gallery1.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" loading="lazy">
+      <img src="assets/images/gallery/gallery2.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="100" loading="lazy">
+      <img src="assets/images/gallery/gallery3.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="200" loading="lazy">
+      <img src="assets/images/gallery/gallery4.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="300" loading="lazy">
+      <img src="assets/images/gallery/gallery5.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="400" loading="lazy">
+      <img src="assets/images/gallery/gallery6.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="500" loading="lazy">
+      <img src="assets/images/gallery/gallery7.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="600" loading="lazy">
+      <img src="assets/images/gallery/gallery8.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="700" loading="lazy">
+      <img src="assets/images/gallery/gallery9.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="800" loading="lazy">
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section id="testimonials" class="py-20 px-6 section-dark">
+    <h2 class="text-center text-3xl gold-text mb-10" data-aos="fade-down">What Clients Say 💬</h2>
+    <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+      <div class="bg-[#1c1c1c] p-6 rounded shadow" data-aos="fade-up">
+        <p>“The fit. The fabric. The feeling — I've never worn anything more powerful.”</p>
+        <p class="gold-text mt-4 font-semibold">– Arjun S., Bangalore</p>
       </div>
-      <div class="gallery-item" data-aos="fade-up" data-aos-delay="100">
-        <img src="assets/images/gallery/gallery2.jpg" alt="Gallery Image 2" class="rounded-lg shadow-lg w-full h-72 object-cover">
-      </div>
-      <div class="gallery-item" data-aos="fade-up" data-aos-delay="200">
-        <img src="assets/images/gallery/gallery3.jpg" alt="Gallery Image 3" class="rounded-lg shadow-lg w-full h-72 object-cover">
-      </div>
-      <div class="gallery-item" data-aos="fade-up" data-aos-delay="300">
-        <img src="assets/images/gallery/gallery4.jpg" alt="Gallery Image 4" class="rounded-lg shadow-lg w-full h-72 object-cover">
+      <div class="bg-[#1c1c1c] p-6 rounded shadow" data-aos="fade-up" data-aos-delay="100">
+        <p>“Aurum transformed my sherwani into art. Personal service, perfect result.”</p>
+        <p class="gold-text mt-4 font-semibold">– Rishi M., JP Nagar</p>
       </div>
     </div>
   </section>
 
-  <!-- Social Media Links Section -->
-  <section id="social" class="py-12 bg-black text-center">
-    <h2 class="text-2xl gold-text mb-6">Follow Us</h2>
-    <div class="flex justify-center space-x-6">
-      <a href="https://instagram.com" target="_blank">
-        <img src="assets/images/social-icons/instagram.svg" alt="Instagram" class="social-icon">
-      </a>
-      <a href="https://facebook.com" target="_blank">
-        <img src="assets/images/social-icons/facebook.svg" alt="Facebook" class="social-icon">
-      </a>
-      <a href="https://youtube.com" target="_blank">
-        <img src="assets/images/social-icons/youtube.svg" alt="YouTube" class="social-icon">
-      </a>
-      <a href="https://linkedin.com" target="_blank">
-        <img src="assets/images/social-icons/x.svg" alt="LinkedIn" class="social-icon">
-      </a>
+  <!-- Contact -->
+  <footer id="contact" class="bg-[#0a0a0a] py-16 px-6 text-center">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-3xl font-bold gold-text mb-4" data-aos="fade-down">Book a Home Visit 🏠</h2>
+      <p class="text-gray-400 mb-6" data-aos="fade-up">Tailored luxury, brought to your doorstep — faster than any competitor ⚡</p>
+
+      <!-- Web3Forms -->
+      <form action="https://api.web3forms.com/submit" method="POST" class="max-w-xl mx-auto space-y-4 text-left" data-aos="fade-up">
+        <input type="hidden" name="access_key" value="2a7aeddb-6483-40e4-a1aa-1ec46ba22a64" />
+        <input type="text" name="name" required placeholder="Your Name" class="w-full p-3 bg-black border border-gray-700 rounded" />
+        <input type="email" name="email" required placeholder="Your Email" class="w-full p-3 bg-black border border-gray-700 rounded" />
+        <textarea name="message" rows="4" required placeholder="Your Message" class="w-full p-3 bg-black border border-gray-700 rounded"></textarea>
+        <button type="submit" class="btn-glow px-6 py-3 rounded-full">Send Message</button>
+      </form>
+
+      <!-- Social Media Icons -->
+      <div class="flex justify-center gap-6 mt-10">
+        <a href="https://www.instagram.com/aurum.bespoke?igsh=czc2cnZ1NnMwdHdi" target="_blank" title="Instagram" data-aos="zoom-in">
+          <img src="assets/images/social-icons/instagram.svg" alt="Instagram" class="social-icon" loading="lazy">
+        </a>
+        <a href="https://x.com/Aurum_Bespoke?t=303eKb_ss5Dn4K0jiIGJHQ&s=35" target="_blank" title="Twitter" data-aos="zoom-in" data-aos-delay="100">
+          <img src="assets/images/social-icons/x.svg" alt="Twitter" class="social-icon" loading="lazy">
+        </a>
+        <a href="https://www.facebook.com/share/16mphUA4Qt/" target="_blank" title="Facebook" data-aos="zoom-in" data-aos-delay="200">
+          <img src="assets/images/social-icons/facebook.svg" alt="Facebook" class="social-icon" loading="lazy">
+        </a>
+        <a href="https://www.youtube.com/@aurumbespoke" target="_blank" title="YouTube" data-aos="zoom-in" data-aos-delay="300">
+          <img src="assets/images/social-icons/youtube.svg" alt="YouTube" class="social-icon" loading="lazy">
+        </a>
+      </div>
+
+      <p class="text-xs text-gray-600 mt-6">&copy; 2025 Aurum Bespoke. Site by <span class="text-blue-500 font-semibold">w3bhub.co.in</span></p>
     </div>
-  </section>
-
-  <!-- WhatsApp Button -->
-  <a href="https://wa.me/918105508503" class="whatsapp-chat" aria-label="WhatsApp Chat">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5d/WhatsApp.svg" alt="WhatsApp" />
-  </a>
-
-  <!-- Footer -->
-  <footer class="py-10 bg-black text-center text-gray-400">
-    <p>&copy; 2025 Aurum Bespoke | All Rights Reserved</p>
   </footer>
 
-  <!-- AOS Animation Initialization -->
+  <!-- WhatsApp Floating Chat Widget -->
+  <div class="whatsapp-chat">
+    <a href="https://wa.me/918105508503?text=Hi%20Aurum%20Bespoke%2C%20I%20want%20to%20book%20a%20home%20appointment" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+      <img src="assets/images/social-icons/whatsapp.svg" alt="Chat on WhatsApp">
+    </a>
+  </div>
+
+  <script>AOS.init();</script>
   <script>
-    AOS.init({
-      duration: 800,
-      easing: 'ease-in-out',
+    // Close mobile menu when clicking a link
+    document.querySelectorAll('#mobileMenu a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('mobileMenu').classList.add('hidden');
+      });
     });
   </script>
 </body>
