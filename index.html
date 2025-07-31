@@ -66,7 +66,7 @@
       cursor: pointer;
       transition: box-shadow 0.2s;
       padding: 8px;
-      background: #c99e67;
+      background: black;
     }
     .whatsapp-chat img:hover {
       box-shadow: 0 4px 16px rgba(0,0,0,0.25);
@@ -88,9 +88,14 @@
       background-color: black;
       border-radius: 50%;
       position: absolute;
-      left: 0;
+      left: -30px;
       top: 0;
       margin: 10px;
+      transition: opacity 0.3s ease;
+    }
+    .nav-logo.hidden {
+      opacity: 0;
+      pointer-events: none;
     }
   </style>
 </head>
@@ -99,7 +104,7 @@
   <nav class="fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-90 text-white px-6 py-4" aria-label="Main navigation">
     <div class="flex items-center justify-between max-w-7xl mx-auto">
       <!-- Logo on top left -->
-      <a href="#home" aria-label="Aurum Bespoke Home">
+      <a href="#home" aria-label="Aurum Bespoke Home" id="navLogo">
         <img src="assets/logos/aurum-logo-gold.png" alt="Aurum Logo" class="nav-logo">
       </a>
       <div class="md:hidden ml-auto">
@@ -252,6 +257,29 @@
       link.addEventListener('click', () => {
         document.getElementById('mobileMenu').classList.add('hidden');
       });
+    });
+
+    // Hide logo on scroll
+    const navLogo = document.getElementById('navLogo').querySelector('img');
+    let lastScrollPosition = 0;
+    
+    window.addEventListener('scroll', function() {
+      const currentScrollPosition = window.pageYOffset;
+      
+      if (currentScrollPosition > 100) { // Only hide if scrolled past 100px
+        if (currentScrollPosition > lastScrollPosition) {
+          // Scrolling down
+          navLogo.classList.add('hidden');
+        } else {
+          // Scrolling up
+          navLogo.classList.remove('hidden');
+        }
+      } else {
+        // At top of page
+        navLogo.classList.remove('hidden');
+      }
+      
+      lastScrollPosition = currentScrollPosition;
     });
   </script>
 </body>
