@@ -59,8 +59,8 @@
       z-index: 9999;
     }
     .whatsapp-chat img {
-      width: 48px;
-      height: 48px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
       box-shadow: 0 2px 8px rgba(0,0,0,0.18);
       cursor: pointer;
@@ -81,6 +81,17 @@
       opacity: 1;
       transform: scale(1.1);
     }
+    .nav-logo {
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+      background-color: black;
+      border-radius: 50%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      margin: 10px;
+    }
   </style>
 </head>
 <body class="overflow-x-hidden">
@@ -89,14 +100,14 @@
     <div class="flex items-center justify-between max-w-7xl mx-auto">
       <!-- Logo on top left -->
       <a href="#home" aria-label="Aurum Bespoke Home">
-        <img src="assets/logos/aurum-logo-gold.png" alt="Aurum Logo" class="w-32 h-32 object-contain" style="background-color: black; border-radius:50%;">
+        <img src="assets/logos/aurum-logo-gold.png" alt="Aurum Logo" class="nav-logo">
       </a>
-      <div class="md:hidden">
+      <div class="md:hidden ml-auto">
         <button onclick="document.getElementById('mobileMenu').classList.toggle('hidden')" class="focus:outline-none" aria-label="Open menu">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
         </button>
       </div>
-      <div class="hidden md:flex space-x-6">
+      <div class="hidden md:flex space-x-6 ml-auto">
         <a href="#home" class="hover:gold-text">Home</a>
         <a href="#services" class="hover:gold-text">Services</a>
         <a href="#gallery" class="hover:gold-text">Gallery</a>
@@ -230,7 +241,7 @@
   <!-- WhatsApp Floating Chat Widget -->
   <div class="whatsapp-chat">
     <a href="https://wa.me/918105508503?text=Hi%20Aurum%20Bespoke%2C%20I%20want%20to%20book%20a%20home%20appointment" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
-      <img src="assets/images/social-icons/whatsapp.svg" alt="Chat on WhatsApp" class="w-12 h-12 rounded-full shadow-md cursor-pointer transition-all duration-200 p-2 gold-bg">
+      <img src="assets/images/social-icons/whatsapp.svg" alt="Chat on WhatsApp">
     </a>
   </div>
 
