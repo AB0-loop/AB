@@ -59,13 +59,13 @@
       z-index: 9999;
     }
     .whatsapp-chat img {
-      width: 50px;
-      height: 50px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
       box-shadow: 0 2px 8px rgba(0,0,0,0.18);
       cursor: pointer;
       transition: box-shadow 0.2s;
-      padding: 5px;
+      padding: 8px;
       background: black;
     }
     .whatsapp-chat img:hover {
@@ -82,25 +82,20 @@
       transform: scale(1.1);
     }
     .nav-logo {
-      width: 120px;
-      height: 120px;
+      width: 150px;
+      height: 150px;
       object-fit: contain;
+      background-color: black;
+      border-radius: 50%;
       position: absolute;
-      left: 10px;
-      top: 10px;
-      transition: all 0.3s ease;
-      z-index: 60;
+      left: -30px;
+      top: 0;
+      margin: 10px;
+      transition: opacity 0.3s ease;
     }
     .nav-logo.hidden {
-      transform: translateY(-150px);
-    }
-    @media (max-width: 768px) {
-      .nav-logo {
-        width: 80px;
-        height: 80px;
-        left: 5px;
-        top: 5px;
-      }
+      opacity: 0;
+      pointer-events: none;
     }
   </style>
 </head>
