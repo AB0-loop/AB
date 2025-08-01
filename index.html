@@ -59,13 +59,13 @@
       z-index: 9999;
     }
     .whatsapp-chat img {
-      width: 60px;
-      height: 60px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       box-shadow: 0 2px 8px rgba(0,0,0,0.18);
       cursor: pointer;
       transition: box-shadow 0.2s;
-      padding: 8px;
+      padding: 6px;
       background: black;
     }
     .whatsapp-chat img:hover {
@@ -82,20 +82,25 @@
       transform: scale(1.1);
     }
     .nav-logo {
-      width: 150px;
-      height: 150px;
+      width: 120px;
+      height: 120px;
       object-fit: contain;
-      background-color: black;
-      border-radius: 50%;
       position: absolute;
-      left: -30px;
-      top: 0;
-      margin: 10px;
-      transition: opacity 0.3s ease;
+      left: 10px;
+      top: 10px;
+      transition: all 0.3s ease;
     }
     .nav-logo.hidden {
       opacity: 0;
-      pointer-events: none;
+      transform: translateX(-100%);
+    }
+    @media (max-width: 768px) {
+      .nav-logo {
+        width: 80px;
+        height: 80px;
+        left: 5px;
+        top: 5px;
+      }
     }
   </style>
 </head>
@@ -261,25 +266,13 @@
 
     // Hide logo on scroll
     const navLogo = document.getElementById('navLogo').querySelector('img');
-    let lastScrollPosition = 0;
     
     window.addEventListener('scroll', function() {
-      const currentScrollPosition = window.pageYOffset;
-      
-      if (currentScrollPosition > 100) { // Only hide if scrolled past 100px
-        if (currentScrollPosition > lastScrollPosition) {
-          // Scrolling down
-          navLogo.classList.add('hidden');
-        } else {
-          // Scrolling up
-          navLogo.classList.remove('hidden');
-        }
+      if (window.scrollY > 50) {
+        navLogo.classList.add('hidden');
       } else {
-        // At top of page
         navLogo.classList.remove('hidden');
       }
-      
-      lastScrollPosition = currentScrollPosition;
     });
   </script>
 </body>
