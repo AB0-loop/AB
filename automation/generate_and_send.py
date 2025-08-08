@@ -27,9 +27,8 @@ BACKGROUND_COLOR = (0, 0, 0)  # pure black to match site theme
 WATERMARK_RELATIVE_WIDTH = 0.16  # watermark width relative to canvas width
 WATERMARK_MARGIN = 28  # px from edges
 
-# Daily posting limits
-MIN_POSTS_PER_DAY = 2
-MAX_POSTS_PER_DAY = 5
+# Daily posting limits (exactly 5/day)
+DAILY_POST_TARGET = 5
 
 # Telegram
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "").strip()
@@ -69,6 +68,7 @@ SERVICE_CONFIG = {
         "caption": "Subtle details. Impeccable fit. The Aurum Tailored Shirt elevates every day.",
     },
 }
+SERVICE_KEYS: List[str] = list(SERVICE_CONFIG.keys())
 
 # Hashtag pools for Bangalore/Karnataka rotation (aggressive, varied)
 HASHTAG_POOLS: List[List[str]] = [
@@ -107,7 +107,7 @@ def load_state() -> Dict:
                 return json.load(f)
             except Exception:
                 pass
-    return {"last_slno": 0, "last_post_date": "", "count_today": 0, "target_today": 0}
+    return {"last_slno": 0, "last_post_date": "", "count_today": 0, "used_today": []}
 
 
 def save_state(state: Dict) -> None:
@@ -125,19 +125,32 @@ def pick_today_target(state: Dict) -> None:
     if state.get("last_post_date") != today_str:
         state["last_post_date"] = today_str
         state["count_today"] = 0
-        state["target_today"] = random.randint(MIN_POSTS_PER_DAY, MAX_POSTS_PER_DAY)
+        state["used_today"] = []
         save_state(state)
 
 
-def list_service_images() -> List[Tuple[str, Path]]:
-    pairs = []
-    for service, cfg in SERVICE_CONFIG.items():
+def choose_service(state: Dict) -> Tuple[str, Path]:
+    # Prefer unique service per day
+    used_today = set(state.get("used_today", []))
+    # Start from next index based on last slno
+    next_idx = (int(state.get("last_slno", 0))) % len(SERVICE_KEYS)
+    for i in range(len(SERVICE_KEYS)):
+        idx = (next_idx + i) % len(SERVICE_KEYS)
+        service = SERVICE_KEYS[idx]
+        if service not in used_today:
+            cfg = SERVICE_CONFIG[service]
+            for fname in cfg["files"]:
+                p = SERVICES_DIR / fname
+                if p.exists():
+                    return service, p
+    # Fallback: if all used, return next available
+    for service in SERVICE_KEYS:
+        cfg = SERVICE_CONFIG[service]
         for fname in cfg["files"]:
             p = SERVICES_DIR / fname
             if p.exists():
-                pairs.append((service, p))
-    random.shuffle(pairs)
-    return pairs
+                return service, p
+    raise RuntimeError("No service images found.")
 
 
 def build_post(service: str, image_path: Path, slno: int) -> Tuple[Path, str]:
@@ -181,7 +194,6 @@ def build_post(service: str, image_path: Path, slno: int) -> Tuple[Path, str]:
     wm_size = (wm_target_w, int(wm_target_w / wm_ratio))
     logo_resized = logo.resize(wm_size, Image.LANCZOS)
 
-    # Optional opacity control (keep brand crisp). If needed, can lower alpha.
     # position bottom-right with margin
     pos = (CANVAS_W - logo_resized.width - WATERMARK_MARGIN,
            CANVAS_H - logo_resized.height - WATERMARK_MARGIN)
@@ -192,13 +204,12 @@ def build_post(service: str, image_path: Path, slno: int) -> Tuple[Path, str]:
     final = base.convert("RGB")
     final.save(out_path, format="JPEG", quality=92, optimize=True)
 
-    # Build caption
+    # Build caption (strict lines included)
     sc = SERVICE_CONFIG[service]
     emojis = sc["emojis"]
     core_caption = sc["caption"]
     handle = BRAND_HANDLE
     hashtag_set = random.choice(HASHTAG_POOLS)
-    # Rotate hashtags a bit
     hash_sample = hashtag_set.copy()
     random.shuffle(hash_sample)
     hashtags = " ".join(hash_sample[: min(22, len(hash_sample))])
@@ -207,7 +218,9 @@ def build_post(service: str, image_path: Path, slno: int) -> Tuple[Path, str]:
         f"Aurum Bespoke | {service}\n"
         f"SL No: {slno_str}\n\n"
         f"{emojis} {core_caption}\n\n"
-        f"Book a home visit: https://aurumbespoke.com/#contact\n"
+        f"Book Your Home Visit\n"
+        f"WhatsApp: +91 81055 08503\n"
+        f"Website: www.aurumbespoke.com\n\n"
         f"{handle}\n\n"
         f"{hashtags}"
     )
@@ -234,7 +247,7 @@ def main() -> int:
     pick_today_target(state)
 
     # If we've met today's target, exit cleanly
-    if state.get("count_today", 0) >= state.get("target_today", MIN_POSTS_PER_DAY):
+    if state.get("count_today", 0) >= DAILY_POST_TARGET:
         print("Target reached for today; no post sent.")
         return 0
 
@@ -243,15 +256,8 @@ def main() -> int:
     if next_slno > 999:
         next_slno = 1
 
-    # Pick a service + image (rotate)
-    pairs = list_service_images()
-    if not pairs:
-        print("No service images found.")
-        return 0
-
-    # Prefer varying services by using remainder of slno
-    service_idx = (next_slno - 1) % len(pairs)
-    service, image_path = pairs[service_idx]
+    # Pick a service + image (enforce unique per day)
+    service, image_path = choose_service(state)
 
     # Build post
     photo_path, caption = build_post(service, image_path, next_slno)
@@ -262,6 +268,9 @@ def main() -> int:
     # Update state
     state["last_slno"] = next_slno
     state["count_today"] = state.get("count_today", 0) + 1
+    used = state.get("used_today", [])
+    used.append(service)
+    state["used_today"] = used
     save_state(state)
 
     print(f"Sent post {next_slno:03d} for service: {service}")
