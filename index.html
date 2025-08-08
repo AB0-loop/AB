@@ -112,6 +112,14 @@
       opacity: 0;
       pointer-events: none;
     }
+    /* Hide horizontal scrollbar for the gallery while keeping scrollable */
+    .no-scrollbar {
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+    }
+    .no-scrollbar::-webkit-scrollbar { /* Chrome, Safari */
+      display: none;
+    }
   </style>
 </head>
 <body class="overflow-x-hidden">
@@ -228,39 +236,52 @@
   <!-- Gallery Section -->
   <section id="gallery" class="py-20 px-6 bg-black">
     <h2 class="text-center text-3xl gold-text mb-10" data-aos="fade-down">Gallery 📸</h2>
-    <div class="flex overflow-x-auto space-x-6 pb-4">
-      <picture>
-        <source type="image/webp" srcset="assets/images/gallery/gallery1.jpg.webp" />
-        <img src="assets/images/gallery/gallery1.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" loading="lazy">
-      </picture>
-      <picture>
-        <source type="image/webp" srcset="assets/images/gallery/gallery2.jpg.webp" />
-        <img src="assets/images/gallery/gallery2.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="100" loading="lazy">
-      </picture>
-      <picture>
-        <source type="image/webp" srcset="assets/images/gallery/gallery3.jpg.webp" />
-        <img src="assets/images/gallery/gallery3.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="200" loading="lazy">
-      </picture>
-      <picture>
-        <source type="image/webp" srcset="assets/images/gallery/gallery4.jpg.webp" />
-        <img src="assets/images/gallery/gallery4.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="300" loading="lazy">
-      </picture>
-      <picture>
-        <source type="image/webp" srcset="assets/images/gallery/gallery5.jpg.webp" />
-        <img src="assets/images/gallery/gallery5.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="400" loading="lazy">
-      </picture>
-      <picture>
-        <source type="image/webp" srcset="assets/images/gallery/kurta.jpg.webp" />
-        <img src="assets/images/gallery/kurta.jpg" alt="Kurta" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" loading="lazy">
-      </picture>
-      <picture>
-        <source type="image/webp" srcset="assets/images/gallery/bandgalla.jpg.webp" />
-        <img src="assets/images/gallery/bandgalla.jpg" alt="Bandgalla" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="100" loading="lazy">
-      </picture>
-      <picture>
-        <source type="image/webp" srcset="assets/images/gallery/indowestern.jpg.webp" />
-        <img src="assets/images/gallery/indowestern.jpg" alt="Indo Western Suit" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="200" loading="lazy">
-      </picture>
+    <div class="relative max-w-7xl mx-auto">
+      <!-- Track -->
+      <div id="galleryTrack" class="flex overflow-x-auto no-scrollbar space-x-6 pb-4 snap-x snap-mandatory scroll-smooth" aria-label="Gallery slider">
+        <picture class="gallery-slide snap-start">
+          <source type="image/webp" srcset="assets/images/gallery/gallery1.jpg.webp" />
+          <img src="assets/images/gallery/gallery1.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" loading="lazy">
+        </picture>
+        <picture class="gallery-slide snap-start">
+          <source type="image/webp" srcset="assets/images/gallery/gallery2.jpg.webp" />
+          <img src="assets/images/gallery/gallery2.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="100" loading="lazy">
+        </picture>
+        <picture class="gallery-slide snap-start">
+          <source type="image/webp" srcset="assets/images/gallery/gallery3.jpg.webp" />
+          <img src="assets/images/gallery/gallery3.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="200" loading="lazy">
+        </picture>
+        <picture class="gallery-slide snap-start">
+          <source type="image/webp" srcset="assets/images/gallery/gallery4.jpg.webp" />
+          <img src="assets/images/gallery/gallery4.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="300" loading="lazy">
+        </picture>
+        <picture class="gallery-slide snap-start">
+          <source type="image/webp" srcset="assets/images/gallery/gallery5.jpg.webp" />
+          <img src="assets/images/gallery/gallery5.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="400" loading="lazy">
+        </picture>
+        <picture class="gallery-slide snap-start">
+          <source type="image/webp" srcset="assets/images/gallery/kurta.jpg.webp" />
+          <img src="assets/images/gallery/kurta.jpg" alt="Kurta" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" loading="lazy">
+        </picture>
+        <picture class="gallery-slide snap-start">
+          <source type="image/webp" srcset="assets/images/gallery/bandgalla.jpg.webp" />
+          <img src="assets/images/gallery/bandgalla.jpg" alt="Bandgalla" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="100" loading="lazy">
+        </picture>
+        <picture class="gallery-slide snap-start">
+          <source type="image/webp" srcset="assets/images/gallery/indowestern.jpg.webp" />
+          <img src="assets/images/gallery/indowestern.jpg" alt="Indo Western Suit" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="200" loading="lazy">
+        </picture>
+      </div>
+
+      <!-- Arrows -->
+      <div class="pointer-events-none">
+        <button id="galleryPrev" class="pointer-events-auto absolute left-0 top-1/2 -translate-y-1/2 bg-[#1c1c1c] bg-opacity-80 border border-gray-700 text-white rounded-full p-3 shadow hover:gold-text focus:outline-none focus:ring-2 focus:ring-[#c99e67]" aria-label="Previous" aria-controls="galleryTrack">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button id="galleryNext" class="pointer-events-auto absolute right-0 top-1/2 -translate-y-1/2 bg-[#1c1c1c] bg-opacity-80 border border-gray-700 text-white rounded-full p-3 shadow hover:gold-text focus:outline-none focus:ring-2 focus:ring-[#c99e67]" aria-label="Next" aria-controls="galleryTrack">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
     </div>
   </section>
 
@@ -325,6 +346,58 @@
     document.addEventListener('DOMContentLoaded', function () {
       if (window.AOS && typeof AOS.init === 'function') {
         AOS.init();
+      }
+
+      // Gallery arrow navigation with snap-to-card behavior
+      const track = document.getElementById('galleryTrack');
+      const prevBtn = document.getElementById('galleryPrev');
+      const nextBtn = document.getElementById('galleryNext');
+      if (track && prevBtn && nextBtn) {
+        const slides = Array.from(track.querySelectorAll('.gallery-slide'));
+        const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+
+        function currentIndex() {
+          const scrollLeft = track.scrollLeft;
+          let nearestIdx = 0;
+          let minDelta = Infinity;
+          slides.forEach((el, idx) => {
+            const delta = Math.abs(el.offsetLeft - scrollLeft);
+            if (delta < minDelta) { minDelta = delta; nearestIdx = idx; }
+          });
+          return nearestIdx;
+        }
+
+        function goTo(index) {
+          index = clamp(index, 0, slides.length - 1);
+          const target = slides[index];
+          track.scrollTo({ left: target.offsetLeft, behavior: 'smooth' });
+        }
+
+        function updateArrows() {
+          const maxScroll = track.scrollWidth - track.clientWidth - 1;
+          prevBtn.disabled = track.scrollLeft <= 0;
+          nextBtn.disabled = track.scrollLeft >= maxScroll;
+          prevBtn.style.opacity = prevBtn.disabled ? 0.4 : 1;
+          nextBtn.style.opacity = nextBtn.disabled ? 0.4 : 1;
+        }
+
+        prevBtn.addEventListener('click', () => {
+          goTo(currentIndex() - 1);
+        });
+        nextBtn.addEventListener('click', () => {
+          goTo(currentIndex() + 1);
+        });
+
+        // Keyboard support for accessibility
+        track.setAttribute('tabindex', '0');
+        track.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowRight') { e.preventDefault(); goTo(currentIndex() + 1); }
+          if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(currentIndex() - 1); }
+        });
+
+        track.addEventListener('scroll', () => { window.requestAnimationFrame(updateArrows); });
+        window.addEventListener('resize', updateArrows);
+        updateArrows();
       }
     });
   </script>
