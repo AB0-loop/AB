@@ -7,6 +7,10 @@
   <title>Aurum Bespoke – Fit That Speaks</title>
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="assets/logos/aurum-logo-gold.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/logos/icons/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/logos/icons/favicon-16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/logos/icons/logo-180.png" />
+  <link rel="icon" href="/assets/logos/icons/favicon.ico" sizes="any">
   <!-- Open Graph / Facebook -->
   <meta property="og:title" content="Aurum Bespoke – Fit That Speaks">
   <meta property="og:description" content="Luxury menswear at your doorstep.">
@@ -95,10 +99,14 @@
       transform: scale(1.1);
     }
     .nav-logo {
-      width: 120px;
-      height: 120px;
+      width: 150px;
+      height: 150px;
       object-fit: contain;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.3s ease, transform 0.2s ease;
+      filter: drop-shadow(0 0 12px rgba(201, 158, 103, 0.35));
+    }
+    @media (min-width: 768px) {
+      .nav-logo { width: 170px; height: 170px; }
     }
     .nav-logo.hidden {
       opacity: 0;
@@ -114,7 +122,7 @@
       <a href="#home" aria-label="Aurum Bespoke Home" id="navLogo">
         <picture>
           <source type="image/webp" srcset="assets/logos/aurum-logo-gold.png.webp" />
-          <img src="assets/logos/aurum-logo-gold.png" alt="Aurum Logo" class="w-28 h-28 object-contain align-middle" width="120" height="120" />
+          <img src="assets/logos/aurum-logo-gold.png" alt="Aurum Logo" class="nav-logo align-middle" width="170" height="170" />
         </picture>
       </a>
       
@@ -150,9 +158,8 @@
     </div>
   </nav>
 
-  <!-- Rest of your HTML remains exactly the same -->
   <!-- Hero Section -->
-  <section id="home" class="w-full min-h-screen flex flex-col items-center justify-center text-center p-6 bg-black relative pt-16">
+  <section id="home" class="w-full min-h-screen flex flex-col items-center justify-center text-center p-6 bg-black relative pt-20 md:pt-24">
     <video autoplay loop muted playsinline preload="metadata" class="absolute top-0 left-0 w-full h-full object-cover opacity-20 z-0">
       <source src="assets/background/hero-loop.mp4" type="video/mp4">
     </video>
@@ -348,7 +355,8 @@
     "@type": "LocalBusiness",
     "name": "Aurum Bespoke",
     "url": "https://aurumbespoke.com/",
-    "image": "https://aurumbespoke.com/assets/logos/aurum-logo-gold.png",
+    "image": "https://aurumbespoke.com/assets/logos/icons/logo-512.png",
+    "logo": "https://aurumbespoke.com/assets/logos/icons/logo-512.png",
     "telephone": "+91 81055 08503",
     "address": {
       "@type": "PostalAddress",
