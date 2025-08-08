@@ -99,14 +99,15 @@
       transform: scale(1.1);
     }
     .nav-logo {
-      width: 150px;
-      height: 150px;
+      width: 175px;
+      height: 175px;
       object-fit: contain;
       transition: opacity 0.3s ease, transform 0.2s ease;
       filter: drop-shadow(0 0 12px rgba(201, 158, 103, 0.35));
+      transform: translate(-6px, 6px);
     }
     @media (min-width: 768px) {
-      .nav-logo { width: 170px; height: 170px; }
+      .nav-logo { width: 170px; height: 170px; transform: none; }
     }
     .nav-logo.hidden {
       opacity: 0;
@@ -239,37 +240,37 @@
     <div class="relative max-w-7xl mx-auto">
       <!-- Track -->
       <div id="galleryTrack" class="flex overflow-x-auto no-scrollbar space-x-6 pb-4 snap-x snap-mandatory scroll-smooth" aria-label="Gallery slider">
-        <picture class="gallery-slide snap-start">
+        <picture class="gallery-slide snap-start shrink-0">
           <source type="image/webp" srcset="assets/images/gallery/gallery1.jpg.webp" />
-          <img src="assets/images/gallery/gallery1.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" loading="lazy">
+          <img src="assets/images/gallery/gallery1.jpg" alt="Gallery" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" loading="lazy">
         </picture>
-        <picture class="gallery-slide snap-start">
+        <picture class="gallery-slide snap-start shrink-0">
           <source type="image/webp" srcset="assets/images/gallery/gallery2.jpg.webp" />
-          <img src="assets/images/gallery/gallery2.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="100" loading="lazy">
+          <img src="assets/images/gallery/gallery2.jpg" alt="Gallery" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="100" loading="lazy">
         </picture>
-        <picture class="gallery-slide snap-start">
+        <picture class="gallery-slide snap-start shrink-0">
           <source type="image/webp" srcset="assets/images/gallery/gallery3.jpg.webp" />
-          <img src="assets/images/gallery/gallery3.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="200" loading="lazy">
+          <img src="assets/images/gallery/gallery3.jpg" alt="Gallery" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="200" loading="lazy">
         </picture>
-        <picture class="gallery-slide snap-start">
+        <picture class="gallery-slide snap-start shrink-0">
           <source type="image/webp" srcset="assets/images/gallery/gallery4.jpg.webp" />
-          <img src="assets/images/gallery/gallery4.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="300" loading="lazy">
+          <img src="assets/images/gallery/gallery4.jpg" alt="Gallery" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="300" loading="lazy">
         </picture>
-        <picture class="gallery-slide snap-start">
+        <picture class="gallery-slide snap-start shrink-0">
           <source type="image/webp" srcset="assets/images/gallery/gallery5.jpg.webp" />
-          <img src="assets/images/gallery/gallery5.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="400" loading="lazy">
+          <img src="assets/images/gallery/gallery5.jpg" alt="Gallery" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="400" loading="lazy">
         </picture>
-        <picture class="gallery-slide snap-start">
+        <picture class="gallery-slide snap-start shrink-0">
           <source type="image/webp" srcset="assets/images/gallery/kurta.jpg.webp" />
-          <img src="assets/images/gallery/kurta.jpg" alt="Kurta" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" loading="lazy">
+          <img src="assets/images/gallery/kurta.jpg" alt="Kurta" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" loading="lazy">
         </picture>
-        <picture class="gallery-slide snap-start">
+        <picture class="gallery-slide snap-start shrink-0">
           <source type="image/webp" srcset="assets/images/gallery/bandgalla.jpg.webp" />
-          <img src="assets/images/gallery/bandgalla.jpg" alt="Bandgalla" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="100" loading="lazy">
+          <img src="assets/images/gallery/bandgalla.jpg" alt="Bandgalla" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="100" loading="lazy">
         </picture>
-        <picture class="gallery-slide snap-start">
+        <picture class="gallery-slide snap-start shrink-0">
           <source type="image/webp" srcset="assets/images/gallery/indowestern.jpg.webp" />
-          <img src="assets/images/gallery/indowestern.jpg" alt="Indo Western Suit" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="200" loading="lazy">
+          <img src="assets/images/gallery/indowestern.jpg" alt="Indo Western Suit" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="200" loading="lazy">
         </picture>
       </div>
 
