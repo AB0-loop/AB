@@ -18,10 +18,23 @@
   <meta name="twitter:title" content="Aurum Bespoke – Fit That Speaks">
   <meta name="twitter:description" content="Luxury menswear at your doorstep.">
   <meta name="twitter:image" content="https://aurumbespoke.com/assets/logos/aurum-logo-gold.png">
+  
+  <!-- Canonical & PWA basics -->
+  <link rel="canonical" href="https://aurumbespoke.com/" />
+  <meta name="theme-color" content="#0e0d0d" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="/assets/logos/aurum-logo-gold.png" />
+
+  <!-- Resource Hints -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" />
+  <link rel="preconnect" href="https://unpkg.com" />
+
   <!-- Fonts and CSS -->
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Inter&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js" defer></script>
   <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
   <style>
     body {
@@ -99,7 +112,10 @@
     <div class="flex items-center justify-between max-w-7xl mx-auto px-2">
       <!-- Logo -->
       <a href="#home" aria-label="Aurum Bespoke Home" id="navLogo">
-        <img src="assets/logos/aurum-logo-gold.png" alt="Aurum Logo" class="w-28 h-28 object-contain align-middle">
+        <picture>
+          <source type="image/webp" srcset="assets/logos/aurum-logo-gold.png.webp" />
+          <img src="assets/logos/aurum-logo-gold.png" alt="Aurum Logo" class="w-28 h-28 object-contain align-middle" width="120" height="120" />
+        </picture>
       </a>
       
       <div class="flex items-center">
@@ -137,13 +153,13 @@
   <!-- Rest of your HTML remains exactly the same -->
   <!-- Hero Section -->
   <section id="home" class="w-full min-h-screen flex flex-col items-center justify-center text-center p-6 bg-black relative pt-16">
-    <video autoplay loop muted playsinline preload="auto" class="absolute top-0 left-0 w-full h-full object-cover opacity-20 z-0">
+    <video autoplay loop muted playsinline preload="metadata" class="absolute top-0 left-0 w-full h-full object-cover opacity-20 z-0">
       <source src="assets/background/hero-loop.mp4" type="video/mp4">
     </video>
     <div class="z-10 max-w-2xl mx-auto">
       <h1 class="text-4xl md:text-6xl gold-text mb-4" data-aos="fade-up">Aurum Bespoke ✨</h1>
       <p class="text-lg text-gray-300 mb-6" data-aos="fade-up" data-aos-delay="200">Luxury Tailoring at Your Doorstep – Bangalore Exclusive 🧵</p>
-      <a href="https://wa.me/918105508503" class="btn-glow px-6 py-3 rounded-full inline-block" data-aos="zoom-in" data-aos-delay="400">Book Appointment ➡️</a>
+      <a href="https://wa.me/918105508503" class="btn-glow px-6 py-3 rounded-full inline-block" data-aos="zoom-in" data-aos-delay="400" target="_blank" rel="noopener noreferrer">Book Appointment ➡️</a>
     </div>
   </section>
 
@@ -152,32 +168,50 @@
     <h2 class="text-center text-3xl gold-text mb-10" data-aos="fade-down">Our Signature Offerings 👔</h2>
     <div class="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
       <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center" data-aos="fade-up">
-        <img src="assets/images/services/suit.jpg" alt="Suit" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+        <picture>
+          <source type="image/webp" srcset="assets/images/services/suit.jpg.webp" />
+          <img src="assets/images/services/suit.jpg" alt="Suit" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+        </picture>
         <h3 class="text-xl gold-text mb-2">Bespoke Suits</h3>
         <p class="text-gray-400">Two & three-piece precision suits to dominate every room 💼</p>
       </div>
       <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center" data-aos="fade-up" data-aos-delay="100">
-        <img src="assets/images/services/sherwani.jpg" alt="Sherwani" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+        <picture>
+          <source type="image/webp" srcset="assets/images/services/sherwani.jpg.webp" />
+          <img src="assets/images/services/sherwani.jpg" alt="Sherwani" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+        </picture>
         <h3 class="text-xl gold-text mb-2">Sherwanis</h3>
         <p class="text-gray-400">Regal silhouettes and modern elegance for celebrations 👑</p>
       </div>
       <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center" data-aos="fade-up" data-aos-delay="200">
-        <img src="assets/images/services/blazer.jpg" alt="Blazer" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+        <picture>
+          <source type="image/webp" srcset="assets/images/services/blazer.jpg.webp" />
+          <img src="assets/images/services/blazer.jpg" alt="Blazer" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+        </picture>
         <h3 class="text-xl gold-text mb-2">Tuxedos & Blazers</h3>
         <p class="text-gray-400">Evening wear that commands presence with quiet confidence 🕴️</p>
       </div>
       <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center" data-aos="fade-up" data-aos-delay="300">
-        <img src="assets/images/services/shirt.jpg" alt="Shirt" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+        <picture>
+          <source type="image/webp" srcset="assets/images/services/shirt.jpg.webp" />
+          <img src="assets/images/services/shirt.jpg" alt="Shirt" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+        </picture>
         <h3 class="text-xl gold-text mb-2">Tailored Shirts</h3>
         <p class="text-gray-400">Subtle details, perfect fit, daily elegance—custom shirts, redefined ✨</p>
       </div>
       <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center" data-aos="fade-up">
+        <picture>
+          <source type="image/webp" srcset="assets/images/services/kurta.jpg.webp" />
         <img src="assets/images/services/kurta.jpg" alt="Kurta" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+        </picture>
         <h3 class="text-xl gold-text mb-2">Pathani Suit</h3>
         <p class="text-gray-400">Classic and comfortable, perfect for traditional occasions.</p>
       </div>
       <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center" data-aos="fade-up" data-aos-delay="100">
-        <img src="assets/images/services/bandgala.jpg" alt="Bandgala" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+        <picture>
+          <source type="image/webp" srcset="assets/images/services/bandgala.jpg.webp" />
+          <img src="assets/images/services/bandgala.jpg" alt="Bandgala" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+        </picture>
         <h3 class="text-xl gold-text mb-2">Bandgala</h3>
         <p class="text-gray-400">Sophisticated and regal, perfect for special occasions.</p>
       </div>
@@ -188,14 +222,38 @@
   <section id="gallery" class="py-20 px-6 bg-black">
     <h2 class="text-center text-3xl gold-text mb-10" data-aos="fade-down">Gallery 📸</h2>
     <div class="flex overflow-x-auto space-x-6 pb-4">
-      <img src="assets/images/gallery/gallery1.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" loading="lazy">
-      <img src="assets/images/gallery/gallery2.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="100" loading="lazy">
-      <img src="assets/images/gallery/gallery3.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="200" loading="lazy">
-      <img src="assets/images/gallery/gallery4.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="300" loading="lazy">
-      <img src="assets/images/gallery/gallery5.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="400" loading="lazy">
-      <img src="assets/images/gallery/kurta.jpg" alt="Kurta" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" loading="lazy">
-      <img src="assets/images/gallery/bandgalla.jpg" alt="Bandgalla" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="100" loading="lazy">
-      <img src="assets/images/gallery/indowestern.jpg" alt="Indo Western Suit" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="200" loading="lazy">
+      <picture>
+        <source type="image/webp" srcset="assets/images/gallery/gallery1.jpg.webp" />
+        <img src="assets/images/gallery/gallery1.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" loading="lazy">
+      </picture>
+      <picture>
+        <source type="image/webp" srcset="assets/images/gallery/gallery2.jpg.webp" />
+        <img src="assets/images/gallery/gallery2.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="100" loading="lazy">
+      </picture>
+      <picture>
+        <source type="image/webp" srcset="assets/images/gallery/gallery3.jpg.webp" />
+        <img src="assets/images/gallery/gallery3.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="200" loading="lazy">
+      </picture>
+      <picture>
+        <source type="image/webp" srcset="assets/images/gallery/gallery4.jpg.webp" />
+        <img src="assets/images/gallery/gallery4.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="300" loading="lazy">
+      </picture>
+      <picture>
+        <source type="image/webp" srcset="assets/images/gallery/gallery5.jpg.webp" />
+        <img src="assets/images/gallery/gallery5.jpg" alt="Gallery" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="400" loading="lazy">
+      </picture>
+      <picture>
+        <source type="image/webp" srcset="assets/images/gallery/kurta.jpg.webp" />
+        <img src="assets/images/gallery/kurta.jpg" alt="Kurta" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" loading="lazy">
+      </picture>
+      <picture>
+        <source type="image/webp" srcset="assets/images/gallery/bandgalla.jpg.webp" />
+        <img src="assets/images/gallery/bandgalla.jpg" alt="Bandgalla" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="100" loading="lazy">
+      </picture>
+      <picture>
+        <source type="image/webp" srcset="assets/images/gallery/indowestern.jpg.webp" />
+        <img src="assets/images/gallery/indowestern.jpg" alt="Indo Western Suit" class="w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="200" loading="lazy">
+      </picture>
     </div>
   </section>
 
@@ -231,16 +289,16 @@
 
       <!-- Social Media Icons -->
       <div class="flex justify-center gap-6 mt-10">
-        <a href="https://www.instagram.com/aurum.bespoke?igsh=czc2cnZ1NnMwdHdi" target="_blank" title="Instagram" data-aos="zoom-in">
+        <a href="https://www.instagram.com/aurum.bespoke?igsh=czc2cnZ1NnMwdHdi" target="_blank" title="Instagram" data-aos="zoom-in" rel="noopener noreferrer">
           <img src="assets/images/social-icons/instagram.svg" alt="Instagram" class="social-icon" loading="lazy">
         </a>
-        <a href="https://x.com/Aurum_Bespoke?t=303eKb_ss5Dn4K0jiIGJHQ&s=35" target="_blank" title="Twitter" data-aos="zoom-in" data-aos-delay="100">
+        <a href="https://x.com/Aurum_Bespoke?t=303eKb_ss5Dn4K0jiIGJHQ&s=35" target="_blank" title="Twitter" data-aos="zoom-in" data-aos-delay="100" rel="noopener noreferrer">
           <img src="assets/images/social-icons/x.svg" alt="Twitter" class="social-icon" loading="lazy">
         </a>
-        <a href="https://www.facebook.com/share/16mphUA4Qt/" target="_blank" title="Facebook" data-aos="zoom-in" data-aos-delay="200">
+        <a href="https://www.facebook.com/share/16mphUA4Qt/" target="_blank" title="Facebook" data-aos="zoom-in" data-aos-delay="200" rel="noopener noreferrer">
           <img src="assets/images/social-icons/facebook.svg" alt="Facebook" class="social-icon" loading="lazy">
         </a>
-        <a href="https://www.youtube.com/@aurumbespoke" target="_blank" title="YouTube" data-aos="zoom-in" data-aos-delay="300">
+        <a href="https://www.youtube.com/@aurumbespoke" target="_blank" title="YouTube" data-aos="zoom-in" data-aos-delay="300" rel="noopener noreferrer">
           <img src="assets/images/social-icons/youtube.svg" alt="YouTube" class="social-icon" loading="lazy">
         </a>
       </div>
@@ -251,12 +309,18 @@
 
   <!-- WhatsApp Floating Chat Widget -->
   <div class="whatsapp-chat">
-    <a href="https://wa.me/918105508503?text=Hi%20Aurum%20Bespoke%2C%20I%20want%20to%20book%20a%20home%20appointment" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+    <a href="https://wa.me/918105508503?text=Hi%20Aurum%20Bespoke%2C%20I%20want%20to%20book%20a%20home%20appointment" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
       <img src="assets/images/social-icons/whatsapp.svg" alt="Chat on WhatsApp">
     </a>
   </div>
 
-  <script>AOS.init();</script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.AOS && typeof AOS.init === 'function') {
+        AOS.init();
+      }
+    });
+  </script>
   <script>
     // Close mobile menu when clicking a link
     document.querySelectorAll('#mobileMenu a').forEach(link => {
@@ -275,6 +339,29 @@
         navLogo.classList.remove('hidden');
       }
     });
+  </script>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Aurum Bespoke",
+    "url": "https://aurumbespoke.com/",
+    "image": "https://aurumbespoke.com/assets/logos/aurum-logo-gold.png",
+    "telephone": "+91 81055 08503",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Bangalore",
+      "addressCountry": "IN"
+    },
+    "sameAs": [
+      "https://www.instagram.com/aurum.bespoke",
+      "https://x.com/Aurum_Bespoke",
+      "https://www.facebook.com/share/16mphUA4Qt/",
+      "https://www.youtube.com/@aurumbespoke"
+    ]
+  }
   </script>
 </body>
 </html>
