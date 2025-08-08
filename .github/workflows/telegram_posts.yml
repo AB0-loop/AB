@@ -1,0 +1,46 @@
+name: Telegram Automated Posts
+
+on:
+  schedule:
+    - cron: '5 3 * * *'   # 08:35 IST
+    - cron: '5 7 * * *'   # 12:35 IST
+    - cron: '5 11 * * *'  # 16:35 IST
+    - cron: '5 15 * * *'  # 20:35 IST
+    - cron: '5 19 * * *'  # 00:35 IST next day
+  workflow_dispatch: {}
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r automation/requirements.txt
+
+      - name: Run generator
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_ID: ${{ secrets.TELEGRAM_ID }}
+        run: |
+          python automation/generate_and_send.py
+
+      - name: Persist state (if changed)
+        run: |
+          if [ -n "$(git status --porcelain automation/state.json)" ]; then
+            git config user.name "GitHub Actions"
+            git config user.email "actions@github.com"
+            git add automation/state.json
+            git commit -m "chore: update automation state"
+            git push
+          fi
