@@ -1,6 +1,9 @@
 {
-  "last_slno": 1,
+  "last_slno": 2,
   "last_post_date": "2025-08-09",
-  "count_today": 1,
-  "target_today": 4
+  "count_today": 2,
+  "target_today": 4,
+  "used_today": [
+    "Tuxedo"
+  ]
 }
