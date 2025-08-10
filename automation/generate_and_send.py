@@ -3,6 +3,7 @@ import os
 import sys
 import json
 import random
+import time
 import datetime as dt
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional, Set
@@ -164,6 +165,16 @@ VARIANTS: List[str] = [
     "golden_glow",   # very subtle golden tint
 ]
 
+# Augmentation styles to generate new visuals for free
+AUGMENT_STYLES: List[str] = [
+    "none",
+    "crop_zoom",
+    "vignette",
+    "gold_border",
+    "soft_focus",
+    "gradient_overlay",
+]
+
 
 def load_state() -> Dict:
     if STATE_PATH.exists():
@@ -181,7 +192,7 @@ def load_state() -> Dict:
     data.setdefault("male_count_today", 0)
     data.setdefault("used_today", [])
     data.setdefault("used_images", [])  # avoid repeats across days (by image)
-    data.setdefault("used_posts", [])   # avoid repeats across days (by image+variant)
+    data.setdefault("used_posts", [])   # avoid repeats across days (by image+variant+style+seed)
     return data
 
 
@@ -258,7 +269,9 @@ def compute_all_available_post_keys() -> Set[str]:
                 continue
             _, rel = resolved
             for v in VARIANTS:
-                keys.add(f"{rel}::{v}")
+                for s in AUGMENT_STYLES:
+                    # seed is effectively unbounded; track by style only for universe estimation
+                    keys.add(f"{rel}::{v}::{s}")
     return keys
 
 
@@ -289,8 +302,8 @@ def get_site_used_rels() -> Set[str]:
     return used
 
 
-def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str]:
-    # Prefer unique service per day and unique (image+variant) across history
+def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str, str, int]:
+    # Prefer unique service per day and unique (image+variant+style+seed) across history
     used_today = set(state.get("used_today", []))
     used_posts = set(state.get("used_posts", []))
     male_count_today = int(state.get("male_count_today", 0))
@@ -306,8 +319,22 @@ def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str]:
         meta = IMAGE_METADATA.get(rel, {})
         return bool(meta.get("male", False))
 
-    # First pass: enforce both per-day unique service and never-before-used (image+variant)
-    # Prioritize male images until quota is met and exclude images already on website
+    def try_return(service: str, p: Path, rel: str) -> Optional[Tuple[str, Path, str, str, str, int]]:
+        variants = VARIANTS.copy()
+        random.shuffle(variants)
+        styles = AUGMENT_STYLES.copy()
+        random.shuffle(styles)
+        for v in variants:
+            for s in styles:
+                # bounded random seed bucket to allow uniqueness without exploding state
+                seed = random.randint(1, 10_000_000)
+                key = f"{rel}::{v}::{s}::{seed//1000}"
+                if key in used_posts:
+                    continue
+                return service, p, rel, v, s, seed
+        return None
+
+    # First pass: enforce day-unique service, exclude site images, prefer male quota, and avoid used combos
     for service in ordered_services:
         if service in used_today:
             continue
@@ -320,14 +347,9 @@ def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str]:
                 continue
             if need_male and not is_male(rel):
                 continue
-            # try variants in shuffled order to diversify
-            variants = VARIANTS.copy()
-            random.shuffle(variants)
-            for v in variants:
-                key = f"{rel}::{v}"
-                if key in used_posts:
-                    continue
-                return service, p, rel, v
+            got = try_return(service, p, rel)
+            if got:
+                return got
 
     # Second pass: still exclude site images; try to satisfy male quota if pending
     for service in ordered_services:
@@ -342,8 +364,9 @@ def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str]:
                 continue
             if need_male and not is_male(rel):
                 continue
-            v = random.choice(VARIANTS)
-            return service, p, rel, v
+            got = try_return(service, p, rel)
+            if got:
+                return got
 
     # Final fallback: if exclusion exhausts pool, allow site images but still aim for male quota
     for service in SERVICE_KEYS:
@@ -354,8 +377,9 @@ def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str]:
             p, rel = resolved
             if need_male and not is_male(rel):
                 continue
-            v = random.choice(VARIANTS)
-            return service, p, rel, v
+            got = try_return(service, p, rel)
+            if got:
+                return got
 
     raise RuntimeError("No service images found.")
 
@@ -367,7 +391,6 @@ def apply_variant(image: Image.Image, variant: str) -> Image.Image:
         enhancer = ImageEnhance.Contrast(image)
         return enhancer.enhance(1.08)
     if variant == "warm":
-        # Slight warmth via color/saturation and a subtle red/yellow lift
         image = ImageEnhance.Color(image).enhance(1.06)
         r, g, b = image.split()
         r = r.point(lambda i: min(255, int(i * 1.03)))
@@ -380,19 +403,60 @@ def apply_variant(image: Image.Image, variant: str) -> Image.Image:
         g = g.point(lambda i: min(255, int(i * 1.01)))
         return Image.merge("RGB", (r, g, b))
     if variant == "golden_glow":
-        # Subtle golden tint overlay to align with brand accents
         overlay = Image.new("RGB", image.size, (201, 158, 103))  # #c99e67
         return Image.blend(image, overlay, alpha=0.06)
     return image
 
 
+def apply_augmentation(image: Image.Image, style: str, seed: int) -> Image.Image:
+    rnd = random.Random(seed)
+    if style == "none":
+        return image
+    w, h = image.size
+    if style == "crop_zoom":
+        # random crop between 88-96% area then resize back
+        scale = rnd.uniform(0.88, 0.96)
+        cw = int(w * scale)
+        ch = int(h * scale)
+        left = rnd.randint(0, w - cw)
+        top = rnd.randint(0, h - ch)
+        return image.crop((left, top, left + cw, top + ch)).resize((w, h), Image.LANCZOS)
+    if style == "vignette":
+        # radial darkening toward edges
+        vignette = Image.new("L", (w, h), 0)
+        cx, cy = w / 2, h / 2
+        max_r2 = (cx**2 + cy**2)
+        px = vignette.load()
+        for y in range(h):
+            for x in range(w):
+                dx, dy = x - cx, y - cy
+                r2 = dx*dx + dy*dy
+                t = min(1.0, r2 / max_r2)
+                val = int(255 * t**1.5)
+                px[x, y] = val
+        return Image.composite(Image.new("RGB", (w, h), (0, 0, 0)), image, vignette.filter(ImageFilter.GaussianBlur(6)))
+    if style == "gold_border":
+        border = 24
+        framed = Image.new("RGB", (w + border*2, h + border*2), (201, 158, 103))
+        framed.paste(image, (border, border))
+        return framed.resize((w, h), Image.LANCZOS)
+    if style == "soft_focus":
+        return image.filter(ImageFilter.GaussianBlur(radius=2))
+    if style == "gradient_overlay":
+        overlay = Image.new("RGBA", (w, h))
+        opx = overlay.load()
+        for y in range(h):
+            alpha = int(64 * (y / h))
+            for x in range(w):
+                opx[x, y] = (201, 158, 103, alpha)
+        return Image.alpha_composite(image.convert("RGBA"), overlay).convert("RGB")
+    return image
+
+
 def choose_hashtags() -> str:
-    # Build an aggressive, rotating set from all pools
     selection: List[str] = []
-    # Ensure core brand/region tags present
     core = ["#AurumBespoke", "#Bangalore", "#Bengaluru", "#Karnataka", "#NammaBengaluru"]
     selection.extend(core)
-    # Randomly sample neighborhoods, style, karnataka, category
     neighborhoods = random.sample(BANGALORE_NEIGHBORHOODS, k=min(8, len(BANGALORE_NEIGHBORHOODS)))
     selection.extend(neighborhoods)
     style = random.sample(GENERAL_STYLE, k=min(4, len(GENERAL_STYLE)))
@@ -402,7 +466,6 @@ def choose_hashtags() -> str:
     cats = random.sample(CATEGORY_TAGS, k=min(8, len(CATEGORY_TAGS)))
     selection.extend(cats)
 
-    # Deduplicate while preserving order, then cap to TOTAL_HASHTAGS
     seen = set()
     uniq: List[str] = []
     for tag in selection:
@@ -413,61 +476,52 @@ def choose_hashtags() -> str:
     return " ".join(uniq[:TOTAL_HASHTAGS])
 
 
-def build_post(service: str, image_path: Path, slno: int, variant: str) -> Tuple[Path, str]:
-    # Compose image on portrait canvas with watermark bottom-right
+def build_post(service: str, image_path: Path, slno: int, variant: str, style: str, seed: int) -> Tuple[Path, str]:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     slno_str = f"{slno:03d}"
     out_path = OUTPUT_DIR / f"{slno_str}_{service.replace(' ', '_').lower()}.jpg"
 
-    # Open and fit image
     base = Image.new("RGB", (CANVAS_W, CANVAS_H), BACKGROUND_COLOR)
     src = Image.open(image_path).convert("RGB")
 
-    # Apply variant for on-brand diversity
+    # Apply augmentation + color variant
+    src = apply_augmentation(src, style, seed)
     src = apply_variant(src, variant)
 
-    # Fit source to canvas while preserving aspect ratio (cover)
+    # Fit to canvas
     src_ratio = src.width / src.height
     canvas_ratio = CANVAS_W / CANVAS_H
     if src_ratio > canvas_ratio:
-        # Source wider than canvas
         new_h = CANVAS_H
         new_w = int(src_ratio * new_h)
     else:
-        # Source taller/narrower
         new_w = CANVAS_W
         new_h = int(new_w / src_ratio)
     resized = src.resize((new_w, new_h), Image.LANCZOS)
 
-    # Center-crop to exact canvas
     left = (new_w - CANVAS_W) // 2
     top = (new_h - CANVAS_H) // 2
     cropped = resized.crop((left, top, left + CANVAS_W, top + CANVAS_H))
 
-    # Subtle sharpen for detail
     sharpened = cropped.filter(ImageFilter.UnsharpMask(radius=1.2, percent=120, threshold=3))
 
-    # Paste to base
     base.paste(sharpened, (0, 0))
 
-    # Add watermark bottom-right (brand logo)
+    # Watermark bottom-right
     logo = Image.open(LOGO_PATH).convert("RGBA")
     wm_target_w = int(CANVAS_W * WATERMARK_RELATIVE_WIDTH)
     wm_ratio = logo.width / logo.height
     wm_size = (wm_target_w, int(wm_target_w / wm_ratio))
     logo_resized = logo.resize(wm_size, Image.LANCZOS)
 
-    # position bottom-right with margin
     pos = (CANVAS_W - logo_resized.width - WATERMARK_MARGIN,
            CANVAS_H - logo_resized.height - WATERMARK_MARGIN)
     base = base.convert("RGBA")
     base.alpha_composite(logo_resized, dest=pos)
 
-    # Save as high-quality JPEG
     final = base.convert("RGB")
     final.save(out_path, format="JPEG", quality=92, optimize=True)
 
-    # Build caption (consistent lines, emojis, and aggressive tags)
     sc = SERVICE_CONFIG[service]
     emojis = sc["emojis"]
     core_caption = sc["caption"]
@@ -493,39 +547,41 @@ def send_to_telegram(photo_path: Path, caption: str) -> None:
         raise RuntimeError("TELEGRAM_TOKEN/TELEGRAM_ID not set in environment.")
 
     url = f"{TELEGRAM_API}/sendPhoto"
-    with open(photo_path, "rb") as f:
-        files = {"photo": f}
-        data = {"chat_id": TELEGRAM_CHAT_ID, "caption": caption}
-        resp = requests.post(url, data=data, files=files, timeout=60)
-        if resp.status_code != 200:
-            raise RuntimeError(f"Telegram API error: {resp.status_code} {resp.text}")
+    for attempt in range(3):
+        try:
+            with open(photo_path, "rb") as f:
+                files = {"photo": f}
+                data = {"chat_id": TELEGRAM_CHAT_ID, "caption": caption}
+                resp = requests.post(url, data=data, files=files, timeout=60)
+                if resp.status_code == 200:
+                    return
+                err = f"Telegram API error: {resp.status_code} {resp.text}"
+                if attempt == 2:
+                    raise RuntimeError(err)
+        except Exception as e:
+            if attempt == 2:
+                raise
+        time.sleep(2 ** attempt)
 
 
 def main() -> int:
-    # Load/roll daily target
     state = load_state()
     pick_today_target(state)
 
-    # If we've met today's target, exit cleanly
     if state.get("count_today", 0) >= DAILY_POST_TARGET:
         print("Target reached for today; no post sent.")
         return 0
 
-    # Next serial number
     next_slno = int(state.get("last_slno", 0)) + 1
     if next_slno > 999:
         next_slno = 1
 
-    # Pick a service + image + variant (enforce unique per day and avoid repeats across days)
-    service, image_path, image_rel, variant = choose_service_and_variant(state)
+    service, image_path, image_rel, variant, style, seed = choose_service_and_variant(state)
 
-    # Build post
-    photo_path, caption = build_post(service, image_path, next_slno, variant)
+    photo_path, caption = build_post(service, image_path, next_slno, variant, style, seed)
 
-    # Send to Telegram
     send_to_telegram(photo_path, caption)
 
-    # Update state
     state["last_slno"] = next_slno
     state["count_today"] = state.get("count_today", 0) + 1
 
@@ -533,28 +589,24 @@ def main() -> int:
     used.append(service)
     state["used_today"] = used
 
-    # Track image and image+variant usage across history
     used_images: List[str] = state.get("used_images", [])
     if image_rel not in set(used_images):
         used_images.append(image_rel)
     state["used_images"] = used_images
 
     used_posts: List[str] = state.get("used_posts", [])
-    key = f"{image_rel}::{variant}"
+    key = f"{image_rel}::{variant}::{style}::{seed//1000}"
     if key not in set(used_posts):
         used_posts.append(key)
 
-    # Increment male count if applicable
-    # Note: images posted always include a bottom-right watermark as enforced above
     if IMAGE_METADATA.get(image_rel, {}).get("male", False):
         state["male_count_today"] = int(state.get("male_count_today", 0)) + 1
 
-    # Reset histories once we've cycled through all possibilities
     all_rels = compute_all_available_rels()
     if all_rels and set(used_images) >= all_rels:
         used_images = []
     all_keys = compute_all_available_post_keys()
-    if all_keys and set(used_posts) >= all_keys:
+    if all_keys and {k.rsplit("::", 1)[0] for k in used_posts} >= all_keys:
         used_posts = []
 
     state["used_images"] = used_images
@@ -562,7 +614,7 @@ def main() -> int:
 
     save_state(state)
 
-    print(f"Sent post {next_slno:03d} for service: {service} using {image_rel} [{variant}]")
+    print(f"Sent post {next_slno:03d} for service: {service} using {image_rel} [{variant}|{style}|{seed}]")
     return 0
 
 
