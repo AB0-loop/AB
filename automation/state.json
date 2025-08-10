@@ -1,13 +1,12 @@
 {
-  "last_slno": 10,
+  "last_slno": 1,
   "last_post_date": "2025-08-10",
-  "count_today": 5,
-  "target_today": 4,
+  "count_today": 1,
   "used_today": [
-    "Tailored Shirt",
-    "Suit",
-    "Tuxedo",
-    "Sherwani",
-    "Bandgala"
-  ]
+    "Suit"
+  ],
+  "full_body_count_today": 0,
+  "last_used_file": {},
+  "last_template_idx": {},
+  "recent_posts": []
 }
