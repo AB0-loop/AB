@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Optional, Set
 
 import requests
-from PIL import Image, ImageOps, ImageFilter
+from PIL import Image, ImageOps, ImageFilter, ImageEnhance
 
 # ------------------------------
 # Config
@@ -90,33 +90,41 @@ SERVICE_CONFIG = {
 SERVICE_KEYS: List[str] = list(SERVICE_CONFIG.keys())
 
 # Hashtag pools for Bangalore/Karnataka rotation (aggressive, varied)
-HASHTAG_POOLS: List[List[str]] = [
-    [
-        "#AurumBespoke", "#Bangalore", "#Bengaluru", "#Karnataka",
-        "#JPnagar", "#Jayanagar", "#Indiranagar", "#Koramangala",
-        "#Menswear", "#MensStyle", "#Bespoke", "#Tailoring",
-        "#GroomStyle", "#WeddingWear", "#Sherwani", "#Tuxedo",
-        "#Bandgala", "#Pathani", "#SuitUp", "#MadeToMeasure",
-        "#LuxuryMenswear", "#BangaloreFashion",
-    ],
-    [
-        "#AurumBespoke", "#NammaBengaluru", "#KarnatakaFashion", "#BangaloreGrooms",
-        "#Ulsoor", "#Whitefield", "#HSRLAYOUT", "#Sadashivanagar",
-        "#CustomTailor", "#BespokeTailor", "#MensFashion", "#MensOutfit",
-        "#IndianGroom", "#GroomOutfit", "#WeddingSeason", "#EveningWear",
-        "#Blazer", "#SherwaniStyle", "#KurtaPathani", "#BespokeSuits",
-        "#StyleInBangalore",
-    ],
-    [
-        "#AurumBespoke", "#BangaloreCity", "#KarnatakaStyle", "#BangaloreLuxury",
-        "#MGroad", "#BrigadeRoad", "#ChurchStreet", "#LavelleRoad",
-        "#MensLook", "#SharpStyle", "#TailorMade", "#SavileRowSpirit",
-        "#Suits", "#Tuxedos", "#Sherwanis", "#BandgalaStyle",
-        "#PathaniSuit", "#LuxuryStyle", "#FashionBangalore",
-    ],
+BANGALORE_NEIGHBORHOODS = [
+    "#Indiranagar", "#Koramangala", "#HSRLAYOUT", "#Whitefield", "#ElectronicCity",
+    "#JPnagar", "#Jayanagar", "#Basavanagudi", "#Banashankari", "#BTM",
+    "#Marathahalli", "#Bellandur", "#Hebbal", "#Yelahanka", "#Malleshwaram",
+    "#Rajajinagar", "#Sadashivanagar", "#Ulsoor", "#FrazerTown", "#KalyanNagar",
+    "#MGroad", "#BrigadeRoad", "#ChurchStreet", "#LavelleRoad",
+]
+GENERAL_STYLE = [
+    "#AurumBespoke", "#Menswear", "#MensStyle", "#LuxuryMenswear", "#Bespoke",
+    "#Tailoring", "#MadeToMeasure", "#SuitUp", "#SharpStyle", "#TailorMade",
+    "#SavileRowSpirit", "#EveningWear", "#GroomStyle", "#WeddingWear",
+]
+KARNATAKA_TAGS = [
+    "#Bangalore", "#Bengaluru", "#Karnataka", "#NammaBengaluru", "#KarnatakaFashion",
+    "#BangaloreFashion", "#BangaloreLuxury", "#FashionBangalore",
+]
+CATEGORY_TAGS = [
+    "#Suit", "#Suits", "#Tuxedo", "#Tuxedos", "#Sherwani", "#Sherwanis",
+    "#Bandgala", "#BandgalaStyle", "#Pathani", "#PathaniSuit", "#Blazer",
+    "#KurtaPathani", "#BespokeSuits", "#MensOutfit", "#IndianGroom", "#GroomOutfit",
 ]
 
+# Aim for consistent caption length; pick a fixed total hashtag count
+TOTAL_HASHTAGS = 22
+
 BRAND_HANDLE = "@aurum.bespoke"
+
+# Visual variants for subtle, on-brand diversity without breaking theme
+VARIANTS: List[str] = [
+    "none",          # original
+    "contrast",      # slightly crisper
+    "warm",          # warm tone
+    "cool",          # cool tone
+    "golden_glow",   # very subtle golden tint
+]
 
 
 def load_state() -> Dict:
@@ -133,7 +141,8 @@ def load_state() -> Dict:
     data.setdefault("last_post_date", "")
     data.setdefault("count_today", 0)
     data.setdefault("used_today", [])
-    data.setdefault("used_images", [])  # track used image relative paths to avoid repeats across days
+    data.setdefault("used_images", [])  # avoid repeats across days (by image)
+    data.setdefault("used_posts", [])   # avoid repeats across days (by image+variant)
     return data
 
 
@@ -169,7 +178,6 @@ def resolve_image_path(fname: str) -> Optional[Tuple[Path, str]]:
             try:
                 rel = str(p.relative_to(IMAGES_ROOT))
             except ValueError:
-                # Not under IMAGES_ROOT; use name only
                 rel = p.name
             return p, rel
         return None
@@ -201,55 +209,125 @@ def compute_all_available_rels() -> Set[str]:
     return rels
 
 
-def choose_service(state: Dict) -> Tuple[str, Path, str]:
-    # Prefer unique service per day and unique image across history
+def compute_all_available_post_keys() -> Set[str]:
+    keys: Set[str] = set()
+    for service in SERVICE_KEYS:
+        for fname in SERVICE_CONFIG[service]["files"]:
+            resolved = resolve_image_path(fname)
+            if resolved is None:
+                continue
+            _, rel = resolved
+            for v in VARIANTS:
+                keys.add(f"{rel}::{v}")
+    return keys
+
+
+def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str]:
+    # Prefer unique service per day and unique (image+variant) across history
     used_today = set(state.get("used_today", []))
-    used_images = set(state.get("used_images", []))
+    used_posts = set(state.get("used_posts", []))
 
     # Start from next index based on last slno
     next_idx = (int(state.get("last_slno", 0))) % len(SERVICE_KEYS)
     ordered_services = [SERVICE_KEYS[(next_idx + i) % len(SERVICE_KEYS)] for i in range(len(SERVICE_KEYS))]
 
-    # First pass: enforce both per-day unique service and never-before-used image
+    # First pass: enforce both per-day unique service and never-before-used (image+variant)
     for service in ordered_services:
         if service in used_today:
             continue
-        cfg = SERVICE_CONFIG[service]
-        for fname in cfg["files"]:
+        for fname in SERVICE_CONFIG[service]["files"]:
             resolved = resolve_image_path(fname)
             if resolved is None:
                 continue
             p, rel = resolved
-            if rel in used_images:
-                continue
-            return service, p, rel
+            # try variants in shuffled order to diversify
+            variants = VARIANTS.copy()
+            random.shuffle(variants)
+            for v in variants:
+                key = f"{rel}::{v}"
+                if key in used_posts:
+                    continue
+                return service, p, rel, v
 
-    # Second pass: allow previously used image if needed, but still unique service per day
+    # Second pass: allow previously used combos if needed, but still unique service per day
     for service in ordered_services:
         if service in used_today:
             continue
-        cfg = SERVICE_CONFIG[service]
-        for fname in cfg["files"]:
+        for fname in SERVICE_CONFIG[service]["files"]:
             resolved = resolve_image_path(fname)
             if resolved is None:
                 continue
             p, rel = resolved
-            return service, p, rel
+            v = random.choice(VARIANTS)
+            return service, p, rel, v
 
-    # Fallback: if all services used today, pick any available image ignoring used_today
+    # Fallback: pick any available ignoring used_today
     for service in SERVICE_KEYS:
-        cfg = SERVICE_CONFIG[service]
-        for fname in cfg["files"]:
+        for fname in SERVICE_CONFIG[service]["files"]:
             resolved = resolve_image_path(fname)
             if resolved is None:
                 continue
             p, rel = resolved
-            return service, p, rel
+            v = random.choice(VARIANTS)
+            return service, p, rel, v
 
     raise RuntimeError("No service images found.")
 
 
-def build_post(service: str, image_path: Path, slno: int) -> Tuple[Path, str]:
+def apply_variant(image: Image.Image, variant: str) -> Image.Image:
+    if variant == "none":
+        return image
+    if variant == "contrast":
+        enhancer = ImageEnhance.Contrast(image)
+        return enhancer.enhance(1.08)
+    if variant == "warm":
+        # Slight warmth via color/saturation and a subtle red/yellow lift
+        image = ImageEnhance.Color(image).enhance(1.06)
+        r, g, b = image.split()
+        r = r.point(lambda i: min(255, int(i * 1.03)))
+        g = g.point(lambda i: min(255, int(i * 1.01)))
+        return Image.merge("RGB", (r, g, b))
+    if variant == "cool":
+        image = ImageEnhance.Color(image).enhance(1.02)
+        r, g, b = image.split()
+        b = b.point(lambda i: min(255, int(i * 1.04)))
+        g = g.point(lambda i: min(255, int(i * 1.01)))
+        return Image.merge("RGB", (r, g, b))
+    if variant == "golden_glow":
+        # Subtle golden tint overlay to align with brand accents
+        overlay = Image.new("RGB", image.size, (201, 158, 103))  # #c99e67
+        return Image.blend(image, overlay, alpha=0.06)
+    return image
+
+
+def choose_hashtags() -> str:
+    # Build an aggressive, rotating set from all pools
+    selection: List[str] = []
+    # Ensure core brand/region tags present
+    core = ["#AurumBespoke", "#Bangalore", "#Bengaluru", "#Karnataka", "#NammaBengaluru"]
+    selection.extend(core)
+    # Randomly sample neighborhoods, style, karnataka, category
+    neighborhoods = random.sample(BANGALORE_NEIGHBORHOODS, k=min(8, len(BANGALORE_NEIGHBORHOODS)))
+    selection.extend(neighborhoods)
+    style = random.sample(GENERAL_STYLE, k=min(4, len(GENERAL_STYLE)))
+    selection.extend(style)
+    ktags = random.sample(KARNATAKA_TAGS, k=min(2, len(KARNATAKA_TAGS)))
+    selection.extend(ktags)
+    cats = random.sample(CATEGORY_TAGS, k=min(8, len(CATEGORY_TAGS)))
+    selection.extend(cats)
+
+    # Deduplicate while preserving order, then cap to TOTAL_HASHTAGS
+    seen = set()
+    uniq: List[str] = []
+    for tag in selection:
+        if tag not in seen:
+            uniq.append(tag)
+            seen.add(tag)
+    random.shuffle(uniq)
+    return " ".join(uniq[:TOTAL_HASHTAGS])
+
+
+def build_post(service: str, image_path: Path, slno: int, variant: str) -> Tuple[Path, str]:
     # Compose image on portrait canvas with watermark bottom-right
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     slno_str = f"{slno:03d}"
@@ -258,6 +336,9 @@ def build_post(service: str, image_path: Path, slno: int) -> Tuple[Path, str]:
     # Open and fit image
     base = Image.new("RGB", (CANVAS_W, CANVAS_H), BACKGROUND_COLOR)
     src = Image.open(image_path).convert("RGB")
+
+    # Apply variant for on-brand diversity
+    src = apply_variant(src, variant)
 
     # Fit source to canvas while preserving aspect ratio (cover)
     src_ratio = src.width / src.height
@@ -300,15 +381,12 @@ def build_post(service: str, image_path: Path, slno: int) -> Tuple[Path, str]:
     final = base.convert("RGB")
     final.save(out_path, format="JPEG", quality=92, optimize=True)
 
-    # Build caption (strict lines included)
+    # Build caption (consistent lines, emojis, and aggressive tags)
     sc = SERVICE_CONFIG[service]
     emojis = sc["emojis"]
     core_caption = sc["caption"]
     handle = BRAND_HANDLE
-    hashtag_set = random.choice(HASHTAG_POOLS)
-    hash_sample = hashtag_set.copy()
-    random.shuffle(hash_sample)
-    hashtags = " ".join(hash_sample[: min(22, len(hash_sample))])
+    hashtags = choose_hashtags()
 
     caption = (
         f"Aurum Bespoke | {service}\n"
@@ -352,11 +430,11 @@ def main() -> int:
     if next_slno > 999:
         next_slno = 1
 
-    # Pick a service + image (enforce unique per day and avoid repeats across days)
-    service, image_path, image_rel = choose_service(state)
+    # Pick a service + image + variant (enforce unique per day and avoid repeats across days)
+    service, image_path, image_rel, variant = choose_service_and_variant(state)
 
     # Build post
-    photo_path, caption = build_post(service, image_path, next_slno)
+    photo_path, caption = build_post(service, image_path, next_slno, variant)
 
     # Send to Telegram
     send_to_telegram(photo_path, caption)
@@ -369,18 +447,31 @@ def main() -> int:
     used.append(service)
     state["used_today"] = used
 
+    # Track image and image+variant usage across history
     used_images: List[str] = state.get("used_images", [])
     if image_rel not in set(used_images):
         used_images.append(image_rel)
-    # Reset the history once we've cycled through all available images
+    state["used_images"] = used_images
+
+    used_posts: List[str] = state.get("used_posts", [])
+    key = f"{image_rel}::{variant}"
+    if key not in set(used_posts):
+        used_posts.append(key)
+
+    # Reset histories once we've cycled through all possibilities
     all_rels = compute_all_available_rels()
     if all_rels and set(used_images) >= all_rels:
         used_images = []
+    all_keys = compute_all_available_post_keys()
+    if all_keys and set(used_posts) >= all_keys:
+        used_posts = []
+
     state["used_images"] = used_images
+    state["used_posts"] = used_posts
 
     save_state(state)
 
-    print(f"Sent post {next_slno:03d} for service: {service} using {image_rel}")
+    print(f"Sent post {next_slno:03d} for service: {service} using {image_rel} [{variant}]")
     return 0
 
 
