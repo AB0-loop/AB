@@ -1,12 +1,17 @@
 {
-  "last_slno": 1,
+  "last_slno": 2,
   "last_post_date": "2025-08-10",
-  "count_today": 1,
+  "count_today": 2,
   "used_today": [
-    "Suit"
+    "Suit",
+    "Sherwani"
   ],
-  "full_body_count_today": 0,
-  "last_used_file": {},
-  "last_template_idx": {},
-  "recent_posts": []
+  "used_images": [
+    "services/suit.jpg",
+    "services/sherwani.jpg"
+  ],
+  "used_posts": [
+    "services/suit.jpg::none",
+    "services/sherwani.jpg::none"
+  ]
 }
