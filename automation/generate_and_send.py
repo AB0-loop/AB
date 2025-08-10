@@ -20,6 +20,7 @@ IMAGES_ROOT = ASSETS_DIR / "images"
 LOGO_PATH = ASSETS_DIR / "logos" / "aurum-logo-gold.png"
 OUTPUT_DIR = REPO_ROOT / "automation" / "out"
 STATE_PATH = REPO_ROOT / "automation" / "state.json"
+SITE_INDEX = REPO_ROOT / "index.html"
 
 # Daily composition requirements
 MIN_MALE_PER_DAY = 3
@@ -120,6 +121,10 @@ IMAGE_METADATA: Dict[str, Dict[str, bool]] = {
     "gallery/gallery3.jpg": {"male": True},
     "gallery/gallery4.jpg": {"male": True},
     "gallery/gallery5.jpg": {"male": True},
+    "gallery/gallery6.jpg": {"male": True},
+    "gallery/gallery7.jpg": {"male": True},
+    "gallery/gallery8.jpg": {"male": True},
+    "gallery/gallery9.jpg": {"male": True},
 }
 
 # Hashtag pools for Bangalore/Karnataka rotation (aggressive, varied)
@@ -257,6 +262,33 @@ def compute_all_available_post_keys() -> Set[str]:
     return keys
 
 
+def get_site_used_rels() -> Set[str]:
+    used: Set[str] = set()
+    if not SITE_INDEX.exists():
+        return used
+    try:
+        html = SITE_INDEX.read_text(encoding="utf-8")
+    except Exception:
+        return used
+    # Naive scan for src="..." under assets/images/
+    import re
+    for m in re.finditer(r'src\s*=\s*"([^"]+)"', html):
+        src = m.group(1)
+        # we only care about assets/images/
+        if "/assets/images/" not in src:
+            continue
+        try:
+            # Map to path relative to IMAGES_ROOT
+            p = (REPO_ROOT / src.lstrip("/"))
+            if not p.exists():
+                continue
+            rel = str(p.relative_to(IMAGES_ROOT))
+            used.add(rel)
+        except Exception:
+            continue
+    return used
+
+
 def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str]:
     # Prefer unique service per day and unique (image+variant) across history
     used_today = set(state.get("used_today", []))
@@ -264,6 +296,7 @@ def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str]:
     male_count_today = int(state.get("male_count_today", 0))
 
     need_male = male_count_today < MIN_MALE_PER_DAY
+    site_used_rels = get_site_used_rels()
 
     # Start from next index based on last slno
     next_idx = (int(state.get("last_slno", 0))) % len(SERVICE_KEYS)
@@ -274,7 +307,7 @@ def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str]:
         return bool(meta.get("male", False))
 
     # First pass: enforce both per-day unique service and never-before-used (image+variant)
-    # Prioritize male images until quota is met
+    # Prioritize male images until quota is met and exclude images already on website
     for service in ordered_services:
         if service in used_today:
             continue
@@ -283,6 +316,8 @@ def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str]:
             if resolved is None:
                 continue
             p, rel = resolved
+            if rel in site_used_rels:
+                continue
             if need_male and not is_male(rel):
                 continue
             # try variants in shuffled order to diversify
@@ -294,8 +329,7 @@ def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str]:
                     continue
                 return service, p, rel, v
 
-    # Second pass: allow previously used combos if needed, but still unique service per day
-    # Still try to satisfy male quota if pending
+    # Second pass: still exclude site images; try to satisfy male quota if pending
     for service in ordered_services:
         if service in used_today:
             continue
@@ -304,18 +338,22 @@ def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str]:
             if resolved is None:
                 continue
             p, rel = resolved
+            if rel in site_used_rels:
+                continue
             if need_male and not is_male(rel):
                 continue
             v = random.choice(VARIANTS)
             return service, p, rel, v
 
-    # Fallback: pick any available ignoring used_today and male quota
+    # Final fallback: if exclusion exhausts pool, allow site images but still aim for male quota
     for service in SERVICE_KEYS:
         for fname in SERVICE_CONFIG[service]["files"]:
             resolved = resolve_image_path(fname)
             if resolved is None:
                 continue
             p, rel = resolved
+            if need_male and not is_male(rel):
+                continue
             v = random.choice(VARIANTS)
             return service, p, rel, v
 
@@ -412,7 +450,7 @@ def build_post(service: str, image_path: Path, slno: int, variant: str) -> Tuple
     # Paste to base
     base.paste(sharpened, (0, 0))
 
-    # Add watermark bottom-right
+    # Add watermark bottom-right (brand logo)
     logo = Image.open(LOGO_PATH).convert("RGBA")
     wm_target_w = int(CANVAS_W * WATERMARK_RELATIVE_WIDTH)
     wm_ratio = logo.width / logo.height
@@ -507,6 +545,7 @@ def main() -> int:
         used_posts.append(key)
 
     # Increment male count if applicable
+    # Note: images posted always include a bottom-right watermark as enforced above
     if IMAGE_METADATA.get(image_rel, {}).get("male", False):
         state["male_count_today"] = int(state.get("male_count_today", 0)) + 1
 
