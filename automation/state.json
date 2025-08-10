@@ -1,17 +1,19 @@
 {
-  "last_slno": 2,
-  "last_post_date": "2025-08-10",
-  "count_today": 2,
+  "last_slno": 3,
+  "last_post_date": "2025-08-11",
+  "count_today": 1,
   "used_today": [
-    "Suit",
-    "Sherwani"
+    "Kurta Pathani"
   ],
   "used_images": [
     "services/suit.jpg",
-    "services/sherwani.jpg"
+    "services/sherwani.jpg",
+    "gallery/kurta.jpg"
   ],
   "used_posts": [
     "services/suit.jpg::none",
-    "services/sherwani.jpg::none"
-  ]
+    "services/sherwani.jpg::none",
+    "gallery/kurta.jpg::none::gradient_overlay::6313"
+  ],
+  "male_count_today": 1
 }
