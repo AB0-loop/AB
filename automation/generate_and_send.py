@@ -5,7 +5,7 @@ import json
 import random
 import datetime as dt
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Optional, Set
 
 import requests
 from PIL import Image, ImageOps, ImageFilter
@@ -16,6 +16,7 @@ from PIL import Image, ImageOps, ImageFilter
 REPO_ROOT = Path(__file__).resolve().parents[1]
 ASSETS_DIR = REPO_ROOT / "assets"
 SERVICES_DIR = ASSETS_DIR / "images" / "services"
+IMAGES_ROOT = ASSETS_DIR / "images"
 LOGO_PATH = ASSETS_DIR / "logos" / "aurum-logo-gold.png"
 OUTPUT_DIR = REPO_ROOT / "automation" / "out"
 STATE_PATH = REPO_ROOT / "automation" / "state.json"
@@ -38,34 +39,50 @@ TELEGRAM_API = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}"
 # Services mapping to available images and captions
 SERVICE_CONFIG = {
     "Suit": {
-        "files": ["suit.jpg"],
+        "files": ["suit.jpg", "suit.jpg.webp"],
         "emojis": "🕴️✨",
         "caption": "Aurum Bespoke Suit — hand-cut, precision-tailored, and finished for commanding presence.",
     },
     "Tuxedo": {
-        "files": ["blazer.jpg"],  # using blazer visual for tux/blazer rotation
+        "files": ["blazer.jpg", "blazer.jpg.webp"],  # using blazer visual for tux/blazer rotation
         "emojis": "🎩🌙",
         "caption": "Black‑tie mastery. An Aurum Tuxedo that speaks in whispers and is heard across the room.",
     },
     "Sherwani": {
-        "files": ["sherwani.jpg"],
+        "files": ["sherwani.jpg", "sherwani.jpg.webp"],
         "emojis": "👑🌟",
         "caption": "Regal lines. Modern ease. The Aurum Sherwani — crafted for celebrations that matter.",
     },
     "Kurta Pathani": {
-        "files": ["kurta.jpg"],
+        "files": [
+            "kurta.jpg",
+            "kurta.jpg.webp",
+            "gallery/kurta.jpg",  # fallback from gallery
+        ],
         "emojis": "🧵🌿",
         "caption": "Classic comfort with tailored sharpness — Kurta Pathani by Aurum Bespoke.",
     },
     "Bandgala": {
-        "files": ["bandgala.jpg"],
+        "files": [
+            "bandgala.jpg",
+            "bandgala.jpg.webp",
+            "gallery/bandgalla.jpg",  # alternate spelling in gallery
+        ],
         "emojis": "🥇🔥",
         "caption": "Bandgala by Aurum — structured, stately, and unmistakably elegant.",
     },
     "Tailored Shirt": {
-        "files": ["shirt.jpg"],
+        "files": ["shirt.jpg", "shirt.jpg.webp"],
         "emojis": "👔✨",
         "caption": "Subtle details. Impeccable fit. The Aurum Tailored Shirt elevates every day.",
+    },
+    "Modi Jacket": {
+        "files": [
+            "modi-jacket.jpg",
+            "modi-jacket.jpg.webp",
+        ],
+        "emojis": "🇮🇳✨",
+        "caption": "Iconic Modi Jacket — timeless, versatile, and tailored to perfection.",
     },
 }
 SERVICE_KEYS: List[str] = list(SERVICE_CONFIG.keys())
@@ -104,10 +121,18 @@ def load_state() -> Dict:
     if STATE_PATH.exists():
         with open(STATE_PATH, "r", encoding="utf-8") as f:
             try:
-                return json.load(f)
+                data = json.load(f)
             except Exception:
-                pass
-    return {"last_slno": 0, "last_post_date": "", "count_today": 0, "used_today": []}
+                data = {}
+    else:
+        data = {}
+    # Defaults
+    data.setdefault("last_slno", 0)
+    data.setdefault("last_post_date", "")
+    data.setdefault("count_today", 0)
+    data.setdefault("used_today", [])
+    data.setdefault("used_images", [])  # track used image relative paths to avoid repeats across days
+    return data
 
 
 def save_state(state: Dict) -> None:
@@ -129,27 +154,96 @@ def pick_today_target(state: Dict) -> None:
         save_state(state)
 
 
-def choose_service(state: Dict) -> Tuple[str, Path]:
-    # Prefer unique service per day
+def resolve_image_path(fname: str) -> Optional[Tuple[Path, str]]:
+    """Resolve an image file name to an absolute Path and a canonical relative string under IMAGES_ROOT.
+
+    Supports both simple names (resolved under services) and nested paths like "gallery/kurta.jpg".
+    Returns None if no existing file is found.
+    """
+    # Absolute path provided
+    p = Path(fname)
+    if p.is_absolute():
+        if p.exists():
+            try:
+                rel = str(p.relative_to(IMAGES_ROOT))
+            except ValueError:
+                # Not under IMAGES_ROOT; use name only
+                rel = p.name
+            return p, rel
+        return None
+
+    # Nested path relative to images root
+    if "/" in fname or "\\" in fname:
+        candidate = IMAGES_ROOT / fname
+        if candidate.exists():
+            rel = str(candidate.relative_to(IMAGES_ROOT))
+            return candidate, rel
+        return None
+
+    # Simple filename: resolve under services directory
+    candidate = SERVICES_DIR / fname
+    if candidate.exists():
+        rel = str(candidate.relative_to(IMAGES_ROOT))
+        return candidate, rel
+    return None
+
+
+def compute_all_available_rels() -> Set[str]:
+    rels: Set[str] = set()
+    for service in SERVICE_KEYS:
+        for fname in SERVICE_CONFIG[service]["files"]:
+            resolved = resolve_image_path(fname)
+            if resolved is not None:
+                _, rel = resolved
+                rels.add(rel)
+    return rels
+
+
+def choose_service(state: Dict) -> Tuple[str, Path, str]:
+    # Prefer unique service per day and unique image across history
     used_today = set(state.get("used_today", []))
+    used_images = set(state.get("used_images", []))
+
     # Start from next index based on last slno
     next_idx = (int(state.get("last_slno", 0))) % len(SERVICE_KEYS)
-    for i in range(len(SERVICE_KEYS)):
-        idx = (next_idx + i) % len(SERVICE_KEYS)
-        service = SERVICE_KEYS[idx]
-        if service not in used_today:
-            cfg = SERVICE_CONFIG[service]
-            for fname in cfg["files"]:
-                p = SERVICES_DIR / fname
-                if p.exists():
-                    return service, p
-    # Fallback: if all used, return next available
+    ordered_services = [SERVICE_KEYS[(next_idx + i) % len(SERVICE_KEYS)] for i in range(len(SERVICE_KEYS))]
+
+    # First pass: enforce both per-day unique service and never-before-used image
+    for service in ordered_services:
+        if service in used_today:
+            continue
+        cfg = SERVICE_CONFIG[service]
+        for fname in cfg["files"]:
+            resolved = resolve_image_path(fname)
+            if resolved is None:
+                continue
+            p, rel = resolved
+            if rel in used_images:
+                continue
+            return service, p, rel
+
+    # Second pass: allow previously used image if needed, but still unique service per day
+    for service in ordered_services:
+        if service in used_today:
+            continue
+        cfg = SERVICE_CONFIG[service]
+        for fname in cfg["files"]:
+            resolved = resolve_image_path(fname)
+            if resolved is None:
+                continue
+            p, rel = resolved
+            return service, p, rel
+
+    # Fallback: if all services used today, pick any available image ignoring used_today
     for service in SERVICE_KEYS:
         cfg = SERVICE_CONFIG[service]
         for fname in cfg["files"]:
-            p = SERVICES_DIR / fname
-            if p.exists():
-                return service, p
+            resolved = resolve_image_path(fname)
+            if resolved is None:
+                continue
+            p, rel = resolved
+            return service, p, rel
+
     raise RuntimeError("No service images found.")
 
 
@@ -256,8 +350,8 @@ def main() -> int:
     if next_slno > 999:
         next_slno = 1
 
-    # Pick a service + image (enforce unique per day)
-    service, image_path = choose_service(state)
+    # Pick a service + image (enforce unique per day and avoid repeats across days)
+    service, image_path, image_rel = choose_service(state)
 
     # Build post
     photo_path, caption = build_post(service, image_path, next_slno)
@@ -268,12 +362,23 @@ def main() -> int:
     # Update state
     state["last_slno"] = next_slno
     state["count_today"] = state.get("count_today", 0) + 1
+
     used = state.get("used_today", [])
     used.append(service)
     state["used_today"] = used
+
+    used_images: List[str] = state.get("used_images", [])
+    if image_rel not in set(used_images):
+        used_images.append(image_rel)
+    # Reset the history once we've cycled through all available images
+    all_rels = compute_all_available_rels()
+    if all_rels and set(used_images) >= all_rels:
+        used_images = []
+    state["used_images"] = used_images
+
     save_state(state)
 
-    print(f"Sent post {next_slno:03d} for service: {service}")
+    print(f"Sent post {next_slno:03d} for service: {service} using {image_rel}")
     return 0
 
 
