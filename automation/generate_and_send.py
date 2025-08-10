@@ -21,6 +21,9 @@ LOGO_PATH = ASSETS_DIR / "logos" / "aurum-logo-gold.png"
 OUTPUT_DIR = REPO_ROOT / "automation" / "out"
 STATE_PATH = REPO_ROOT / "automation" / "state.json"
 
+# Daily composition requirements
+MIN_MALE_PER_DAY = 3
+
 # Canvas config (portrait social size)
 CANVAS_W = 1080
 CANVAS_H = 1350
@@ -89,6 +92,36 @@ SERVICE_CONFIG = {
 }
 SERVICE_KEYS: List[str] = list(SERVICE_CONFIG.keys())
 
+# Explicit image metadata (whether the image contains a male character)
+# Services images are product-style (assume no visible model), gallery images are model shots
+IMAGE_METADATA: Dict[str, Dict[str, bool]] = {
+    # Services (assume no visible male model)
+    "services/suit.jpg": {"male": False},
+    "services/suit.jpg.webp": {"male": False},
+    "services/blazer.jpg": {"male": False},
+    "services/blazer.jpg.webp": {"male": False},
+    "services/sherwani.jpg": {"male": False},
+    "services/sherwani.jpg.webp": {"male": False},
+    "services/bandgala.jpg": {"male": False},
+    "services/bandgala.jpg.webp": {"male": False},
+    "services/shirt.jpg": {"male": False},
+    "services/shirt.jpg.webp": {"male": False},
+    "services/kurta.jpg": {"male": False},
+    "services/kurta.jpg.webp": {"male": False},
+    "services/modi-jacket.jpg": {"male": False},
+    "services/modi-jacket.jpg.webp": {"male": False},
+
+    # Gallery (assume visible male model)
+    "gallery/kurta.jpg": {"male": True},
+    "gallery/bandgalla.jpg": {"male": True},
+    "gallery/indowestern.jpg": {"male": True},
+    "gallery/gallery1.jpg": {"male": True},
+    "gallery/gallery2.jpg": {"male": True},
+    "gallery/gallery3.jpg": {"male": True},
+    "gallery/gallery4.jpg": {"male": True},
+    "gallery/gallery5.jpg": {"male": True},
+}
+
 # Hashtag pools for Bangalore/Karnataka rotation (aggressive, varied)
 BANGALORE_NEIGHBORHOODS = [
     "#Indiranagar", "#Koramangala", "#HSRLAYOUT", "#Whitefield", "#ElectronicCity",
@@ -140,6 +173,7 @@ def load_state() -> Dict:
     data.setdefault("last_slno", 0)
     data.setdefault("last_post_date", "")
     data.setdefault("count_today", 0)
+    data.setdefault("male_count_today", 0)
     data.setdefault("used_today", [])
     data.setdefault("used_images", [])  # avoid repeats across days (by image)
     data.setdefault("used_posts", [])   # avoid repeats across days (by image+variant)
@@ -161,6 +195,7 @@ def pick_today_target(state: Dict) -> None:
     if state.get("last_post_date") != today_str:
         state["last_post_date"] = today_str
         state["count_today"] = 0
+        state["male_count_today"] = 0
         state["used_today"] = []
         save_state(state)
 
@@ -226,12 +261,20 @@ def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str]:
     # Prefer unique service per day and unique (image+variant) across history
     used_today = set(state.get("used_today", []))
     used_posts = set(state.get("used_posts", []))
+    male_count_today = int(state.get("male_count_today", 0))
+
+    need_male = male_count_today < MIN_MALE_PER_DAY
 
     # Start from next index based on last slno
     next_idx = (int(state.get("last_slno", 0))) % len(SERVICE_KEYS)
     ordered_services = [SERVICE_KEYS[(next_idx + i) % len(SERVICE_KEYS)] for i in range(len(SERVICE_KEYS))]
 
+    def is_male(rel: str) -> bool:
+        meta = IMAGE_METADATA.get(rel, {})
+        return bool(meta.get("male", False))
+
     # First pass: enforce both per-day unique service and never-before-used (image+variant)
+    # Prioritize male images until quota is met
     for service in ordered_services:
         if service in used_today:
             continue
@@ -240,6 +283,8 @@ def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str]:
             if resolved is None:
                 continue
             p, rel = resolved
+            if need_male and not is_male(rel):
+                continue
             # try variants in shuffled order to diversify
             variants = VARIANTS.copy()
             random.shuffle(variants)
@@ -250,6 +295,7 @@ def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str]:
                 return service, p, rel, v
 
     # Second pass: allow previously used combos if needed, but still unique service per day
+    # Still try to satisfy male quota if pending
     for service in ordered_services:
         if service in used_today:
             continue
@@ -258,10 +304,12 @@ def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str]:
             if resolved is None:
                 continue
             p, rel = resolved
+            if need_male and not is_male(rel):
+                continue
             v = random.choice(VARIANTS)
             return service, p, rel, v
 
-    # Fallback: pick any available ignoring used_today
+    # Fallback: pick any available ignoring used_today and male quota
     for service in SERVICE_KEYS:
         for fname in SERVICE_CONFIG[service]["files"]:
             resolved = resolve_image_path(fname)
@@ -457,6 +505,10 @@ def main() -> int:
     key = f"{image_rel}::{variant}"
     if key not in set(used_posts):
         used_posts.append(key)
+
+    # Increment male count if applicable
+    if IMAGE_METADATA.get(image_rel, {}).get("male", False):
+        state["male_count_today"] = int(state.get("male_count_today", 0)) + 1
 
     # Reset histories once we've cycled through all possibilities
     all_rels = compute_all_available_rels()
