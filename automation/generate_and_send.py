@@ -80,6 +80,8 @@ SERVICE_CONFIG = {
         "files": [
             "modi-jacket.jpg",
             "modi-jacket.jpg.webp",
+            "gallery/indowestern.jpg",
+            "gallery/indowestern.jpg.webp",
         ],
         "emojis": "🇮🇳✨",
         "caption": "Iconic Modi Jacket — timeless, versatile, and tailored to perfection.",
