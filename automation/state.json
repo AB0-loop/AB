@@ -1,22 +1,25 @@
 {
-  "last_slno": 4,
+  "last_slno": 5,
   "last_post_date": "2025-08-11",
-  "count_today": 2,
+  "count_today": 3,
   "used_today": [
     "Kurta Pathani",
-    "Bandgala"
+    "Bandgala",
+    "Modi Jacket"
   ],
   "used_images": [
     "services/suit.jpg",
     "services/sherwani.jpg",
     "gallery/kurta.jpg",
-    "gallery/bandgalla.jpg"
+    "gallery/bandgalla.jpg",
+    "gallery/indowestern.jpg"
   ],
   "used_posts": [
     "services/suit.jpg::none",
     "services/sherwani.jpg::none",
     "gallery/kurta.jpg::none::gradient_overlay::6313",
-    "gallery/bandgalla.jpg::contrast::none::8009"
+    "gallery/bandgalla.jpg::contrast::none::8009",
+    "gallery/indowestern.jpg::contrast::none::6897"
   ],
-  "male_count_today": 2
+  "male_count_today": 3
 }
