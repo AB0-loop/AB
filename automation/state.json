@@ -1,13 +1,9 @@
 {
-  "last_slno": 7,
-  "last_post_date": "2025-08-11",
-  "count_today": 5,
+  "last_slno": 8,
+  "last_post_date": "2025-08-12",
+  "count_today": 1,
   "used_today": [
-    "Kurta Pathani",
-    "Bandgala",
-    "Modi Jacket",
-    "Tailored Shirt",
-    "Suit"
+    "Kurta Pathani"
   ],
   "used_images": [
     "services/suit.jpg",
@@ -24,7 +20,8 @@
     "gallery/bandgalla.jpg::contrast::none::8009",
     "gallery/indowestern.jpg::contrast::none::6897",
     "services/shirt.jpg::cool::crop_zoom::5228",
-    "services/suit.jpg::golden_glow::vignette::4403"
+    "services/suit.jpg::golden_glow::vignette::4403",
+    "gallery/kurta.jpg::cool::gold_border::7743"
   ],
-  "male_count_today": 3
+  "male_count_today": 1
 }
