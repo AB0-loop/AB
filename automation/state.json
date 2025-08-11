@@ -1,19 +1,22 @@
 {
-  "last_slno": 3,
+  "last_slno": 4,
   "last_post_date": "2025-08-11",
-  "count_today": 1,
+  "count_today": 2,
   "used_today": [
-    "Kurta Pathani"
+    "Kurta Pathani",
+    "Bandgala"
   ],
   "used_images": [
     "services/suit.jpg",
     "services/sherwani.jpg",
-    "gallery/kurta.jpg"
+    "gallery/kurta.jpg",
+    "gallery/bandgalla.jpg"
   ],
   "used_posts": [
     "services/suit.jpg::none",
     "services/sherwani.jpg::none",
-    "gallery/kurta.jpg::none::gradient_overlay::6313"
+    "gallery/kurta.jpg::none::gradient_overlay::6313",
+    "gallery/bandgalla.jpg::contrast::none::8009"
   ],
-  "male_count_today": 1
+  "male_count_today": 2
 }
