@@ -157,7 +157,7 @@ CATEGORY_TAGS = [
 TOTAL_HASHTAGS = 22
 
 # Do not reuse the same outfit image within this many recent posts
-RECENT_POST_WINDOW = 40
+RECENT_POST_WINDOW = 120
 
 BRAND_HANDLE = "@aurum.bespoke"
 
@@ -179,6 +179,47 @@ AUGMENT_STYLES: List[str] = [
     "soft_focus",
     "gradient_overlay",
 ]
+
+# Color presets per service (CPU-only via FFmpeg filters)
+# These approximate tones to create perceived color variety without segmentation
+SERVICE_COLOR_PRESETS: Dict[str, List[Tuple[str, str]]] = {
+    "Suit": [
+        ("black", "eq=contrast=1.12:saturation=0.35:brightness=-0.02"),
+        ("navy", "eq=saturation=1.05,curves=blue='0/0 0.5/0.55 1/1'"),
+        ("brown", "eq=saturation=1.05,colorchannelmixer=rr=1.0:gg=0.92:bb=0.82"),
+        ("charcoal", "eq=contrast=1.10:saturation=0.6:brightness=-0.01"),
+    ],
+    "Tuxedo": [
+        ("black", "eq=contrast=1.15:saturation=0.4:brightness=-0.02"),
+        ("midnight", "eq=saturation=1.04,curves=blue='0/0 0.5/0.58 1/1'"),
+        ("ivory lapel", "eq=brightness=0.015:saturation=0.95,curves=red='0/0 0.5/0.52 1/1'"),
+    ],
+    "Sherwani": [
+        ("cream", "eq=brightness=0.02:saturation=1.05,colorchannelmixer=rr=1.03:gg=1.02:bb=0.98"),
+        ("maroon", "curves=red='0/0 0.5/0.65 1/1',eq=saturation=1.02"),
+        ("gold", "drawbox=0:0:iw:ih:color=0xc99e67@0.08:t=fill,eq=saturation=1.03"),
+    ],
+    "Kurta Pathani": [
+        ("black", "eq=contrast=1.1:saturation=0.4:brightness=-0.02"),
+        ("white", "eq=brightness=0.02:saturation=0.9"),
+        ("olive", "colorchannelmixer=rr=0.95:gg=1.05:bb=0.9,eq=saturation=1.03"),
+    ],
+    "Bandgala": [
+        ("white", "eq=brightness=0.02:saturation=0.92"),
+        ("black", "eq=contrast=1.12:saturation=0.45:brightness=-0.02"),
+        ("royal blue", "curves=blue='0/0 0.5/0.62 1/1',eq=saturation=1.04"),
+    ],
+    "Tailored Shirt": [
+        ("white", "eq=brightness=0.02:saturation=0.9"),
+        ("sky blue", "curves=blue='0/0 0.5/0.58 1/1'"),
+        ("charcoal", "eq=contrast=1.08:saturation=0.55"),
+    ],
+    "Modi Jacket": [
+        ("black", "eq=contrast=1.1:saturation=0.45:brightness=-0.02"),
+        ("cream", "eq=brightness=0.02:saturation=0.95"),
+        ("rust", "colorchannelmixer=rr=1.05:gg=0.95:bb=0.9,eq=saturation=1.04"),
+    ],
+}
 
 
 def load_state() -> Dict:
@@ -308,7 +349,7 @@ def get_site_used_rels() -> Set[str]:
     return used
 
 
-def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str, str, int]:
+def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str, str, str, int]:
     # Prefer unique service per day and unique (image+variant+style+seed) across history
     used_today = set(state.get("used_today", []))
     used_posts = set(state.get("used_posts", []))
@@ -327,19 +368,22 @@ def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str, str, i
         meta = IMAGE_METADATA.get(rel, {})
         return bool(meta.get("male", False))
 
-    def try_return(service: str, p: Path, rel: str) -> Optional[Tuple[str, Path, str, str, str, int]]:
+    def try_return(service: str, p: Path, rel: str) -> Optional[Tuple[str, Path, str, str, str, str, int]]:
         variants = VARIANTS.copy()
         random.shuffle(variants)
         styles = AUGMENT_STYLES.copy()
         random.shuffle(styles)
+        colors = SERVICE_COLOR_PRESETS.get(service, [("classic", "")]).copy()
+        random.shuffle(colors)
         for v in variants:
             for s in styles:
-                # bounded random seed bucket to allow uniqueness without exploding state
-                seed = random.randint(1, 10_000_000)
-                key = f"{rel}::{v}::{s}::{seed//1000}"
-                if key in used_posts:
-                    continue
-                return service, p, rel, v, s, seed
+                for cname, cfilter in colors:
+                    # bounded random seed bucket to allow uniqueness without exploding state
+                    seed = random.randint(1, 10_000_000)
+                    key = f"{rel}::{cname}::{v}::{s}::{seed//1000}"
+                    if key in used_posts:
+                        continue
+                    return service, p, rel, v, s, cname, seed
         return None
 
     # First pass: enforce day-unique service, exclude site images, prefer male quota, and avoid used combos
@@ -396,7 +440,7 @@ def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str, str, i
     raise RuntimeError("No service images found.")
 
 
-def build_ffmpeg_filter(variant: str, style: str, wm_w: int) -> Tuple[str, str]:
+def build_ffmpeg_filter(variant: str, style: str, wm_w: int, color_filter: str) -> Tuple[str, str]:
     """Return (filter_complex, out_label) for ffmpeg.
     Streams: [0:v] = src, [1:v] = watermark
     """
@@ -432,12 +476,14 @@ def build_ffmpeg_filter(variant: str, style: str, wm_w: int) -> Tuple[str, str]:
     }
     sf = style_filters.get(style, "")
 
-    # Build processing chain from base -> (style) -> (variant)
+    # Build processing chain from base -> (style) -> (variant) -> (color)
     procs = []
     if sf:
         procs.append(sf)
     if vf:
         procs.append(vf)
+    if color_filter:
+        procs.append(color_filter)
     proc_part = ",".join(procs) if procs else "null"
     chain_proc = f"[{lbl_base}]{proc_part}[{lbl_proc}]"
 
@@ -451,9 +497,9 @@ def build_ffmpeg_filter(variant: str, style: str, wm_w: int) -> Tuple[str, str]:
     return filter_complex, lbl_out
 
 
-def run_ffmpeg_build(src_path: Path, out_path: Path, variant: str, style: str) -> None:
+def run_ffmpeg_build(src_path: Path, out_path: Path, variant: str, style: str, color_filter: str) -> None:
     wm_target_w = int(CANVAS_W * WATERMARK_RELATIVE_WIDTH)
-    filter_complex, out_label = build_ffmpeg_filter(variant, style, wm_target_w)
+    filter_complex, out_label = build_ffmpeg_filter(variant, style, wm_target_w, color_filter)
     cmd = [
         "ffmpeg", "-y", "-loglevel", "error",
         "-i", str(src_path),
@@ -490,13 +536,19 @@ def choose_hashtags() -> str:
     return " ".join(uniq[:TOTAL_HASHTAGS])
 
 
-def build_post(service: str, image_path: Path, slno: int, variant: str, style: str, seed: int) -> Tuple[Path, str]:
+def build_post(service: str, image_path: Path, slno: int, variant: str, style: str, color_name: str, seed: int) -> Tuple[Path, str]:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     slno_str = f"{slno:03d}"
     out_path = OUTPUT_DIR / f"{slno_str}_{service.replace(' ', '_').lower()}.jpg"
 
     # CPU-friendly FFmpeg pipeline to generate final image with watermark
-    run_ffmpeg_build(image_path, out_path, variant, style)
+    # Resolve color filter for selected service/color
+    color_filter = ""
+    for cname, cfilter in SERVICE_COLOR_PRESETS.get(service, [("classic", "")]):
+        if cname == color_name:
+            color_filter = cfilter
+            break
+    run_ffmpeg_build(image_path, out_path, variant, style, color_filter)
 
     sc = SERVICE_CONFIG[service]
     emojis = sc["emojis"]
@@ -505,7 +557,7 @@ def build_post(service: str, image_path: Path, slno: int, variant: str, style: s
     hashtags = choose_hashtags()
 
     caption = (
-        f"Aurum Bespoke | {service}\n"
+        f"Aurum Bespoke | {service} ({color_name})\n"
         f"SL No: {slno_str}\n\n"
         f"{emojis} {core_caption}\n\n"
         f"Book Your Home Visit\n"
@@ -552,9 +604,9 @@ def main() -> int:
     if next_slno > 999:
         next_slno = 1
 
-    service, image_path, image_rel, variant, style, seed = choose_service_and_variant(state)
+    service, image_path, image_rel, variant, style, color_name, seed = choose_service_and_variant(state)
 
-    photo_path, caption = build_post(service, image_path, next_slno, variant, style, seed)
+    photo_path, caption = build_post(service, image_path, next_slno, variant, style, color_name, seed)
 
     send_to_telegram(photo_path, caption)
 
@@ -571,7 +623,7 @@ def main() -> int:
     state["used_images"] = used_images
 
     used_posts: List[str] = state.get("used_posts", [])
-    key = f"{image_rel}::{variant}::{style}::{seed//1000}"
+    key = f"{image_rel}::{color_name}::{variant}::{style}::{seed//1000}"
     if key not in set(used_posts):
         used_posts.append(key)
 
@@ -589,7 +641,7 @@ def main() -> int:
     if all_rels and set(used_images) >= all_rels:
         used_images = []
     all_keys = compute_all_available_post_keys()
-    if all_keys and {k.rsplit("::", 1)[0] for k in used_posts} >= all_keys:
+    if all_keys and {"::".join(k.split("::")[:3]) for k in used_posts} >= all_keys:
         used_posts = []
 
     state["used_images"] = used_images
@@ -597,7 +649,7 @@ def main() -> int:
 
     save_state(state)
 
-    print(f"Sent post {next_slno:03d} for service: {service} using {image_rel} [{variant}|{style}|{seed}]")
+    print(f"Sent post {next_slno:03d} for service: {service} using {image_rel} [{color_name}|{variant}|{style}|{seed}]")
     return 0
 
 
