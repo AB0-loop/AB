@@ -9,7 +9,9 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Optional, Set
 
 import requests
-from PIL import Image, ImageOps, ImageFilter, ImageEnhance
+import subprocess
+import shlex
+from PIL import Image  # only for existence checks when needed; not used for heavy processing
 
 # ------------------------------
 # Config
@@ -384,73 +386,75 @@ def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str, str, i
     raise RuntimeError("No service images found.")
 
 
-def apply_variant(image: Image.Image, variant: str) -> Image.Image:
-    if variant == "none":
-        return image
-    if variant == "contrast":
-        enhancer = ImageEnhance.Contrast(image)
-        return enhancer.enhance(1.08)
-    if variant == "warm":
-        image = ImageEnhance.Color(image).enhance(1.06)
-        r, g, b = image.split()
-        r = r.point(lambda i: min(255, int(i * 1.03)))
-        g = g.point(lambda i: min(255, int(i * 1.01)))
-        return Image.merge("RGB", (r, g, b))
-    if variant == "cool":
-        image = ImageEnhance.Color(image).enhance(1.02)
-        r, g, b = image.split()
-        b = b.point(lambda i: min(255, int(i * 1.04)))
-        g = g.point(lambda i: min(255, int(i * 1.01)))
-        return Image.merge("RGB", (r, g, b))
-    if variant == "golden_glow":
-        overlay = Image.new("RGB", image.size, (201, 158, 103))  # #c99e67
-        return Image.blend(image, overlay, alpha=0.06)
-    return image
+def build_ffmpeg_filter(variant: str, style: str, wm_w: int) -> Tuple[str, str]:
+    """Return (filter_complex, out_label) for ffmpeg.
+    Streams: [0:v] = src, [1:v] = watermark
+    """
+    lbl_base = "base"
+    lbl_proc = "proc"
+    lbl_wm = "wm"
+    lbl_out = "out"
+
+    # Base: cover fit to 1080x1350 and subtle sharpen
+    chain_base = (
+        f"[0:v]scale={CANVAS_W}:{CANVAS_H}:force_original_aspect_ratio=increase,"
+        f"crop={CANVAS_W}:{CANVAS_H},unsharp=5:5:0.6:5:5:0.0[{lbl_base}]"
+    )
+
+    # Variant adjustments
+    variant_filters = {
+        "none": "",
+        "contrast": "eq=contrast=1.08",
+        "warm": "eq=saturation=1.06,colorchannelmixer=rr=1.03:gg=1.01:bb=1.0",
+        "cool": "eq=saturation=1.02,colorchannelmixer=bb=1.04:gg=1.01:rr=1.0",
+        "golden_glow": "drawbox=x=0:y=0:w=iw:h=ih:color=0xc99e67@0.06:t=fill",
+    }
+    vf = variant_filters.get(variant, "")
+
+    # Augmentation styles
+    style_filters = {
+        "none": "",
+        "crop_zoom": "crop=iw*0.92:ih*0.92,scale=1080:1350",
+        "vignette": "vignette",
+        "gold_border": "pad=iw+48:ih+48:(ow-iw)/2:(oh-ih)/2:0xC99E67,scale=1080:1350",  # gold pad then scale back
+        "soft_focus": "gblur=sigma=2.0",
+        "gradient_overlay": "drawbox=x=0:y=0:w=iw:h=ih:color=0xc99e67@0.06:t=fill",
+    }
+    sf = style_filters.get(style, "")
+
+    # Build processing chain from base -> (style) -> (variant)
+    procs = []
+    if sf:
+        procs.append(sf)
+    if vf:
+        procs.append(vf)
+    proc_part = ",".join(procs) if procs else "null"
+    chain_proc = f"[{lbl_base}]{proc_part}[{lbl_proc}]"
+
+    # Watermark scale and overlay
+    chain_wm = f"[1:v]scale={wm_w}:-1[{lbl_wm}]"
+    chain_overlay = (
+        f"[{lbl_proc}][{lbl_wm}]overlay=x=main_w-overlay_w-{WATERMARK_MARGIN}:y=main_h-overlay_h-{WATERMARK_MARGIN}[{lbl_out}]"
+    )
+
+    filter_complex = ",".join([chain_base, chain_proc, chain_wm, chain_overlay])
+    return filter_complex, lbl_out
 
 
-def apply_augmentation(image: Image.Image, style: str, seed: int) -> Image.Image:
-    rnd = random.Random(seed)
-    if style == "none":
-        return image
-    w, h = image.size
-    if style == "crop_zoom":
-        # random crop between 88-96% area then resize back
-        scale = rnd.uniform(0.88, 0.96)
-        cw = int(w * scale)
-        ch = int(h * scale)
-        left = rnd.randint(0, w - cw)
-        top = rnd.randint(0, h - ch)
-        return image.crop((left, top, left + cw, top + ch)).resize((w, h), Image.LANCZOS)
-    if style == "vignette":
-        # radial darkening toward edges
-        vignette = Image.new("L", (w, h), 0)
-        cx, cy = w / 2, h / 2
-        max_r2 = (cx**2 + cy**2)
-        px = vignette.load()
-        for y in range(h):
-            for x in range(w):
-                dx, dy = x - cx, y - cy
-                r2 = dx*dx + dy*dy
-                t = min(1.0, r2 / max_r2)
-                val = int(255 * t**1.5)
-                px[x, y] = val
-        return Image.composite(Image.new("RGB", (w, h), (0, 0, 0)), image, vignette.filter(ImageFilter.GaussianBlur(6)))
-    if style == "gold_border":
-        border = 24
-        framed = Image.new("RGB", (w + border*2, h + border*2), (201, 158, 103))
-        framed.paste(image, (border, border))
-        return framed.resize((w, h), Image.LANCZOS)
-    if style == "soft_focus":
-        return image.filter(ImageFilter.GaussianBlur(radius=2))
-    if style == "gradient_overlay":
-        overlay = Image.new("RGBA", (w, h))
-        opx = overlay.load()
-        for y in range(h):
-            alpha = int(64 * (y / h))
-            for x in range(w):
-                opx[x, y] = (201, 158, 103, alpha)
-        return Image.alpha_composite(image.convert("RGBA"), overlay).convert("RGB")
-    return image
+def run_ffmpeg_build(src_path: Path, out_path: Path, variant: str, style: str) -> None:
+    wm_target_w = int(CANVAS_W * WATERMARK_RELATIVE_WIDTH)
+    filter_complex, out_label = build_ffmpeg_filter(variant, style, wm_target_w)
+    cmd = [
+        "ffmpeg", "-y", "-loglevel", "error",
+        "-i", str(src_path),
+        "-i", str(LOGO_PATH),
+        "-filter_complex", filter_complex,
+        "-map", f"[{out_label}]",
+        "-frames:v", "1",
+        "-q:v", "3",
+        str(out_path),
+    ]
+    subprocess.run(cmd, check=True)
 
 
 def choose_hashtags() -> str:
@@ -481,46 +485,8 @@ def build_post(service: str, image_path: Path, slno: int, variant: str, style: s
     slno_str = f"{slno:03d}"
     out_path = OUTPUT_DIR / f"{slno_str}_{service.replace(' ', '_').lower()}.jpg"
 
-    base = Image.new("RGB", (CANVAS_W, CANVAS_H), BACKGROUND_COLOR)
-    src = Image.open(image_path).convert("RGB")
-
-    # Apply augmentation + color variant
-    src = apply_augmentation(src, style, seed)
-    src = apply_variant(src, variant)
-
-    # Fit to canvas
-    src_ratio = src.width / src.height
-    canvas_ratio = CANVAS_W / CANVAS_H
-    if src_ratio > canvas_ratio:
-        new_h = CANVAS_H
-        new_w = int(src_ratio * new_h)
-    else:
-        new_w = CANVAS_W
-        new_h = int(new_w / src_ratio)
-    resized = src.resize((new_w, new_h), Image.LANCZOS)
-
-    left = (new_w - CANVAS_W) // 2
-    top = (new_h - CANVAS_H) // 2
-    cropped = resized.crop((left, top, left + CANVAS_W, top + CANVAS_H))
-
-    sharpened = cropped.filter(ImageFilter.UnsharpMask(radius=1.2, percent=120, threshold=3))
-
-    base.paste(sharpened, (0, 0))
-
-    # Watermark bottom-right
-    logo = Image.open(LOGO_PATH).convert("RGBA")
-    wm_target_w = int(CANVAS_W * WATERMARK_RELATIVE_WIDTH)
-    wm_ratio = logo.width / logo.height
-    wm_size = (wm_target_w, int(wm_target_w / wm_ratio))
-    logo_resized = logo.resize(wm_size, Image.LANCZOS)
-
-    pos = (CANVAS_W - logo_resized.width - WATERMARK_MARGIN,
-           CANVAS_H - logo_resized.height - WATERMARK_MARGIN)
-    base = base.convert("RGBA")
-    base.alpha_composite(logo_resized, dest=pos)
-
-    final = base.convert("RGB")
-    final.save(out_path, format="JPEG", quality=92, optimize=True)
+    # CPU-friendly FFmpeg pipeline to generate final image with watermark
+    run_ffmpeg_build(image_path, out_path, variant, style)
 
     sc = SERVICE_CONFIG[service]
     emojis = sc["emojis"]

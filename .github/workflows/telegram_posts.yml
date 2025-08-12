@@ -28,6 +28,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r automation/requirements.txt
 
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
       - name: Run generator
         env:
           TELEGRAM_TOKEN: 7801267285:AAH2F_6s9KiXQolAv1rlZWSuj2g_SumHhZ0
