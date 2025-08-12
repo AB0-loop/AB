@@ -156,6 +156,9 @@ CATEGORY_TAGS = [
 # Aim for consistent caption length; pick a fixed total hashtag count
 TOTAL_HASHTAGS = 22
 
+# Do not reuse the same outfit image within this many recent posts
+RECENT_POST_WINDOW = 40
+
 BRAND_HANDLE = "@aurum.bespoke"
 
 # Visual variants for subtle, on-brand diversity without breaking theme
@@ -195,6 +198,7 @@ def load_state() -> Dict:
     data.setdefault("used_today", [])
     data.setdefault("used_images", [])  # avoid repeats across days (by image)
     data.setdefault("used_posts", [])   # avoid repeats across days (by image+variant+style+seed)
+    data.setdefault("recent_rels", [])  # rolling window of recently used image rels
     return data
 
 
@@ -312,6 +316,8 @@ def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str, str, i
 
     need_male = male_count_today < MIN_MALE_PER_DAY
     site_used_rels = get_site_used_rels()
+    recent_rels = list(state.get("recent_rels", []))
+    recent_set = set(recent_rels)
 
     # Start from next index based on last slno
     next_idx = (int(state.get("last_slno", 0))) % len(SERVICE_KEYS)
@@ -347,6 +353,8 @@ def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str, str, i
             p, rel = resolved
             if rel in site_used_rels:
                 continue
+            if rel in recent_set:
+                continue
             if need_male and not is_male(rel):
                 continue
             got = try_return(service, p, rel)
@@ -363,6 +371,8 @@ def choose_service_and_variant(state: Dict) -> Tuple[str, Path, str, str, str, i
                 continue
             p, rel = resolved
             if rel in site_used_rels:
+                continue
+            if rel in recent_set:
                 continue
             if need_male and not is_male(rel):
                 continue
@@ -567,6 +577,13 @@ def main() -> int:
 
     if IMAGE_METADATA.get(image_rel, {}).get("male", False):
         state["male_count_today"] = int(state.get("male_count_today", 0)) + 1
+
+    # Update recent window
+    recent_rels: List[str] = state.get("recent_rels", [])
+    recent_rels.append(image_rel)
+    if len(recent_rels) > RECENT_POST_WINDOW:
+        recent_rels = recent_rels[-RECENT_POST_WINDOW:]
+    state["recent_rels"] = recent_rels
 
     all_rels = compute_all_available_rels()
     if all_rels and set(used_images) >= all_rels:
