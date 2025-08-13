@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Aurum Bespoke Video Automation System
+Aurum Bespoke Video Automation System - COST FREE VERSION
 Generates and posts branded videos to Telegram with AI-generated content.
 """
 
@@ -12,6 +12,7 @@ import time
 import datetime as dt
 import requests
 import subprocess
+import shutil
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional, Set
 import logging
@@ -27,12 +28,23 @@ class VideoAutomation:
     def __init__(self):
         self.state = self.load_state()
         self.buckets = self.load_buckets()
+        self.hashtag_rotation = self.load_hashtag_rotation()
         self.setup_directories()
+        self.setup_watermark()
         
     def setup_directories(self):
         """Create necessary directories"""
         OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
         TEMP_DIR.mkdir(parents=True, exist_ok=True)
+        
+    def setup_watermark(self):
+        """Auto-setup watermark from existing logo if needed"""
+        if not OVERLAY_PATH.exists() and FALLBACK_LOGO.exists():
+            try:
+                shutil.copy2(FALLBACK_LOGO, OVERLAY_PATH)
+                logger.info("Watermark auto-copied from existing logo")
+            except Exception as e:
+                logger.error(f"Failed to copy watermark: {e}")
         
     def load_state(self) -> Dict:
         """Load automation state"""
@@ -65,16 +77,48 @@ class VideoAutomation:
             except Exception as e:
                 logger.error(f"Error loading buckets: {e}")
                 return {}
-        return self.get_default_buckets()
+        return DEFAULT_BUCKETS
     
-    def get_default_buckets(self) -> Dict:
-        """Get default content buckets"""
-        return {
-            "services": ["Suit", "Sherwani", "Tuxedo", "Bandgala", "Pathani", "Modi Jacket"],
-            "styles": ["Classic", "Modern", "Traditional", "Contemporary"],
-            "occasions": ["Wedding", "Business", "Festival", "Party", "Formal"],
-            "emotions": ["Confident", "Elegant", "Powerful", "Sophisticated"]
-        }
+    def load_hashtag_rotation(self) -> List[str]:
+        """Load hashtag rotation for sequential usage"""
+        if HASHTAG_PERSISTENCE_FILE.exists():
+            try:
+                with open(HASHTAG_PERSISTENCE_FILE, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    return data.get("current_rotation", [])
+            except Exception as e:
+                logger.error(f"Error loading hashtag rotation: {e}")
+        
+        # Initialize rotation
+        rotation = AGGRESSIVE_HASHTAGS.copy()
+        random.shuffle(rotation)
+        self.save_hashtag_rotation(rotation)
+        return rotation
+    
+    def save_hashtag_rotation(self, rotation: List[str]):
+        """Save hashtag rotation state"""
+        try:
+            data = {"current_rotation": rotation, "last_updated": dt.datetime.now().isoformat()}
+            with open(HASHTAG_PERSISTENCE_FILE, "w", encoding="utf-8") as f:
+                json.dump(data, f, indent=2)
+        except Exception as e:
+            logger.error(f"Error saving hashtag rotation: {e}")
+    
+    def get_next_hashtags(self, count: int = 15) -> str:
+        """Get next hashtags in rotation order"""
+        if not self.hashtag_rotation:
+            # Reset rotation if empty
+            self.hashtag_rotation = AGGRESSIVE_HASHTAGS.copy()
+            random.shuffle(self.hashtag_rotation)
+        
+        # Take next batch
+        selected = self.hashtag_rotation[:count]
+        self.hashtag_rotation = self.hashtag_rotation[count:]
+        
+        # Save updated rotation
+        self.save_hashtag_rotation(self.hashtag_rotation)
+        
+        return " ".join(selected)
     
     def save_state(self):
         """Save state atomically"""
@@ -128,21 +172,17 @@ class VideoAutomation:
         return service, style, occasion
     
     def generate_ai_story(self, service: str, style: str, occasion: str) -> str:
-        """Generate story using OpenAI API"""
+        """Generate story using sophisticated templates"""
         try:
-            prompt = f"""Create a compelling 20-second story for a luxury menswear brand video.
-Service: {service}
-Style: {style}
-Occasion: {occasion}
-Tone: Sophisticated, aspirational, confident
-Length: 2-3 sentences, suitable for voiceover
-Focus: The feeling of wearing bespoke clothing, the confidence it brings"""
-            
-            # For now, return a template story (replace with actual OpenAI API call)
+            # Sophisticated templates for luxury brand
             stories = [
                 f"Step into the world of {service} perfection. Every stitch tells a story of craftsmanship, every detail speaks of luxury. When you wear {service}, you don't just dress—you transform.",
                 f"The {style} {service} is more than clothing—it's armor for the modern gentleman. Designed for {occasion}, crafted for confidence. This is where style meets substance.",
-                f"From {occasion} to everyday elegance, the {service} redefines what it means to be well-dressed. Because true luxury isn't just seen—it's felt, lived, and remembered."
+                f"From {occasion} to everyday elegance, the {service} redefines what it means to be well-dressed. Because true luxury isn't just seen—it's felt, lived, and remembered.",
+                f"Experience the {style} elegance of {service}. Crafted for {occasion}, designed for confidence. This is where luxury meets legacy.",
+                f"The {service} represents more than fashion—it's a statement of sophistication. {style} design meets {occasion} excellence. This is Aurum Bespoke.",
+                f"Discover the art of {service} mastery. Each {style} detail crafted for {occasion} perfection. This is bespoke luxury redefined.",
+                f"The {service} embodies timeless {style} elegance. Designed for {occasion}, built for confidence. This is where legends are crafted."
             ]
             return random.choice(stories)
             
@@ -151,44 +191,48 @@ Focus: The feeling of wearing bespoke clothing, the confidence it brings"""
             return f"Experience the luxury of {service}. Crafted with precision, designed for {style} elegance. Perfect for {occasion}."
     
     def generate_tts(self, text: str, output_path: Path) -> bool:
-        """Generate TTS using ElevenLabs/PlayHT API"""
+        """Generate TTS using espeak (local, free)"""
         try:
-            # For now, use espeak as fallback (replace with actual TTS API)
+            # Use espeak (local) - FREE and reliable
             cmd = [
                 "espeak", "-w", str(output_path),
-                "--voice=en-us", "--speed=150",
+                f"--voice={ESPEAK_VOICE}", f"--speed={ESPEAK_SPEED}",
                 text
             ]
             result = subprocess.run(cmd, capture_output=True, text=True)
-            return result.returncode == 0
+            if result.returncode == 0:
+                logger.info("TTS generated using espeak")
+                return True
+            
+            logger.error("TTS generation failed")
+            return False
             
         except Exception as e:
             logger.error(f"Error generating TTS: {e}")
             return False
     
-    def generate_ai_image(self, prompt: str, output_path: Path) -> bool:
-        """Generate AI image using Leonardo/Hailuo API"""
+    def create_luxury_image(self, prompt: str, output_path: Path) -> bool:
+        """Create luxury-style image using existing assets and FFmpeg"""
         try:
-            # For now, create a placeholder (replace with actual API call)
-            # This would integrate with Leonardo AI or Hailuo for image generation
-            logger.info(f"Would generate AI image: {prompt}")
-            
-            # Create a simple colored rectangle as placeholder
+            # Create a sophisticated luxury background with the logo
             cmd = [
                 "ffmpeg", "-y", "-f", "lavfi",
                 "-i", f"color=black:size={VIDEO_WIDTH}x{VIDEO_HEIGHT}",
-                "-vf", "drawtext=text='AI Image Placeholder':fontsize=60:fontcolor=white:x=(w-text_w)/2:y=(h-text_h)/2",
+                "-i", str(FALLBACK_LOGO),
+                "-filter_complex", f"[0:v][1:v]overlay=(W-w)/2:(H-h)/2,drawtext=text='{prompt[:40]}...':fontsize=36:fontcolor=white:x=(w-text_w)/2:y=80,drawtext=text='Aurum Bespoke':fontsize=48:fontcolor=#c99e67:x=(w-text_w)/2:y=120",
                 "-frames:v", "1", str(output_path)
             ]
             result = subprocess.run(cmd, capture_output=True)
-            return result.returncode == 0
-            
+            if result.returncode == 0:
+                logger.info("Luxury image created successfully")
+                return True
+            return False
         except Exception as e:
-            logger.error(f"Error generating AI image: {e}")
+            logger.error(f"Luxury image creation failed: {e}")
             return False
     
     def compose_video(self, image_path: Path, audio_path: Path, output_path: Path) -> bool:
-        """Compose final video using FFmpeg"""
+        """Compose final video using FFmpeg with watermark"""
         try:
             # Video composition with watermark
             watermark_path = OVERLAY_PATH
@@ -196,7 +240,7 @@ Focus: The feeling of wearing bespoke clothing, the confidence it brings"""
                 logger.warning("Watermark not found, creating without it")
                 watermark_cmd = ""
             else:
-                watermark_cmd = f"[1:v]scale=200:-1[wm];[0:v][wm]overlay=W-w-20:H-h-20"
+                watermark_cmd = f"[1:v]scale={VIDEO_SETTINGS['watermark_size']}:-1[wm];[0:v][wm]overlay=W-w-{VIDEO_SETTINGS['watermark_margin']}:H-h-{VIDEO_SETTINGS['watermark_margin']}"
             
             if watermark_cmd:
                 filter_complex = f"[0:v]scale={VIDEO_WIDTH}:{VIDEO_HEIGHT}:force_original_aspect_ratio=increase,crop={VIDEO_WIDTH}:{VIDEO_HEIGHT}[base];{watermark_cmd}"
@@ -232,54 +276,44 @@ Focus: The feeling of wearing bespoke clothing, the confidence it brings"""
             logger.error(f"Error composing video: {e}")
             return False
     
-    def generate_hashtags(self) -> str:
-        """Generate relevant hashtags"""
-        try:
-            with open(HASHTAG_BANK_PATH, "r", encoding="utf-8") as f:
-                hashtags = f.read().strip().split("\n")
-            
-            # Select relevant hashtags
-            selected = random.sample(hashtags, min(15, len(hashtags)))
-            return " ".join(selected)
-            
-        except Exception as e:
-            logger.error(f"Error loading hashtags: {e}")
-            return "#AurumBespoke #LuxuryMenswear #Bespoke #Tailoring #Bangalore"
-    
     def create_caption(self, service: str, slno: int, hashtags: str) -> str:
-        """Create video caption"""
-        return f"""🎬 Aurum Bespoke | {service}
+        """Create video caption with brand information"""
+        return f"""🎬 {AURUM_BRAND} | {service}
 SL No: {slno:03d}
 
 ✨ Luxury tailoring that transforms your confidence
 🎯 Perfect fit, perfect style, perfect you
 
 📱 Book Your Home Visit
-WhatsApp: +91 81055 08503
-Website: www.aurumbespoke.com
+WhatsApp: {AURUM_PHONE}
+Website: {AURUM_SITE}
 
 @aurum.bespoke
 
 {hashtags}"""
     
     def send_to_telegram(self, video_path: Path, caption: str) -> bool:
-        """Send video to Telegram"""
+        """Send video to Telegram using same credentials as photo automation"""
         try:
-            if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
+            # Use the same environment variables as photo automation
+            telegram_token = os.getenv("TELEGRAM_TOKEN") or os.getenv("TELEGRAM_BOT_TOKEN")
+            telegram_chat_id = os.getenv("TELEGRAM_ID") or os.getenv("TELEGRAM_CHAT_ID")
+            
+            if not telegram_token or not telegram_chat_id:
                 raise RuntimeError("Telegram credentials not configured")
             
-            url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendVideo"
+            url = f"https://api.telegram.org/bot{telegram_token}/sendVideo"
             
-            for attempt in range(3):
+            for attempt in range(MAX_RETRIES):
                 try:
                     with open(video_path, "rb") as f:
                         files = {"video": f}
                         data = {
-                            "chat_id": TELEGRAM_CHAT_ID,
+                            "chat_id": telegram_chat_id,
                             "caption": caption,
                             "supports_streaming": True
                         }
-                        resp = requests.post(url, data=data, files=files, timeout=120)
+                        resp = requests.post(url, data=data, files=files, timeout=TIMEOUT)
                         
                         if resp.status_code == 200:
                             logger.info("Video sent successfully to Telegram")
@@ -288,13 +322,13 @@ Website: www.aurumbespoke.com
                         err = f"Telegram API error: {resp.status_code} {resp.text}"
                         logger.error(err)
                         
-                        if attempt == 2:
+                        if attempt == MAX_RETRIES - 1:
                             raise RuntimeError(err)
                             
                 except Exception as e:
-                    if attempt == 2:
+                    if attempt == MAX_RETRIES - 1:
                         raise
-                    time.sleep(2 ** attempt)
+                    time.sleep(RETRY_DELAY ** attempt)
             
             return False
             
@@ -313,7 +347,9 @@ Website: www.aurumbespoke.com
             logger.error(f"Error cleaning up temp files: {e}")
     
     def run(self) -> bool:
-        """Main automation run"""
+        """Main automation run with timeout protection"""
+        start_time = time.time()
+        
         try:
             logger.info("Starting video automation")
             
@@ -330,6 +366,11 @@ Website: www.aurumbespoke.com
             service, style, occasion = self.choose_service_and_style()
             logger.info(f"Selected: {service} - {style} - {occasion}")
             
+            # Check timeout
+            if time.time() - start_time > PER_OUTFIT_TIMEOUT:
+                logger.error("Outfit timeout exceeded")
+                return False
+            
             # Generate AI content
             story = self.generate_ai_story(service, style, occasion)
             logger.info(f"Generated story: {story}")
@@ -340,15 +381,30 @@ Website: www.aurumbespoke.com
             temp_video = TEMP_DIR / f"temp_video_{slno}.mp4"
             final_video = OUTPUT_DIR / f"{slno:03d}_{service.replace(' ', '_').lower()}.mp4"
             
+            # Check timeout
+            if time.time() - start_time > PER_OUTFIT_TIMEOUT:
+                logger.error("Outfit timeout exceeded")
+                return False
+            
             # Generate TTS
             if not self.generate_tts(story, temp_audio):
                 logger.error("Failed to generate TTS")
                 return False
             
-            # Generate AI image
+            # Check timeout
+            if time.time() - start_time > PER_OUTFIT_TIMEOUT:
+                logger.error("Outfit timeout exceeded")
+                return False
+            
+            # Generate luxury image
             image_prompt = f"Luxury {service} in {style} style for {occasion}, sophisticated, high-end photography"
-            if not self.generate_ai_image(image_prompt, temp_image):
-                logger.error("Failed to generate AI image")
+            if not self.create_luxury_image(image_prompt, temp_image):
+                logger.error("Failed to generate luxury image")
+                return False
+            
+            # Check timeout
+            if time.time() - start_time > PER_OUTFIT_TIMEOUT:
+                logger.error("Outfit timeout exceeded")
                 return False
             
             # Compose video
@@ -360,8 +416,13 @@ Website: www.aurumbespoke.com
             temp_video.rename(final_video)
             
             # Generate caption and hashtags
-            hashtags = self.generate_hashtags()
+            hashtags = self.get_next_hashtags(15)
             caption = self.create_caption(service, slno, hashtags)
+            
+            # Check timeout
+            if time.time() - start_time > PER_OUTFIT_TIMEOUT:
+                logger.error("Outfit timeout exceeded")
+                return False
             
             # Send to Telegram
             if not self.send_to_telegram(final_video, caption):
