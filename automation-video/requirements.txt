@@ -1,26 +1,6 @@
-# Core dependencies
 requests==2.32.3
-Pillow==11.0.0
-
-# AI and API integrations
-openai==1.12.0
-elevenlabs==0.3.0
-playht==0.1.0
-
-# Video and audio processing
-ffmpeg-python==0.2.0
-pydub==0.25.1
-
-# Image processing
-Pillow==11.0.0
-opencv-python==4.9.0.80
-
-# Utilities
+python-telegram-bot==21.4
+tenacity==8.5.0
+pydantic==2.8.2
 python-dotenv==1.0.1
-schedule==1.2.1
-colorama==0.4.6
-
-# Development and testing
-pytest==8.0.0
-black==24.1.1
-flake8==7.0.0
+pytz==2024.1
