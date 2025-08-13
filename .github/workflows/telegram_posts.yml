@@ -35,8 +35,8 @@ jobs:
 
       - name: Run generator
         env:
-          TELEGRAM_TOKEN: 7801267285:AAH2F_6s9KiXQolAv1rlZWSuj2g_SumHhZ0
-          TELEGRAM_ID: 7915749117
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_ID: ${{ secrets.TELEGRAM_ID }}
         run: |
           python automation/generate_and_send.py
 

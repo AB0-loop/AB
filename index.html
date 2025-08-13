@@ -18,8 +18,10 @@
   <meta property="og:image" content="https://aurumbespoke.com/assets/logos/aurum-logo.jpg">
   <meta property="og:url" content="https://aurumbespoke.com/">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Aurum Bespoke">
+  <meta property="og:locale" content="en_US">
   <!-- Twitter -->
-  <meta name="twitter:card" content="summary">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Aurum Bespoke – Fit That Speaks">
   <meta name="twitter:description" content="Luxury menswear at your doorstep.">
   <meta name="twitter:image" content="https://aurumbespoke.com/assets/logos/aurum-logo.jpg">
@@ -179,8 +181,10 @@
 
   <!-- Hero Section -->
   <section id="home" class="w-full min-h-screen flex flex-col items-center justify-center text-center p-6 bg-black relative pt-20 md:pt-24">
-    <video autoplay loop muted playsinline preload="metadata" class="absolute top-0 left-0 w-full h-full object-cover opacity-20 z-0">
+    <video autoplay loop muted playsinline preload="metadata" poster="assets/logos/aurum-logo.jpg" class="absolute top-0 left-0 w-full h-full object-cover opacity-20 z-0">
       <source src="assets/background/hero-loop.mp4" type="video/mp4">
+      <!-- Fallback for video loading issues -->
+      <div class="absolute inset-0 bg-gradient-to-b from-black/60 to-black/90"></div>
     </video>
     <div class="z-10 max-w-2xl mx-auto">
       <h1 class="text-4xl md:text-6xl gold-text mb-4" data-aos="fade-up">Aurum Bespoke ✨</h1>
@@ -362,9 +366,28 @@
   </div>
 
   <script>
+    // Register service worker for PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(registration => console.log('SW registered:', registration))
+          .catch(error => console.log('SW registration failed:', error));
+      });
+    }
+    
     document.addEventListener('DOMContentLoaded', function () {
-      if (window.AOS && typeof AOS.init === 'function') {
+      // Check for reduced motion preference
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      
+      if (window.AOS && typeof AOS.init === 'function' && !prefersReducedMotion) {
         AOS.init();
+      }
+      
+      // Pause video if reduced motion is preferred
+      const heroVideo = document.querySelector('video');
+      if (heroVideo && prefersReducedMotion) {
+        heroVideo.pause();
+        heroVideo.style.display = 'none';
       }
 
       // Gallery arrow navigation with snap-to-card behavior
