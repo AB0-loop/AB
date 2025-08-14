@@ -1,2 +1,8 @@
 Pillow==11.0.0
 requests==2.32.3
+huggingface-hub==0.20.3
+diffusers==0.25.0
+transformers==4.36.2
+torch==2.1.2
+torchvision==0.16.2
+accelerate==0.25.0

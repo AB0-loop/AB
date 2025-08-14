@@ -2,11 +2,12 @@ name: Telegram Automated Posts
 
 on:
   schedule:
-    - cron: '5 3 * * *'   # 08:35 IST
-    - cron: '5 7 * * *'   # 12:35 IST
-    - cron: '5 11 * * *'  # 16:35 IST
-    - cron: '5 15 * * *'  # 20:35 IST
-    - cron: '5 19 * * *'  # 00:35 IST next day
+    - cron: '5 3 * * *'   # 08:35 IST - Morning post
+    - cron: '5 7 * * *'   # 12:35 IST - Afternoon post
+    - cron: '5 11 * * *'  # 16:35 IST - Evening post
+    - cron: '5 15 * * *'  # 20:35 IST - Night post
+    - cron: '5 19 * * *'  # 00:35 IST next day - Late night post
+    - cron: '0 9 * * *'   # 09:00 IST - Daily video post
   workflow_dispatch: {}
 
 jobs:
@@ -27,11 +28,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r automation/requirements.txt
-
-      - name: Install ffmpeg
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg
 
       - name: Run generator
         env:
