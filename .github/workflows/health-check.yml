@@ -1,0 +1,41 @@
+name: Health Check & Validation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 2 * * 0'  # Weekly on Sundays at 2 AM UTC
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install link checker
+        run: npm install -g markdown-link-check
+
+      - name: Check links
+        run: |
+          markdown-link-check README.md || true
+          npx broken-link-checker https://aurumbespoke.com --recursive --depth 2 || true
+
+      - name: HTML validation
+        run: |
+          curl -s "https://validator.w3.org/nu/?doc=https://aurumbespoke.com&out=json" | jq '.messages | length' || echo "Validation check completed"
+
+      - name: Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          urls: |
+            https://aurumbespoke.com
+          uploadArtifacts: true
+          temporaryPublicStorage: true

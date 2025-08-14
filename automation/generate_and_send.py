@@ -85,8 +85,7 @@ SERVICE_CONFIG = {
     },
     "Modi Jacket": {
         "files": [
-            "modi-jacket.jpg",
-            "modi-jacket.jpg.webp",
+            "modi-jacket1.jpg",
             "gallery/indowestern.jpg",
             "gallery/indowestern.jpg.webp",
         ],
@@ -317,8 +316,9 @@ def compute_all_available_post_keys() -> Set[str]:
             _, rel = resolved
             for v in VARIANTS:
                 for s in AUGMENT_STYLES:
-                    # seed is effectively unbounded; track by style only for universe estimation
-                    keys.add(f"{rel}::{v}::{s}")
+                    for cname, _ in SERVICE_COLOR_PRESETS.get(service, [("classic", "")]):
+                        # Include color dimension for consistent key structure
+                        keys.add(f"{rel}::{cname}::{v}::{s}")
     return keys
 
 

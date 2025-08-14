@@ -1,0 +1,60 @@
+name: Aurum Video Automation
+
+on:
+  schedule:
+    - cron: '0 9 * * *'  # 09:00 IST daily
+  workflow_dispatch:
+    inputs:
+      count:
+        description: 'Number of videos to generate'
+        required: false
+        default: '1'
+        type: string
+      outfits:
+        description: 'Specific outfits (comma-separated)'
+        required: false
+        default: ''
+        type: string
+
+jobs:
+  video-automation:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r automation-video/requirements.txt
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg espeak
+
+      - name: Run video automation
+        env:
+          # Use the same credentials as photo automation
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_ID: ${{ secrets.TELEGRAM_ID }}
+        run: |
+          cd automation-video
+          python main.py
+
+      - name: Persist state and outputs
+        run: |
+          if [ -n "$(git status --porcelain automation-video/)" ]; then
+            git config user.name "GitHub Actions"
+            git config user.email "actions@github.com"
+            git add automation-video/
+            git commit -m "feat: update video automation state and outputs" || true
+            git push origin main || git push -f origin main || true
+          fi
