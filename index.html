@@ -100,16 +100,20 @@
       transform: scale(1.1);
     }
     .nav-logo {
-      width: 175px;
-      height: 175px;
+      width: 200px;
+      height: 200px;
       object-fit: contain;
       transition: opacity 0.3s ease, transform 0.2s ease;
       filter: drop-shadow(0 0 12px rgba(201, 158, 103, 0.35));
       transform: translateY(6px);
       margin-left: -34px;
+      background-color: #000000;
+      border-radius: 50%;
+      padding: 15px;
+      box-sizing: border-box;
     }
     @media (min-width: 768px) {
-      .nav-logo { width: 170px; height: 170px; transform: none; margin-left: 0; }
+      .nav-logo { width: 190px; height: 190px; transform: none; margin-left: 0; background-color: #000000; border-radius: 50%; padding: 15px; box-sizing: border-box; }
     }
     .nav-logo.hidden {
       opacity: 0;
@@ -141,7 +145,7 @@
       <a href="#home" aria-label="Aurum Bespoke Home" id="navLogo">
         <picture>
           <source type="image/webp" srcset="assets/logos/aurum-logo.jpg" />
-          <img src="assets/logos/aurum-logo.jpg" alt="Aurum Logo" class="nav-logo align-middle" width="170" height="170" />
+          <img src="assets/logos/aurum-logo.jpg" alt="Aurum Logo" class="nav-logo align-middle" width="200" height="200" />
         </picture>
       </a>
       
