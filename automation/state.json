@@ -1,12 +1,13 @@
 {
-  "last_slno": 25,
+  "last_slno": 26,
   "last_post_date": "2025-08-16",
-  "count_today": 4,
+  "count_today": 5,
   "used_today": [
     "Kurta Pathani",
     "Kurta Pathani",
     "Kurta Pathani",
-    "Bandgala"
+    "Bandgala",
+    "Suit"
   ],
   "used_images": [
     "services/suit.jpg",
@@ -18,7 +19,8 @@
     "services/blazer.jpg",
     "services/shirt.jpg.webp",
     "gallery/indowestern.jpg.webp",
-    "services/bandgala.jpg"
+    "services/bandgala.jpg",
+    "services/suit.jpg.webp"
   ],
   "used_posts": [
     "services/suit.jpg::none",
@@ -45,7 +47,8 @@
     "gallery/kurta.jpg::black::warm::crop_zoom::8266",
     "gallery/kurta.jpg::white::contrast::gold_border::7464",
     "gallery/kurta.jpg::white::warm::gold_border::2800",
-    "services/bandgala.jpg::black::golden_glow::none::9609"
+    "services/bandgala.jpg::black::golden_glow::none::9609",
+    "services/suit.jpg.webp::black::cool::vignette::9951"
   ],
   "male_count_today": 3,
   "recent_rels": [
@@ -63,6 +66,7 @@
     "gallery/kurta.jpg",
     "gallery/kurta.jpg",
     "gallery/kurta.jpg",
-    "services/bandgala.jpg"
+    "services/bandgala.jpg",
+    "services/suit.jpg.webp"
   ]
 }
