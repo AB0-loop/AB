@@ -1,11 +1,12 @@
 {
-  "last_slno": 274,
+  "last_slno": 275,
   "last_post_date": "2025-10-05",
-  "count_today": 3,
+  "count_today": 4,
   "used_today": [
     "Kurta Pathani",
     "Kurta Pathani",
-    "Kurta Pathani"
+    "Kurta Pathani",
+    "Tuxedo"
   ],
   "used_images": [
     "gallery/kurta.jpg",
@@ -17,7 +18,8 @@
     "services/shirt.jpg.webp",
     "gallery/indowestern.jpg.webp",
     "services/bandgala.jpg",
-    "services/suit.jpg.webp"
+    "services/suit.jpg.webp",
+    "services/blazer.jpg.webp"
   ],
   "used_posts": [
     "services/suit.jpg::none",
@@ -293,11 +295,11 @@
     "services/suit.jpg.webp::navy::contrast::none::4421",
     "gallery/kurta.jpg::white::cool::vignette::8033",
     "gallery/kurta.jpg::white::golden_glow::none::2540",
-    "gallery/kurta.jpg::black::cool::gold_border::6569"
+    "gallery/kurta.jpg::black::cool::gold_border::6569",
+    "services/blazer.jpg.webp::black::contrast::crop_zoom::6974"
   ],
   "male_count_today": 3,
   "recent_rels": [
-    "services/sherwani.jpg",
     "services/suit.jpg",
     "gallery/kurta.jpg",
     "gallery/kurta.jpg",
@@ -416,6 +418,7 @@
     "services/suit.jpg.webp",
     "gallery/kurta.jpg",
     "gallery/kurta.jpg",
-    "gallery/kurta.jpg"
+    "gallery/kurta.jpg",
+    "services/blazer.jpg.webp"
   ]
 }
