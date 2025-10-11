@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <meta name="description" content="Find answers to frequently asked questions about Aurum Bespoke's luxury menswear services, pricing, process, and more." />
+  <title>FAQ | Aurum Bespoke – Luxury Tailoring</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/assets/logos/icons/favicon-32.png?v=2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/logos/icons/favicon-32.png?v=2" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/logos/icons/favicon-16.png?v=2" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/logos/icons/logo-180.png?v=2" />
+  <link rel="icon" href="/assets/logos/icons/favicon.ico?v=2" sizes="any">
+  <link rel="icon" href="/favicon.ico?v=2" sizes="any">
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="FAQ | Aurum Bespoke – Luxury Tailoring">
+  <meta property="og:description" content="Find answers to frequently asked questions about Aurum Bespoke's luxury menswear services, pricing, process, and more.">
+  <meta property="og:image" content="https://aurumbespoke.com/assets/logos/aurum-logo.jpg">
+  <meta property="og:url" content="https://aurumbespoke.com/faq">
+  <meta property="og:type" content="website">
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="FAQ | Aurum Bespoke – Luxury Tailoring">
+  <meta name="twitter:description" content="Find answers to frequently asked questions about Aurum Bespoke's luxury menswear services, pricing, process, and more.">
+  <meta name="twitter:image" content="https://aurumbespoke.com/assets/logos/aurum-logo.jpg">
+  
+  <!-- Canonical & PWA basics -->
+  <link rel="canonical" href="https://aurumbespoke.com/faq" />
+  <meta name="theme-color" content="#0e0d0d" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="/assets/logos/icons/logo-180.png" />
+
+  <!-- Resource Hints -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" />
+  <link rel="preconnect" href="https://unpkg.com" />
+
+  <!-- Fonts and CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Inter&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js" defer></script>
+  <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0e0d0d;
+      color: #e4e4e4;
+    }
+    h1, h2, h3 {
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .gold-text { color: #c99e67; }
+    .gold-bg { background-color: #c99e67; }
+    .section-dark { background-color: #141414; }
+    .hero-overlay {
+      background: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.9));
+    }
+    .btn-glow {
+      background-color: #c99e67;
+      color: #0e0d0d;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    .btn-glow:hover {
+      box-shadow: 0 0 15px #c99e67;
+      transform: translateY(-2px);
+    }
+    .faq-item {
+      border-bottom: 1px solid #333;
+      padding: 1.5rem 0;
+    }
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    .faq-answer {
+      margin-top: 1rem;
+      padding-left: 1.5rem;
+      display: none;
+    }
+    .faq-answer.active {
+      display: block;
+    }
+    .toggle-icon {
+      transition: transform 0.3s ease;
+    }
+    .toggle-icon.active {
+      transform: rotate(180deg);
+    }
+    .whatsapp-chat {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+    }
+    .whatsapp-chat img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      cursor: pointer;
+      transition: box-shadow 0.2s;
+      padding: 8px;
+      background: black;
+    }
+    .whatsapp-chat img:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    }
+    .social-icon {
+      width: 24px;
+      height: 24px;
+      transition: all 0.3s ease;
+      opacity: 0.8;
+    }
+    .social-icon:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+    .nav-logo {
+      width: 175px;
+      height: 175px;
+      object-fit: contain;
+      transition: opacity 0.3s ease, transform 0.2s ease;
+      filter: drop-shadow(0 0 12px rgba(201, 158, 103, 0.35));
+      transform: translateY(6px);
+      margin-left: -34px;
+    }
+    @media (min-width: 768px) {
+      .nav-logo { width: 170px; height: 170px; transform: none; margin-left: 0; }
+    }
+    .nav-logo.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+  </style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EV18G05FL2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-EV18G05FL2');
+</script>
+</head>
+<body class="overflow-x-hidden">
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-90 text-white px-6 py-4" aria-label="Main navigation">
+    <div class="flex items-center justify-between max-w-7xl mx-auto px-2">
+      <!-- Logo -->
+      <a href="/" aria-label="Aurum Bespoke Home" id="navLogo">
+        <picture>
+          <source type="image/webp" srcset="assets/logos/aurum-logo.jpg" />
+          <img src="assets/logos/aurum-logo.jpg" alt="Aurum Logo" class="nav-logo align-middle" width="170" height="170" />
+        </picture>
+      </a>
+      
+      <div class="flex items-center">
+        <div class="hidden md:flex space-x-6">
+          <a href="/" class="hover:gold-text">Home</a>
+          <a href="/#services" class="hover:gold-text">Services</a>
+          <a href="/#gallery" class="hover:gold-text">Gallery</a>
+          <a href="/about" class="hover:gold-text">About</a>
+          <a href="/process" class="hover:gold-text">Process</a>
+          <a href="/faq" class="hover:gold-text font-semibold">FAQ</a>
+          <a href="/blog" class="hover:gold-text">Blog</a>
+          <a href="/#contact" class="hover:gold-text">Contact</a>
+        </div>
+        
+        <!-- Mobile menu button (right aligned) -->
+        <button onclick="document.getElementById('mobileMenu').classList.toggle('hidden')" 
+                class="md:hidden ml-4 focus:outline-none" 
+                aria-label="Open menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="md:hidden hidden mt-4">
+      <div class="flex flex-col space-y-2">
+        <a href="/" class="block py-2 hover:gold-text">Home</a>
+        <a href="/#services" class="block py-2 hover:gold-text">Services</a>
+        <a href="/#gallery" class="block py-2 hover:gold-text">Gallery</a>
+        <a href="/about" class="block py-2 hover:gold-text">About</a>
+        <a href="/process" class="block py-2 hover:gold-text">Process</a>
+        <a href="/faq" class="block py-2 hover:gold-text font-semibold">FAQ</a>
+        <a href="/blog" class="block py-2 hover:gold-text">Blog</a>
+        <a href="/#contact" class="block py-2 hover:gold-text">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="w-full min-h-screen flex flex-col items-center justify-center text-center p-6 bg-black relative pt-20 md:pt-24">
+    <div class="absolute inset-0 bg-[url('assets/background/hero-loop.mp4')] bg-cover bg-center opacity-10"></div>
+    <div class="z-10 max-w-4xl mx-auto">
+      <h1 class="text-4xl md:text-6xl gold-text mb-6" data-aos="fade-up">Frequently Asked Questions ❓</h1>
+      <p class="text-xl text-gray-300 mb-8" data-aos="fade-up" data-aos-delay="200">Everything you need to know about Aurum Bespoke</p>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="py-20 px-6 section-dark">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-3xl md:text-4xl gold-text mb-16 text-center" data-aos="fade-down">Common Questions</h2>
+      
+      <div class="space-y-4">
+        <!-- FAQ 1 -->
+        <div class="faq-item" data-aos="fade-up">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span>How long does the entire process take?</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>Our standard process takes approximately 3-4 weeks from initial consultation to final delivery. This includes:</p>
+            <ul class="mt-2 space-y-1">
+              <li>• Initial consultation and design selection (1-2 days)</li>
+              <li>• Precision measurements and pattern creation (1-2 days)</li>
+              <li>• Crafting and quality control (2-3 weeks)</li>
+              <li>• Final fitting and delivery (1-2 days)</li>
+            </ul>
+            <p class="mt-2">For urgent requirements, we offer express service with a 2-week turnaround for an additional fee.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="100">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span>What is the price range for your services?</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>Our pricing varies based on the garment type, fabric selection, and complexity of design:</p>
+            <ul class="mt-2 space-y-1">
+              <li>• Bespoke Suits: ₹18,000 - ₹45,000</li>
+              <li>• Sherwanis: ₹15,000 - ₹35,000</li>
+              <li>• Tuxedos & Blazers: ₹12,000 - ₹30,000</li>
+              <li>• Tailored Shirts: ₹2,500 - ₹8,000</li>
+              <li>• Pathani Suits: ₹8,000 - ₹20,000</li>
+              <li>• Modi Jackets: ₹7,000 - ₹18,000</li>
+              <li>• Bandgalas: ₹10,000 - ₹25,000</li>
+            </ul>
+            <p class="mt-2">These prices include premium fabrics, handcrafted construction, and home visit consultations. Custom fabric options are available at additional cost.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="200">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span>Do you provide fabric options?</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>Yes, we offer an extensive selection of premium fabrics from renowned mills including:</p>
+            <ul class="mt-2 space-y-1">
+              <li>• Italian fabrics from Ermenegildo Zegna, Loro Piana, and Carlo Barbera</li>
+              <li>• British fabrics from Scabal, Holland & Sherry, and Dormeuil</li>
+              <li>• Indian luxury fabrics including handwoven silks and premium cottons</li>
+              <li>• Seasonal collections featuring the latest textures and patterns</li>
+            </ul>
+            <p class="mt-2">During your consultation, our design experts will guide you through fabric options that best suit your style, occasion, and budget.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="300">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span>What areas do you serve?</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>We provide our home visit service throughout Bangalore, including:</p>
+            <ul class="mt-2 space-y-1">
+              <li>• Central Bangalore (CBD, Richmond Town, Indiranagar)</li>
+              <li>• East Bangalore (Whitefield, Brookefield, Marathahalli)</li>
+              <li>• South Bangalore (JP Nagar, Koramangala, BTM Layout)</li>
+              <li>• West Bangalore (Yeshwantpur, Rajajinagar, Malleshwaram)</li>
+              <li>• North Bangalore (Hebbal, Yelahanka, HSR Layout)</li>
+            </ul>
+            <p class="mt-2">For locations beyond these areas, we offer consultation at our flagship store or premium hotel venues. International clients can access our services through our travel consultation packages.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 5 -->
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="400">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span>What makes Aurum Bespoke different from other tailors?</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>Our unique approach combines traditional craftsmanship with modern convenience:</p>
+            <ul class="mt-2 space-y-1">
+              <li>• <strong>Home Visit Service:</strong> We come to you, saving you time and providing comfort</li>
+              <li>• <strong>Master Craftsmanship:</strong> Our tailors have 15+ years of experience in bespoke tailoring</li>
+              <li>• <strong>Premium Materials:</strong> Exclusive access to fabrics from world-renowned mills</li>
+              <li>• <strong>Personalized Approach:</strong> Each garment is designed specifically for your body and style</li>
+              <li>• <strong>Quality Assurance:</strong> Multiple checkpoints ensure perfection before delivery</li>
+              <li>• <strong>Post-Delivery Support:</strong> Free minor alterations within 30 days of delivery</li>
+            </ul>
+            <p class="mt-2">We're not just making clothes; we're creating confidence through perfect fit.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 6 -->
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="500">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span>How do I schedule a consultation?</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>Scheduling a consultation is simple:</p>
+            <ol class="mt-2 space-y-2">
+              <li>1. <strong>WhatsApp:</strong> Message us at +91 81055 08503 with your preferred date and time</li>
+              <li>2. <strong>Website:</strong> Fill out the contact form on our homepage</li>
+              <li>3. <strong>Phone:</strong> Call us directly at +91 81055 08503</li>
+              <li>4. <strong>Email:</strong> Send us a message at contact@aurumbespoke.com</li>
+            </ol>
+            <p class="mt-2">We typically respond within 2 hours during business hours. Consultations are available Monday through Saturday, 10 AM to 8 PM.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 7 -->
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="600">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span>What if I need alterations after delivery?</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>We stand by our craftsmanship and offer comprehensive post-delivery support:</p>
+            <ul class="mt-2 space-y-1">
+              <li>• <strong>Free Minor Alterations:</strong> Complimentary adjustments within 30 days of delivery</li>
+              <li>• <strong>Extended Support:</strong> Discounted alteration services for up to 6 months</li>
+              <li>• <strong>Care Guidance:</strong> Detailed instructions to maintain your garment's quality</li>
+              <li>• <strong>Repair Services:</strong> Expert repair for any wear and tear issues</li>
+            </ul>
+            <p class="mt-2">To schedule alterations, simply contact us via WhatsApp or phone. We'll arrange a convenient home visit for the adjustments.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 8 -->
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="700">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span>Do you offer corporate services?</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>Yes, we provide specialized corporate tailoring services for businesses:</p>
+            <ul class="mt-2 space-y-1">
+              <li>• <strong>Corporate Uniforms:</strong> Custom-designed professional attire for teams</li>
+              <li>• <strong>Executive Wardrobes:</strong> Personalized suiting for business leaders</li>
+              <li>• <strong>Event Services:</strong> Wedding party attire and special occasion wear</li>
+              <li>• <strong>Bulk Discounts:</strong> Competitive pricing for orders of 5+ garments</li>
+              <li>• <strong>Office Visits:</strong> On-site consultation services for corporate clients</li>
+            </ul>
+            <p class="mt-2">Our corporate team works with HR departments to create professional, consistent looks that represent your brand values. Contact our corporate desk at corporate@aurumbespoke.com for more information.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 px-6 bg-black text-center">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-3xl md:text-4xl gold-text mb-6" data-aos="fade-up">Still Have Questions?</h2>
+      <p class="text-xl text-gray-300 mb-8" data-aos="fade-up" data-aos-delay="100">Our style consultants are ready to help you with personalized advice</p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4" data-aos="zoom-in" data-aos-delay="200">
+        <a href="https://wa.me/918105508503" class="btn-glow px-8 py-4 rounded-full text-lg inline-block">Chat on WhatsApp</a>
+        <a href="/#contact" class="border border-[#c99e67] text-[#c99e67] px-8 py-4 rounded-full text-lg inline-block">Send a Message</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-[#0a0a0a] py-16 px-6 text-center">
+    <div class="max-w-4xl mx-auto">
+      <div class="flex justify-center gap-6 mb-10">
+        <a href="https://www.instagram.com/aurum.bespoke?igsh=czc2cnZ1NnMwdHdi" target="_blank" title="Instagram" data-aos="zoom-in" rel="noopener noreferrer">
+          <img src="assets/images/social-icons/instagram.svg" alt="Instagram" class="social-icon" loading="lazy">
+        </a>
+        <a href="https://x.com/Aurum_Bespoke?t=303eKb_ss5Dn4K0jiIGJHQ&s=35" target="_blank" title="Twitter" data-aos="zoom-in" data-aos-delay="100" rel="noopener noreferrer">
+          <img src="assets/images/social-icons/x.svg" alt="Twitter" class="social-icon" loading="lazy">
+        </a>
+        <a href="https://www.facebook.com/share/16mphUA4Qt/" target="_blank" title="Facebook" data-aos="zoom-in" data-aos-delay="200" rel="noopener noreferrer">
+          <img src="assets/images/social-icons/facebook.svg" alt="Facebook" class="social-icon" loading="lazy">
+        </a>
+        <a href="https://www.youtube.com/@aurumbespoke" target="_blank" title="YouTube" data-aos="zoom-in" data-aos-delay="300" rel="noopener noreferrer">
+          <img src="assets/images/social-icons/youtube.svg" alt="YouTube" class="social-icon" loading="lazy">
+        </a>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-6 mt-10 text-sm">
+        <a href="/about" class="hover:gold-text">About Us</a>
+        <a href="/process" class="hover:gold-text">Our Process</a>
+        <a href="/faq" class="hover:gold-text">FAQ</a>
+        <a href="/blog" class="hover:gold-text">Blog</a>
+        <a href="/privacy" class="hover:gold-text">Privacy Policy</a>
+        <a href="/terms" class="hover:gold-text">Terms of Service</a>
+      </div>
+
+      <p class="text-xs text-gray-600 mt-6">&copy; 2025 Aurum Bespoke. Site by <span class="text-blue-500 font-semibold">w3bhub.co.in</span></p>
+    </div>
+  </footer>
+
+  <!-- WhatsApp Floating Chat Widget -->
+  <div class="whatsapp-chat">
+    <a href="https://wa.me/918105508503?text=Hi%20Aurum%20Bespoke%2C%20I%20want%20to%20book%20a%20home%20appointment" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+      <img src="assets/images/social-icons/whatsapp.svg" alt="Chat on WhatsApp">
+    </a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.AOS && typeof AOS.init === 'function') {
+        AOS.init();
+      }
+    });
+
+    function toggleFAQ(element) {
+      const answer = element.nextElementSibling;
+      const icon = element.querySelector('.toggle-icon');
+      
+      answer.classList.toggle('active');
+      icon.classList.toggle('active');
+    }
+  </script>
+  <script>
+    // Close mobile menu when clicking a link
+    document.querySelectorAll('#mobileMenu a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('mobileMenu').classList.add('hidden');
+      });
+    });
+
+    // Hide logo on scroll
+    const navLogo = document.getElementById('navLogo').querySelector('img');
+    
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 50) {
+        navLogo.classList.add('hidden');
+      } else {
+        navLogo.classList.remove('hidden');
+      }
+    });
+  </script>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Aurum Bespoke",
+    "url": "https://aurumbespoke.com/",
+    "image": "https://aurumbespoke.com/assets/logos/icons/logo-512.png",
+    "logo": "https://aurumbespoke.com/assets/logos/icons/logo-512.png",
+    "telephone": "+91 81055 08503",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Bangalore",
+      "addressCountry": "IN"
+    },
+    "sameAs": [
+      "https://www.instagram.com/aurum.bespoke",
+      "https://x.com/Aurum_Bespoke",
+      "https://www.facebook.com/share/16mphUA4Qt/",
+      "https://www.youtube.com/@aurumbespoke"
+    ]
+  }
+  </script>
+</body>
+</html>
