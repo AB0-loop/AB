@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <meta name="description" content="Explore our gallery of bespoke menswear creations. From suits to sherwanis, see the craftsmanship and attention to detail that sets Aurum Bespoke apart." />
+  <title>Gallery | Aurum Bespoke – Luxury Tailoring</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/assets/logos/icons/favicon-32.png?v=2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/logos/icons/favicon-32.png?v=2" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/logos/icons/favicon-16.png?v=2" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/logos/icons/logo-180.png?v=2" />
+  <link rel="icon" href="/assets/logos/icons/favicon.ico?v=2" sizes="any">
+  <link rel="icon" href="/favicon.ico?v=2" sizes="any">
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="Gallery | Aurum Bespoke – Luxury Tailoring">
+  <meta property="og:description" content="Explore our gallery of bespoke menswear creations. From suits to sherwanis, see the craftsmanship and attention to detail that sets Aurum Bespoke apart.">
+  <meta property="og:image" content="https://aurumbespoke.com/assets/logos/aurum-logo.jpg">
+  <meta property="og:url" content="https://aurumbespoke.com/gallery">
+  <meta property="og:type" content="website">
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Gallery | Aurum Bespoke – Luxury Tailoring">
+  <meta name="twitter:description" content="Explore our gallery of bespoke menswear creations. From suits to sherwanis, see the craftsmanship and attention to detail that sets Aurum Bespoke apart.">
+  <meta name="twitter:image" content="https://aurumbespoke.com/assets/logos/aurum-logo.jpg">
+  
+  <!-- Canonical & PWA basics -->
+  <link rel="canonical" href="https://aurumbespoke.com/gallery" />
+  <meta name="theme-color" content="#0e0d0d" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="/assets/logos/icons/logo-180.png" />
+
+  <!-- Resource Hints -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" />
+  <link rel="preconnect" href="https://unpkg.com" />
+
+  <!-- Fonts and CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Inter&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js" defer></script>
+  <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0e0d0d;
+      color: #e4e4e4;
+    }
+    h1, h2, h3 {
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .gold-text { color: #c99e67; }
+    .gold-bg { background-color: #c99e67; }
+    .section-dark { background-color: #141414; }
+    .hero-overlay {
+      background: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.9));
+    }
+    .btn-glow {
+      background-color: #c99e67;
+      color: #0e0d0d;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    .btn-glow:hover {
+      box-shadow: 0 0 15px #c99e67;
+      transform: translateY(-2px);
+    }
+    .whatsapp-chat {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+    }
+    .whatsapp-chat img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      cursor: pointer;
+      transition: box-shadow 0.2s;
+      padding: 8px;
+      background: black;
+    }
+    .whatsapp-chat img:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    }
+    .social-icon {
+      width: 24px;
+      height: 24px;
+      transition: all 0.3s ease;
+      opacity: 0.8;
+    }
+    .social-icon:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+    .nav-logo {
+      width: 175px;
+      height: 175px;
+      object-fit: contain;
+      transition: opacity 0.3s ease, transform 0.2s ease;
+      filter: drop-shadow(0 0 12px rgba(201, 158, 103, 0.35));
+      transform: translateY(6px);
+      margin-left: -34px;
+    }
+    @media (min-width: 768px) {
+      .nav-logo { width: 170px; height: 170px; transform: none; margin-left: 0; }
+    }
+    .nav-logo.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    /* Gallery styles */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    .gallery-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(201, 158, 103, 0.2);
+    }
+    .gallery-img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      display: block;
+    }
+    .gallery-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+      padding: 1.5rem 1rem 1rem;
+      transform: translateY(30px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    .gallery-item:hover .gallery-overlay {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .filter-btn {
+      padding: 0.5rem 1rem;
+      border: 1px solid #c99e67;
+      color: #c99e67;
+      background: transparent;
+      border-radius: 9999px;
+      margin: 0.25rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: #c99e67;
+      color: #0e0d0d;
+    }
+  </style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EV18G05FL2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-EV18G05FL2');
+</script>
+</head>
+<body class="overflow-x-hidden">
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-90 text-white px-6 py-4" aria-label="Main navigation">
+    <div class="flex items-center justify-between max-w-7xl mx-auto px-2">
+      <!-- Logo -->
+      <a href="/" aria-label="Aurum Bespoke Home" id="navLogo">
+        <picture>
+          <source type="image/webp" srcset="assets/logos/aurum-logo.jpg" />
+          <img src="assets/logos/aurum-logo.jpg" alt="Aurum Logo" class="nav-logo align-middle" width="170" height="170" />
+        </picture>
+      </a>
+      
+      <div class="flex items-center">
+        <div class="hidden md:flex space-x-6">
+          <a href="/" class="hover:gold-text">Home</a>
+          <a href="/#services" class="hover:gold-text">Services</a>
+          <a href="/gallery" class="hover:gold-text font-semibold">Gallery</a>
+          <a href="/about" class="hover:gold-text">About</a>
+          <a href="/process" class="hover:gold-text">Process</a>
+          <a href="/faq" class="hover:gold-text">FAQ</a>
+          <a href="/blog" class="hover:gold-text">Blog</a>
+          <a href="/#contact" class="hover:gold-text">Contact</a>
+        </div>
+        
+        <!-- Mobile menu button (right aligned) -->
+        <button onclick="document.getElementById('mobileMenu').classList.toggle('hidden')" 
+                class="md:hidden ml-4 focus:outline-none" 
+                aria-label="Open menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="md:hidden hidden mt-4">
+      <div class="flex flex-col space-y-2">
+        <a href="/" class="block py-2 hover:gold-text">Home</a>
+        <a href="/#services" class="block py-2 hover:gold-text">Services</a>
+        <a href="/gallery" class="block py-2 hover:gold-text font-semibold">Gallery</a>
+        <a href="/about" class="block py-2 hover:gold-text">About</a>
+        <a href="/process" class="block py-2 hover:gold-text">Process</a>
+        <a href="/faq" class="block py-2 hover:gold-text">FAQ</a>
+        <a href="/blog" class="block py-2 hover:gold-text">Blog</a>
+        <a href="/#contact" class="block py-2 hover:gold-text">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="w-full min-h-screen flex flex-col items-center justify-center text-center p-6 bg-black relative pt-20 md:pt-24">
+    <div class="absolute inset-0 bg-[url('assets/background/hero-loop.mp4')] bg-cover bg-center opacity-10"></div>
+    <div class="z-10 max-w-4xl mx-auto">
+      <h1 class="text-4xl md:text-6xl gold-text mb-6" data-aos="fade-up">Our Gallery 📸</h1>
+      <p class="text-xl text-gray-300 mb-8" data-aos="fade-up" data-aos-delay="200">A showcase of our bespoke craftsmanship and attention to detail</p>
+    </div>
+  </section>
+
+  <!-- Gallery Filter -->
+  <section class="py-10 px-6 bg-[#0a0a0a]">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-wrap justify-center" data-aos="fade-up">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="suits">Suits</button>
+        <button class="filter-btn" data-filter="sherwanis">Sherwanis</button>
+        <button class="filter-btn" data-filter="blazers">Blazers</button>
+        <button class="filter-btn" data-filter="shirts">Shirts</button>
+        <button class="filter-btn" data-filter="indo-western">Indo-Western</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Grid -->
+  <section class="py-20 px-6 section-dark">
+    <div class="max-w-7xl mx-auto">
+      <div class="gallery-grid">
+        <!-- Gallery Item 1 -->
+        <div class="gallery-item" data-category="suits" data-aos="fade-up">
+          <img src="assets/images/gallery/suit1.jpg" alt="Bespoke Suit" class="gallery-img">
+          <div class="gallery-overlay">
+            <h3 class="text-xl gold-text">Bespoke Suit</h3>
+            <p class="text-gray-300">Two-piece premium wool suit with hand-stitched details</p>
+          </div>
+        </div>
+        
+        <!-- Gallery Item 2 -->
+        <div class="gallery-item" data-category="sherwanis" data-aos="fade-up" data-aos-delay="100">
+          <img src="assets/images/gallery/sherwani1.jpg" alt="Luxury Sherwani" class="gallery-img">
+          <div class="gallery-overlay">
+            <h3 class="text-xl gold-text">Luxury Sherwani</h3>
+            <p class="text-gray-300">Embroidered silk sherwani with traditional detailing</p>
+          </div>
+        </div>
+        
+        <!-- Gallery Item 3 -->
+        <div class="gallery-item" data-category="blazers" data-aos="fade-up" data-aos-delay="200">
+          <img src="assets/images/gallery/blazer1.jpg" alt="Evening Blazer" class="gallery-img">
+          <div class="gallery-overlay">
+            <h3 class="text-xl gold-text">Evening Blazer</h3>
+            <p class="text-gray-300">Velvet dinner jacket with silk trim details</p>
+          </div>
+        </div>
+        
+        <!-- Gallery Item 4 -->
+        <div class="gallery-item" data-category="shirts" data-aos="fade-up" data-aos-delay="300">
+          <img src="assets/images/gallery/shirt1.jpg" alt="Custom Shirt" class="gallery-img">
+          <div class="gallery-overlay">
+            <h3 class="text-xl gold-text">Custom Shirt</h3>
+            <p class="text-gray-300">Egyptian cotton dress shirt with French cuffs</p>
+          </div>
+        </div>
+        
+        <!-- Gallery Item 5 -->
+        <div class="gallery-item" data-category="indo-western" data-aos="fade-up" data-aos-delay="400">
+          <img src="assets/images/gallery/indowestern.jpg" alt="Indo-Western Suit" class="gallery-img">
+          <div class="gallery-overlay">
+            <h3 class="text-xl gold-text">Indo-Western Suit</h3>
+            <p class="text-gray-300">Modern fusion of traditional and contemporary styles</p>
+          </div>
+        </div>
+        
+        <!-- Gallery Item 6 -->
+        <div class="gallery-item" data-category="suits" data-aos="fade-up" data-aos-delay="500">
+          <img src="assets/images/gallery/suit2.jpg" alt="Three-Piece Suit" class="gallery-img">
+          <div class="gallery-overlay">
+            <h3 class="text-xl gold-text">Three-Piece Suit</h3>
+            <p class="text-gray-300">Classic wool suit with vest and peak lapels</p>
+          </div>
+        </div>
+        
+        <!-- Gallery Item 7 -->
+        <div class="gallery-item" data-category="sherwanis" data-aos="fade-up" data-aos-delay="600">
+          <img src="assets/images/gallery/sherwani2.jpg" alt="Designer Sherwani" class="gallery-img">
+          <div class="gallery-overlay">
+            <h3 class="text-xl gold-text">Designer Sherwani</h3>
+            <p class="text-gray-300">Contemporary cut with traditional embroidery</p>
+          </div>
+        </div>
+        
+        <!-- Gallery Item 8 -->
+        <div class="gallery-item" data-category="blazers" data-aos="fade-up" data-aos-delay="700">
+          <img src="assets/images/gallery/blazer2.jpg" alt="Casual Blazer" class="gallery-img">
+          <div class="gallery-overlay">
+            <h3 class="text-xl gold-text">Casual Blazer</h3>
+            <p class="text-gray-300">Linen blend blazer for relaxed elegance</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="text-center mt-16" data-aos="fade-up" data-aos-delay="200">
+        <a href="https://wa.me/918105508503" class="btn-glow px-8 py-4 rounded-full text-lg inline-block">Book Consultation</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="py-20 px-6 bg-black">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-center text-3xl md:text-4xl gold-text mb-10" data-aos="fade-down">Client Experiences 💬</h2>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="bg-[#1c1c1c] p-6 rounded shadow" data-aos="fade-up">
+          <p>"The gallery doesn't do justice to the actual craftsmanship. When I saw my finished suit, I was blown away by the attention to detail. Every stitch was perfect."</p>
+          <p class="gold-text mt-4 font-semibold">– Rohit K., BTM Layout</p>
+        </div>
+        <div class="bg-[#1c1c1c] p-6 rounded shadow" data-aos="fade-up" data-aos-delay="100">
+          <p>"I've been to many tailors, but none match the quality and service of Aurum. The gallery shows their range, but experiencing it firsthand is something else."</p>
+          <p class="gold-text mt-4 font-semibold">– Anil R., HSR Layout</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 px-6 section-dark text-center">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-3xl md:text-4xl gold-text mb-6" data-aos="fade-up">See Yourself in Bespoke</h2>
+      <p class="text-xl text-gray-300 mb-8" data-aos="fade-up" data-aos-delay="100">Book a home visit and discover the difference of true craftsmanship</p>
+      <a href="https://wa.me/918105508503" class="btn-glow px-8 py-4 rounded-full text-lg inline-block" data-aos="zoom-in" data-aos-delay="200">Book Home Visit ➡️</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-[#0a0a0a] py-16 px-6 text-center">
+    <div class="max-w-4xl mx-auto">
+      <div class="flex justify-center gap-6 mb-10">
+        <a href="https://www.instagram.com/aurum.bespoke?igsh=czc2cnZ1NnMwdHdi" target="_blank" title="Instagram" data-aos="zoom-in" rel="noopener noreferrer">
+          <img src="assets/images/social-icons/instagram.svg" alt="Instagram" class="social-icon" loading="lazy">
+        </a>
+        <a href="https://x.com/Aurum_Bespoke?t=303eKb_ss5Dn4K0jiIGJHQ&s=35" target="_blank" title="Twitter" data-aos="zoom-in" data-aos-delay="100" rel="noopener noreferrer">
+          <img src="assets/images/social-icons/x.svg" alt="Twitter" class="social-icon" loading="lazy">
+        </a>
+        <a href="https://www.facebook.com/share/16mphUA4Qt/" target="_blank" title="Facebook" data-aos="zoom-in" data-aos-delay="200" rel="noopener noreferrer">
+          <img src="assets/images/social-icons/facebook.svg" alt="Facebook" class="social-icon" loading="lazy">
+        </a>
+        <a href="https://www.youtube.com/@aurumbespoke" target="_blank" title="YouTube" data-aos="zoom-in" data-aos-delay="300" rel="noopener noreferrer">
+          <img src="assets/images/social-icons/youtube.svg" alt="YouTube" class="social-icon" loading="lazy">
+        </a>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-6 mt-10 text-sm">
+        <a href="/about" class="hover:gold-text">About Us</a>
+        <a href="/process" class="hover:gold-text">Our Process</a>
+        <a href="/faq" class="hover:gold-text">FAQ</a>
+        <a href="/blog" class="hover:gold-text">Blog</a>
+        <a href="/privacy" class="hover:gold-text">Privacy Policy</a>
+        <a href="/terms" class="hover:gold-text">Terms of Service</a>
+      </div>
+
+      <p class="text-xs text-gray-600 mt-6">&copy; 2025 Aurum Bespoke. Site by <span class="text-blue-500 font-semibold">w3bhub.co.in</span></p>
+    </div>
+  </footer>
+
+  <!-- WhatsApp Floating Chat Widget -->
+  <div class="whatsapp-chat">
+    <a href="https://wa.me/918105508503?text=Hi%20Aurum%20Bespoke%2C%20I%20want%20to%20book%20a%20home%20appointment" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+      <img src="assets/images/social-icons/whatsapp.svg" alt="Chat on WhatsApp">
+    </a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.AOS && typeof AOS.init === 'function') {
+        AOS.init();
+      }
+
+      // Gallery filtering
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const galleryItems = document.querySelectorAll('.gallery-item');
+
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          // Remove active class from all buttons
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          // Add active class to clicked button
+          button.classList.add('active');
+          
+          const filter = button.getAttribute('data-filter');
+          
+          galleryItems.forEach(item => {
+            if (filter === 'all' || item.getAttribute('data-category') === filter) {
+              item.style.display = 'block';
+              item.style.animation = 'fadeIn 0.5s ease';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+        });
+      });
+
+      // Add CSS for fadeIn animation
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `;
+      document.head.appendChild(style);
+    });
+  </script>
+  <script>
+    // Close mobile menu when clicking a link
+    document.querySelectorAll('#mobileMenu a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('mobileMenu').classList.add('hidden');
+      });
+    });
+
+    // Hide logo on scroll
+    const navLogo = document.getElementById('navLogo').querySelector('img');
+    
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 50) {
+        navLogo.classList.add('hidden');
+      } else {
+        navLogo.classList.remove('hidden');
+      }
+    });
+  </script>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Aurum Bespoke",
+    "url": "https://aurumbespoke.com/",
+    "image": "https://aurumbespoke.com/assets/logos/icons/logo-512.png",
+    "logo": "https://aurumbespoke.com/assets/logos/icons/logo-512.png",
+    "telephone": "+91 81055 08503",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Bangalore",
+      "addressCountry": "IN"
+    },
+    "sameAs": [
+      "https://www.instagram.com/aurum.bespoke",
+      "https://x.com/Aurum_Bespoke",
+      "https://www.facebook.com/share/16mphUA4Qt/",
+      "https://www.youtube.com/@aurumbespoke"
+    ]
+  }
+  </script>
+</body>
+</html>

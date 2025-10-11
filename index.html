@@ -126,6 +126,58 @@
     .no-scrollbar::-webkit-scrollbar { /* Chrome, Safari */
       display: none;
     }
+    /* Enhanced homepage styles */
+    .hero-video-container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .hero-video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      object-fit: cover;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 1rem;
+    }
+    .service-card {
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+    }
+    .service-card:hover {
+      transform: translateY(-10px);
+      border-color: #c99e67;
+      box-shadow: 0 10px 25px rgba(201, 158, 103, 0.2);
+    }
+    .stats-number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #c99e67;
+      line-height: 1;
+    }
+    .testimonial-card {
+      transition: all 0.3s ease;
+    }
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #c99e67;
+    }
   </style>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-EV18G05FL2"></script>
@@ -150,10 +202,13 @@
       
       <div class="flex items-center">
         <div class="hidden md:flex space-x-6">
-          <a href="#home" class="hover:gold-text">Home</a>
+          <a href="#home" class="hover:gold-text font-semibold">Home</a>
           <a href="#services" class="hover:gold-text">Services</a>
           <a href="#gallery" class="hover:gold-text">Gallery</a>
+          <a href="#features" class="hover:gold-text">Why Us</a>
           <a href="#testimonials" class="hover:gold-text">Testimonials</a>
+          <a href="/about" class="hover:gold-text">About</a>
+          <a href="/process" class="hover:gold-text">Process</a>
           <a href="#contact" class="hover:gold-text">Contact</a>
         </div>
         
@@ -171,10 +226,13 @@
     <!-- Mobile menu -->
     <div id="mobileMenu" class="md:hidden hidden mt-4">
       <div class="flex flex-col space-y-2">
-        <a href="#home" class="block py-2 hover:gold-text">Home</a>
+        <a href="#home" class="block py-2 hover:gold-text font-semibold">Home</a>
         <a href="#services" class="block py-2 hover:gold-text">Services</a>
         <a href="#gallery" class="block py-2 hover:gold-text">Gallery</a>
+        <a href="#features" class="block py-2 hover:gold-text">Why Us</a>
         <a href="#testimonials" class="block py-2 hover:gold-text">Testimonials</a>
+        <a href="/about" class="block py-2 hover:gold-text">About</a>
+        <a href="/process" class="block py-2 hover:gold-text">Process</a>
         <a href="#contact" class="block py-2 hover:gold-text">Contact</a>
       </div>
     </div>
@@ -182,150 +240,274 @@
 
   <!-- Hero Section -->
   <section id="home" class="w-full min-h-screen flex flex-col items-center justify-center text-center p-6 bg-black relative pt-20 md:pt-24">
-    <video autoplay loop muted playsinline preload="metadata" class="absolute top-0 left-0 w-full h-full object-cover opacity-20 z-0">
-      <source src="assets/background/hero-loop.mp4" type="video/mp4">
-    </video>
-    <div class="z-10 max-w-2xl mx-auto">
-      <h1 class="text-4xl md:text-6xl gold-text mb-4" data-aos="fade-up">Aurum Bespoke ✨</h1>
-      <p class="text-lg text-gray-300 mb-6" data-aos="fade-up" data-aos-delay="200">Luxury Tailoring at Your Doorstep – Bangalore Exclusive 🧵</p>
-      <a href="https://wa.me/918105508503" class="btn-glow px-6 py-3 rounded-full inline-block" data-aos="zoom-in" data-aos-delay="400" target="_blank" rel="noopener noreferrer">Book Appointment ➡️</a>
+    <div class="hero-video-container">
+      <video autoplay loop muted playsinline preload="metadata" class="hero-video opacity-20">
+        <source src="assets/background/hero-loop.mp4" type="video/mp4">
+      </video>
+      <div class="hero-content max-w-4xl mx-auto">
+        <h1 class="text-4xl md:text-6xl gold-text mb-4" data-aos="fade-up">Aurum Bespoke ✨</h1>
+        <p class="text-lg md:text-xl text-gray-300 mb-6" data-aos="fade-up" data-aos-delay="200">Luxury Tailoring at Your Doorstep – Bangalore Exclusive 🧵</p>
+        <p class="text-md text-gray-400 mb-8 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="400">Experience the finest bespoke menswear crafted by master tailors who visit your home or office. Perfect fit, premium quality, and unmatched convenience.</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center" data-aos="zoom-in" data-aos-delay="600">
+          <a href="https://wa.me/918105508503" class="btn-glow px-6 py-3 rounded-full inline-block">Book Appointment ➡️</a>
+          <a href="#services" class="border-2 border-[#c99e67] text-[#c99e67] px-6 py-3 rounded-full inline-block hover:bg-[#c99e67] hover:text-black transition-all">Explore Services</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="py-16 px-6 bg-[#0a0a0a]">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div data-aos="fade-up">
+          <div class="stats-number">500+</div>
+          <p class="text-gray-400 mt-2">Happy Clients</p>
+        </div>
+        <div data-aos="fade-up" data-aos-delay="100">
+          <div class="stats-number">2000+</div>
+          <p class="text-gray-400 mt-2">Garments Crafted</p>
+        </div>
+        <div data-aos="fade-up" data-aos-delay="200">
+          <div class="stats-number">98%</div>
+          <p class="text-gray-400 mt-2">Satisfaction Rate</p>
+        </div>
+        <div data-aos="fade-up" data-aos-delay="300">
+          <div class="stats-number">3</div>
+          <p class="text-gray-400 mt-2">Weeks Delivery</p>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- Services Section -->
   <section id="services" class="py-20 px-6 section-dark">
-    <h2 class="text-center text-3xl gold-text mb-10" data-aos="fade-down">Our Signature Offerings 👔</h2>
-    <div class="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-      <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center" data-aos="fade-up">
-        <picture>
-          <source type="image/webp" srcset="assets/images/services/suit.jpg.webp" />
-          <img src="assets/images/services/suit.jpg" alt="Suit" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
-        </picture>
-        <h3 class="text-xl gold-text mb-2">Bespoke Suits</h3>
-        <p class="text-gray-400">Two & three-piece precision suits to dominate every room 💼</p>
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-center text-3xl md:text-4xl gold-text mb-4" data-aos="fade-down">Our Signature Offerings 👔</h2>
+      <p class="text-center text-gray-400 mb-12 max-w-3xl mx-auto" data-aos="fade-down" data-aos-delay="100">Each garment is meticulously crafted with premium fabrics and attention to detail that sets us apart</p>
+      <div class="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+        <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center service-card" data-aos="fade-up">
+          <picture>
+            <source type="image/webp" srcset="assets/images/services/suit.jpg.webp" />
+            <img src="assets/images/services/suit.jpg" alt="Suit" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+          </picture>
+          <h3 class="text-xl gold-text mb-2">Bespoke Suits</h3>
+          <p class="text-gray-400">Two & three-piece precision suits to dominate every room 💼</p>
+        </div>
+        <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center service-card" data-aos="fade-up" data-aos-delay="100">
+          <picture>
+            <source type="image/webp" srcset="assets/images/services/sherwani.jpg.webp" />
+            <img src="assets/images/services/sherwani.jpg" alt="Sherwani" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+          </picture>
+          <h3 class="text-xl gold-text mb-2">Sherwanis</h3>
+          <p class="text-gray-400">Regal silhouettes and modern elegance for celebrations 👑</p>
+        </div>
+        <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center service-card" data-aos="fade-up" data-aos-delay="200">
+          <picture>
+            <source type="image/webp" srcset="assets/images/services/blazer.jpg.webp" />
+            <img src="assets/images/services/blazer.jpg" alt="Blazer" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+          </picture>
+          <h3 class="text-xl gold-text mb-2">Tuxedos & Blazers</h3>
+          <p class="text-gray-400">Evening wear that commands presence with quiet confidence 🕴️</p>
+        </div>
+        <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center service-card" data-aos="fade-up" data-aos-delay="300">
+          <picture>
+            <source type="image/webp" srcset="assets/images/services/shirt.jpg.webp" />
+            <img src="assets/images/services/shirt.jpg" alt="Shirt" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+          </picture>
+          <h3 class="text-xl gold-text mb-2">Tailored Shirts</h3>
+          <p class="text-gray-400">Subtle details, perfect fit, daily elegance—custom shirts, redefined ✨</p>
+        </div>
+        <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center service-card" data-aos="fade-up">
+          <picture>
+            <img src="assets/images/services/pathani.jpg" alt="Pathani Suit" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+          </picture>
+          <h3 class="text-xl gold-text mb-2">Pathani Suit</h3>
+          <p class="text-gray-400">Classic and comfortable, perfect for traditional occasions.</p>
+        </div>
+        <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center service-card" data-aos="fade-up" data-aos-delay="200">
+          <picture>
+            <img src="assets/images/services/modi-jacket1.jpg" alt="Modi Jacket" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+          </picture>
+          <h3 class="text-xl gold-text mb-2">Modi Jacket</h3>
+          <p class="text-gray-400">Timeless sleeveless elegance—versatile for festive or formal wear.</p>
+        </div>
+        <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center service-card" data-aos="fade-up" data-aos-delay="100">
+          <picture>
+            <source type="image/webp" srcset="assets/images/services/bandgala.jpg.webp" />
+            <img src="assets/images/services/bandgala.jpg" alt="Bandgala" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+          </picture>
+          <h3 class="text-xl gold-text mb-2">Bandgala</h3>
+          <p class="text-gray-400">Sophisticated and regal, perfect for special occasions.</p>
+        </div>
+        <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center service-card" data-aos="fade-up" data-aos-delay="300">
+          <picture>
+            <img src="assets/images/services/kurta.jpg" alt="Kurta" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
+          </picture>
+          <h3 class="text-xl gold-text mb-2">Designer Kurtas</h3>
+          <p class="text-gray-400">Elegant and comfortable, perfect for casual or semi-formal events.</p>
+        </div>
       </div>
-      <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center" data-aos="fade-up" data-aos-delay="100">
-        <picture>
-          <source type="image/webp" srcset="assets/images/services/sherwani.jpg.webp" />
-          <img src="assets/images/services/sherwani.jpg" alt="Sherwani" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
-        </picture>
-        <h3 class="text-xl gold-text mb-2">Sherwanis</h3>
-        <p class="text-gray-400">Regal silhouettes and modern elegance for celebrations 👑</p>
+      <div class="text-center mt-12" data-aos="fade-up" data-aos-delay="400">
+        <a href="https://wa.me/918105508503" class="btn-glow px-6 py-3 rounded-full inline-block">View Full Collection</a>
       </div>
-      <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center" data-aos="fade-up" data-aos-delay="200">
-        <picture>
-          <source type="image/webp" srcset="assets/images/services/blazer.jpg.webp" />
-          <img src="assets/images/services/blazer.jpg" alt="Blazer" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
-        </picture>
-        <h3 class="text-xl gold-text mb-2">Tuxedos & Blazers</h3>
-        <p class="text-gray-400">Evening wear that commands presence with quiet confidence 🕴️</p>
-      </div>
-      <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center" data-aos="fade-up" data-aos-delay="300">
-        <picture>
-          <source type="image/webp" srcset="assets/images/services/shirt.jpg.webp" />
-          <img src="assets/images/services/shirt.jpg" alt="Shirt" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
-        </picture>
-        <h3 class="text-xl gold-text mb-2">Tailored Shirts</h3>
-        <p class="text-gray-400">Subtle details, perfect fit, daily elegance—custom shirts, redefined ✨</p>
-      </div>
-      <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center" data-aos="fade-up">
-        <picture>
-          <img src="assets/images/services/pathani.jpg" alt="Pathani Suit" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
-        </picture>
-        <h3 class="text-xl gold-text mb-2">Pathani Suit</h3>
-        <p class="text-gray-400">Classic and comfortable, perfect for traditional occasions.</p>
-      </div>
-      <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center" data-aos="fade-up" data-aos-delay="200">
-        <picture>
-          <img src="assets/images/services/modi-jacket1.jpg" alt="Modi Jacket" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
-        </picture>
-        <h3 class="text-xl gold-text mb-2">Modi Jacket</h3>
-        <p class="text-gray-400">Timeless sleeveless elegance—versatile for festive or formal wear.</p>
-      </div>
+    </div>
+  </section>
 
-            
-      <div class="bg-[#1c1c1c] p-4 rounded-lg shadow-md text-center" data-aos="fade-up" data-aos-delay="100">
-        <picture>
-          <source type="image/webp" srcset="assets/images/services/bandgala.jpg.webp" />
-          <img src="assets/images/services/bandgala.jpg" alt="Bandgala" class="rounded mb-4 h-64 w-full object-cover" loading="lazy">
-        </picture>
-        <h3 class="text-xl gold-text mb-2">Bandgala</h3>
-        <p class="text-gray-400">Sophisticated and regal, perfect for special occasions.</p>
+  <!-- Why Choose Us Section -->
+  <section id="features" class="py-20 px-6 bg-black">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-center text-3xl md:text-4xl gold-text mb-4" data-aos="fade-down">Why Aurum Bespoke? 🌟</h2>
+      <p class="text-center text-gray-400 mb-12 max-w-3xl mx-auto" data-aos="fade-down" data-aos-delay="100">We've redefined luxury tailoring with our unique approach and commitment to excellence</p>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="bg-[#141414] p-6 rounded-lg" data-aos="fade-up">
+          <div class="feature-icon">🏠</div>
+          <h3 class="text-xl gold-text mb-3">Home Visit Service</h3>
+          <p class="text-gray-400">We come to you! Enjoy the convenience of professional tailoring at your home or office without the hassle of travel.</p>
+        </div>
+        <div class="bg-[#141414] p-6 rounded-lg" data-aos="fade-up" data-aos-delay="100">
+          <div class="feature-icon">📐</div>
+          <h3 class="text-xl gold-text mb-3">Precision Measurement</h3>
+          <p class="text-gray-400">Over 20 detailed measurements ensure a perfect fit tailored to your unique body shape and posture.</p>
+        </div>
+        <div class="bg-[#141414] p-6 rounded-lg" data-aos="fade-up" data-aos-delay="200">
+          <div class="feature-icon">🧵</div>
+          <h3 class="text-xl gold-text mb-3">Premium Craftsmanship</h3>
+          <p class="text-gray-400">Each garment is handcrafted by master tailors with decades of experience using time-honored techniques.</p>
+        </div>
+        <div class="bg-[#141414] p-6 rounded-lg" data-aos="fade-up" data-aos-delay="300">
+          <div class="feature-icon">⏱️</div>
+          <h3 class="text-xl gold-text mb-3">Fast 3-Week Delivery</h3>
+          <p class="text-gray-400">Get your custom garments in just 3 weeks with our streamlined process and commitment to timely delivery.</p>
+        </div>
+        <div class="bg-[#141414] p-6 rounded-lg" data-aos="fade-up" data-aos-delay="400">
+          <div class="feature-icon">💎</div>
+          <h3 class="text-xl gold-text mb-3">Premium Fabric Selection</h3>
+          <p class="text-gray-400">Access to exclusive fabrics from renowned mills in Italy, UK, and India for the finest quality and feel.</p>
+        </div>
+        <div class="bg-[#141414] p-6 rounded-lg" data-aos="fade-up" data-aos-delay="500">
+          <div class="feature-icon">🔄</div>
+          <h3 class="text-xl gold-text mb-3">Lifetime Alterations</h3>
+          <p class="text-gray-400">Enjoy complimentary alterations for life to ensure your garments always fit perfectly as your body changes.</p>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Gallery Section -->
-  <section id="gallery" class="py-20 px-6 bg-black">
-    <h2 class="text-center text-3xl gold-text mb-10" data-aos="fade-down">Gallery 📸</h2>
-    <div class="relative max-w-7xl mx-auto">
-      <!-- Track -->
-      <div id="galleryTrack" class="flex overflow-x-auto no-scrollbar space-x-6 pb-4 snap-x snap-mandatory scroll-smooth" aria-label="Gallery slider">
-        <picture class="gallery-slide snap-start shrink-0">
-          <source type="image/webp" srcset="assets/images/gallery/gallery1.jpg.webp" />
-          <img src="assets/images/gallery/gallery1.jpg" alt="Gallery" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" loading="lazy">
-        </picture>
-        <picture class="gallery-slide snap-start shrink-0">
-          <source type="image/webp" srcset="assets/images/gallery/gallery2.jpg.webp" />
-          <img src="assets/images/gallery/gallery2.jpg" alt="Gallery" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="100" loading="lazy">
-        </picture>
-        <picture class="gallery-slide snap-start shrink-0">
-          <source type="image/webp" srcset="assets/images/gallery/gallery3.jpg.webp" />
-          <img src="assets/images/gallery/gallery3.jpg" alt="Gallery" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="200" loading="lazy">
-        </picture>
-        <picture class="gallery-slide snap-start shrink-0">
-          <source type="image/webp" srcset="assets/images/gallery/gallery4.jpg.webp" />
-          <img src="assets/images/gallery/gallery4.jpg" alt="Gallery" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="300" loading="lazy">
-        </picture>
-        <picture class="gallery-slide snap-start shrink-0">
-          <source type="image/webp" srcset="assets/images/gallery/gallery5.jpg.webp" />
-          <img src="assets/images/gallery/gallery5.jpg" alt="Gallery" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="400" loading="lazy">
-        </picture>
-        <picture class="gallery-slide snap-start shrink-0">
-          <source type="image/webp" srcset="assets/images/gallery/kurta.jpg.webp" />
-          <img src="assets/images/gallery/kurta.jpg" alt="Kurta" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" loading="lazy">
-        </picture>
-        <picture class="gallery-slide snap-start shrink-0">
-          <source type="image/webp" srcset="assets/images/gallery/bandgalla.jpg.webp" />
-          <img src="assets/images/gallery/bandgalla.jpg" alt="Bandgalla" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="100" loading="lazy">
-        </picture>
-        <picture class="gallery-slide snap-start shrink-0">
-          <source type="image/webp" srcset="assets/images/gallery/indowestern.jpg.webp" />
-          <img src="assets/images/gallery/indowestern.jpg" alt="Indo Western Suit" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="200" loading="lazy">
-        </picture>
-      </div>
+  <section id="gallery" class="py-20 px-6 section-dark">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-center text-3xl md:text-4xl gold-text mb-4" data-aos="fade-down">Our Work Gallery 📸</h2>
+      <p class="text-center text-gray-400 mb-12 max-w-3xl mx-auto" data-aos="fade-down" data-aos-delay="100">Browse our collection of meticulously crafted bespoke garments</p>
+      <div class="relative">
+        <!-- Track -->
+        <div id="galleryTrack" class="flex overflow-x-auto no-scrollbar space-x-6 pb-4 snap-x snap-mandatory scroll-smooth" aria-label="Gallery slider">
+          <picture class="gallery-slide snap-start shrink-0">
+            <source type="image/webp" srcset="assets/images/gallery/gallery1.jpg.webp" />
+            <img src="assets/images/gallery/gallery1.jpg" alt="Gallery" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" loading="lazy">
+          </picture>
+          <picture class="gallery-slide snap-start shrink-0">
+            <source type="image/webp" srcset="assets/images/gallery/gallery2.jpg.webp" />
+            <img src="assets/images/gallery/gallery2.jpg" alt="Gallery" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="100" loading="lazy">
+          </picture>
+          <picture class="gallery-slide snap-start shrink-0">
+            <source type="image/webp" srcset="assets/images/gallery/gallery3.jpg.webp" />
+            <img src="assets/images/gallery/gallery3.jpg" alt="Gallery" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="200" loading="lazy">
+          </picture>
+          <picture class="gallery-slide snap-start shrink-0">
+            <source type="image/webp" srcset="assets/images/gallery/gallery4.jpg.webp" />
+            <img src="assets/images/gallery/gallery4.jpg" alt="Gallery" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="300" loading="lazy">
+          </picture>
+          <picture class="gallery-slide snap-start shrink-0">
+            <source type="image/webp" srcset="assets/images/gallery/gallery5.jpg.webp" />
+            <img src="assets/images/gallery/gallery5.jpg" alt="Gallery" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="400" loading="lazy">
+          </picture>
+          <picture class="gallery-slide snap-start shrink-0">
+            <source type="image/webp" srcset="assets/images/gallery/kurta.jpg.webp" />
+            <img src="assets/images/gallery/kurta.jpg" alt="Kurta" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" loading="lazy">
+          </picture>
+          <picture class="gallery-slide snap-start shrink-0">
+            <source type="image/webp" srcset="assets/images/gallery/bandgalla.jpg.webp" />
+            <img src="assets/images/gallery/bandgalla.jpg" alt="Bandgalla" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="100" loading="lazy">
+          </picture>
+          <picture class="gallery-slide snap-start shrink-0">
+            <source type="image/webp" srcset="assets/images/gallery/indowestern.jpg.webp" />
+            <img src="assets/images/gallery/indowestern.jpg" alt="Indo Western Suit" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="200" loading="lazy">
+          </picture>
+          <picture class="gallery-slide snap-start shrink-0">
+            <source type="image/webp" srcset="assets/images/gallery/sherwani1.jpg.webp" />
+            <img src="assets/images/gallery/sherwani1.jpg" alt="Sherwani" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="300" loading="lazy">
+          </picture>
+          <picture class="gallery-slide snap-start shrink-0">
+            <source type="image/webp" srcset="assets/images/gallery/suit1.jpg.webp" />
+            <img src="assets/images/gallery/suit1.jpg" alt="Suit" class="w-80 md:w-64 rounded-lg shadow-md gallery-item" data-aos="zoom-in" data-aos-delay="400" loading="lazy">
+          </picture>
+        </div>
 
-      <!-- Arrows -->
-      <div class="pointer-events-none">
-        <button id="galleryPrev" class="pointer-events-auto absolute left-0 top-1/2 -translate-y-1/2 bg-[#1c1c1c] bg-opacity-80 border border-gray-700 text-white rounded-full p-3 shadow hover:gold-text focus:outline-none focus:ring-2 focus:ring-[#c99e67]" aria-label="Previous" aria-controls="galleryTrack">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
-        <button id="galleryNext" class="pointer-events-auto absolute right-0 top-1/2 -translate-y-1/2 bg-[#1c1c1c] bg-opacity-80 border border-gray-700 text-white rounded-full p-3 shadow hover:gold-text focus:outline-none focus:ring-2 focus:ring-[#c99e67]" aria-label="Next" aria-controls="galleryTrack">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
+        <!-- Arrows -->
+        <div class="pointer-events-none">
+          <button id="galleryPrev" class="pointer-events-auto absolute left-0 top-1/2 -translate-y-1/2 bg-[#1c1c1c] bg-opacity-80 border border-gray-700 text-white rounded-full p-3 shadow hover:gold-text focus:outline-none focus:ring-2 focus:ring-[#c99e67]" aria-label="Previous" aria-controls="galleryTrack">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button id="galleryNext" class="pointer-events-auto absolute right-0 top-1/2 -translate-y-1/2 bg-[#1c1c1c] bg-opacity-80 border border-gray-700 text-white rounded-full p-3 shadow hover:gold-text focus:outline-none focus:ring-2 focus:ring-[#c99e67]" aria-label="Next" aria-controls="galleryTrack">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="text-center mt-12" data-aos="fade-up" data-aos-delay="400">
+        <a href="/gallery" class="btn-glow px-6 py-3 rounded-full inline-block">View Full Gallery</a>
       </div>
     </div>
   </section>
 
   <!-- Testimonials -->
-  <section id="testimonials" class="py-20 px-6 section-dark">
-    <h2 class="text-center text-3xl gold-text mb-10" data-aos="fade-down">What Clients Say 💬</h2>
-    <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-      <div class="bg-[#1c1c1c] p-6 rounded shadow" data-aos="fade-up">
-        <p>“The fit. The fabric. The feeling — I've never worn anything more powerful.”</p>
-        <p class="gold-text mt-4 font-semibold">– Arjun S., Bangalore</p>
+  <section id="testimonials" class="py-20 px-6 bg-black">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-center text-3xl md:text-4xl gold-text mb-4" data-aos="fade-down">What Clients Say 💬</h2>
+      <p class="text-center text-gray-400 mb-12 max-w-3xl mx-auto" data-aos="fade-down" data-aos-delay="100">Don't just take our word for it - hear from our satisfied customers</p>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-[#1c1c1c] p-6 rounded shadow testimonial-card" data-aos="fade-up">
+          <div class="flex items-center mb-4">
+            <div class="text-yellow-400 text-xl">★★★★★</div>
+          </div>
+          <p class="mb-4">"My bespoke suit from Aurum was exactly what I needed for my wedding. The attention to detail and perfect fit made me feel confident throughout the ceremony. Worth every penny!"</p>
+          <p class="gold-text font-semibold">– Karthik R., Koramangala</p>
+        </div>
+        <div class="bg-[#1c1c1c] p-6 rounded shadow testimonial-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="flex items-center mb-4">
+            <div class="text-yellow-400 text-xl">★★★★★</div>
+          </div>
+          <p class="mb-4">"As someone who struggles to find well-fitting clothes off-the-rack, Aurum's home consultation service was a game-changer. My sherwani fit like a glove and received countless compliments."</p>
+          <p class="gold-text font-semibold">– Vivek S., Indiranagar</p>
+        </div>
+        <div class="bg-[#1c1c1c] p-6 rounded shadow testimonial-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="flex items-center mb-4">
+            <div class="text-yellow-400 text-xl">★★★★★</div>
+          </div>
+          <p class="mb-4">"The level of craftsmanship is exceptional. My blazer was completed in just 3 weeks and fits better than anything I've ever bought off the rack. The home visit service is incredibly convenient."</p>
+          <p class="gold-text font-semibold">– Arjun M., Whitefield</p>
+        </div>
       </div>
-      <div class="bg-[#1c1c1c] p-6 rounded shadow" data-aos="fade-up" data-aos-delay="100">
-        <p>“Aurum transformed my sherwani into art. Personal service, perfect result.”</p>
-        <p class="gold-text mt-4 font-semibold">– Rishi M., JP Nagar</p>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 px-6 section-dark text-center">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-3xl md:text-4xl gold-text mb-6" data-aos="fade-up">Ready to Experience Luxury Tailoring?</h2>
+      <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">Book a free consultation and let our master tailor visit you at home or office</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center" data-aos="zoom-in" data-aos-delay="200">
+        <a href="https://wa.me/918105508503" class="btn-glow px-8 py-4 rounded-full text-lg inline-block">Book Home Visit ➡️</a>
+        <a href="tel:+918105508503" class="border-2 border-[#c99e67] text-[#c99e67] px-8 py-4 rounded-full text-lg inline-block hover:bg-[#c99e67] hover:text-black transition-all">Call Now</a>
       </div>
+      <p class="text-gray-500 mt-4 text-sm" data-aos="fade-up" data-aos-delay="300">Free consultation • No obligation • Same-day appointments available</p>
     </div>
   </section>
 
   <!-- Contact -->
   <footer id="contact" class="bg-[#0a0a0a] py-16 px-6 text-center">
     <div class="max-w-4xl mx-auto">
-      <h2 class="text-3xl font-bold gold-text mb-4" data-aos="fade-down">Book a Home Visit 🏠</h2>
+      <h2 class="text-3xl font-bold gold-text mb-4" data-aos="fade-down">Get In Touch 📞</h2>
       <p class="text-gray-400 mb-6" data-aos="fade-up">Tailored luxury, brought to your doorstep — faster than any competitor ⚡</p>
 
       <!-- Web3Forms -->
@@ -333,9 +515,17 @@
         <input type="hidden" name="access_key" value="2a7aeddb-6483-40e4-a1aa-1ec46ba22a64" />
         <input type="text" name="name" required placeholder="Your Name" class="w-full p-3 bg-black border border-gray-700 rounded" />
         <input type="email" name="email" required placeholder="Your Email" class="w-full p-3 bg-black border border-gray-700 rounded" />
+        <input type="tel" name="phone" required placeholder="Your Phone Number" class="w-full p-3 bg-black border border-gray-700 rounded" />
         <textarea name="message" rows="4" required placeholder="Your Message" class="w-full p-3 bg-black border border-gray-700 rounded"></textarea>
-        <button type="submit" class="btn-glow px-6 py-3 rounded-full">Send Message</button>
+        <button type="submit" class="btn-glow px-6 py-3 rounded-full w-full">Send Message</button>
       </form>
+
+      <!-- Contact Info -->
+      <div class="mt-10 mb-8">
+        <p class="text-lg mb-2">Or connect directly:</p>
+        <p class="text-gray-400 mb-4"><a href="tel:+918105508503" class="gold-text hover:underline">+91 81055 08503</a></p>
+        <p class="text-gray-400">Bangalore, India</p>
+      </div>
 
       <!-- Social Media Icons -->
       <div class="flex justify-center gap-6 mt-10">
@@ -440,6 +630,20 @@
       } else {
         navLogo.classList.remove('hidden');
       }
+    });
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          window.scrollTo({
+            top: target.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
     });
   </script>
 

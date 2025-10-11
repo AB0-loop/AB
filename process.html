@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <meta name="description" content="Discover Aurum Bespoke's 4-step process for creating perfect fitting luxury menswear. From consultation to delivery, we ensure excellence at every stage." />
+  <title>Our Process | Aurum Bespoke – Luxury Tailoring</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/assets/logos/icons/favicon-32.png?v=2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/logos/icons/favicon-32.png?v=2" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/logos/icons/favicon-16.png?v=2" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/logos/icons/logo-180.png?v=2" />
+  <link rel="icon" href="/assets/logos/icons/favicon.ico?v=2" sizes="any">
+  <link rel="icon" href="/favicon.ico?v=2" sizes="any">
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="Our Process | Aurum Bespoke – Luxury Tailoring">
+  <meta property="og:description" content="Discover Aurum Bespoke's 4-step process for creating perfect fitting luxury menswear. From consultation to delivery, we ensure excellence at every stage.">
+  <meta property="og:image" content="https://aurumbespoke.com/assets/logos/aurum-logo.jpg">
+  <meta property="og:url" content="https://aurumbespoke.com/process">
+  <meta property="og:type" content="website">
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Our Process | Aurum Bespoke – Luxury Tailoring">
+  <meta name="twitter:description" content="Discover Aurum Bespoke's 4-step process for creating perfect fitting luxury menswear. From consultation to delivery, we ensure excellence at every stage.">
+  <meta name="twitter:image" content="https://aurumbespoke.com/assets/logos/aurum-logo.jpg">
+  
+  <!-- Canonical & PWA basics -->
+  <link rel="canonical" href="https://aurumbespoke.com/process" />
+  <meta name="theme-color" content="#0e0d0d" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="/assets/logos/icons/logo-180.png" />
+
+  <!-- Resource Hints -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" />
+  <link rel="preconnect" href="https://unpkg.com" />
+
+  <!-- Fonts and CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Inter&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js" defer></script>
+  <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0e0d0d;
+      color: #e4e4e4;
+    }
+    h1, h2, h3 {
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .gold-text { color: #c99e67; }
+    .gold-bg { background-color: #c99e67; }
+    .section-dark { background-color: #141414; }
+    .hero-overlay {
+      background: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.9));
+    }
+    .btn-glow {
+      background-color: #c99e67;
+      color: #0e0d0d;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    .btn-glow:hover {
+      box-shadow: 0 0 15px #c99e67;
+      transform: translateY(-2px);
+    }
+    .process-step {
+      position: relative;
+      padding-left: 3rem;
+    }
+    .step-number {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2.5rem;
+      height: 2.5rem;
+      background-color: #c99e67;
+      color: #0e0d0d;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    .whatsapp-chat {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+    }
+    .whatsapp-chat img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      cursor: pointer;
+      transition: box-shadow 0.2s;
+      padding: 8px;
+      background: black;
+    }
+    .whatsapp-chat img:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    }
+    .social-icon {
+      width: 24px;
+      height: 24px;
+      transition: all 0.3s ease;
+      opacity: 0.8;
+    }
+    .social-icon:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+    .nav-logo {
+      width: 175px;
+      height: 175px;
+      object-fit: contain;
+      transition: opacity 0.3s ease, transform 0.2s ease;
+      filter: drop-shadow(0 0 12px rgba(201, 158, 103, 0.35));
+      transform: translateY(6px);
+      margin-left: -34px;
+    }
+    @media (min-width: 768px) {
+      .nav-logo { width: 170px; height: 170px; transform: none; margin-left: 0; }
+    }
+    .nav-logo.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    /* Enhanced process page styles */
+    .process-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .timeline-container {
+      position: relative;
+      padding: 2rem 0;
+    }
+    .timeline-line {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: linear-gradient(to bottom, #c99e67, #8a6d44);
+      transform: translateX(-50%);
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 3rem;
+      width: 100%;
+    }
+    .timeline-content {
+      width: calc(50% - 2rem);
+      padding: 1.5rem;
+      background: #1c1c1c;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .timeline-item:nth-child(odd) .timeline-content {
+      margin-left: auto;
+    }
+    .timeline-marker {
+      position: absolute;
+      left: 50%;
+      top: 2rem;
+      width: 20px;
+      height: 20px;
+      background: #c99e67;
+      border-radius: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+    .timeline-marker::after {
+      content: '';
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border: 2px solid #c99e67;
+      border-radius: 50%;
+      top: -10px;
+      left: -10px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.7; }
+      50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.3; }
+      100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.7; }
+    }
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .benefit-card {
+      background: #1c1c1c;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    .benefit-card:hover {
+      transform: translateY(-5px);
+    }
+    .benefit-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #c99e67;
+    }
+  </style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EV18G05FL2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-EV18G05FL2');
+</script>
+</head>
+<body class="overflow-x-hidden">
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-90 text-white px-6 py-4" aria-label="Main navigation">
+    <div class="flex items-center justify-between max-w-7xl mx-auto px-2">
+      <!-- Logo -->
+      <a href="/" aria-label="Aurum Bespoke Home" id="navLogo">
+        <picture>
+          <source type="image/webp" srcset="assets/logos/aurum-logo.jpg" />
+          <img src="assets/logos/aurum-logo.jpg" alt="Aurum Logo" class="nav-logo align-middle" width="170" height="170" />
+        </picture>
+      </a>
+      
+      <div class="flex items-center">
+        <div class="hidden md:flex space-x-6">
+          <a href="/" class="hover:gold-text">Home</a>
+          <a href="/#services" class="hover:gold-text">Services</a>
+          <a href="/#gallery" class="hover:gold-text">Gallery</a>
+          <a href="/about" class="hover:gold-text">About</a>
+          <a href="/process" class="hover:gold-text font-semibold">Process</a>
+          <a href="/faq" class="hover:gold-text">FAQ</a>
+          <a href="/blog" class="hover:gold-text">Blog</a>
+          <a href="/#contact" class="hover:gold-text">Contact</a>
+        </div>
+        
+        <!-- Mobile menu button (right aligned) -->
+        <button onclick="document.getElementById('mobileMenu').classList.toggle('hidden')" 
+                class="md:hidden ml-4 focus:outline-none" 
+                aria-label="Open menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="md:hidden hidden mt-4">
+      <div class="flex flex-col space-y-2">
+        <a href="/" class="block py-2 hover:gold-text">Home</a>
+        <a href="/#services" class="block py-2 hover:gold-text">Services</a>
+        <a href="/#gallery" class="block py-2 hover:gold-text">Gallery</a>
+        <a href="/about" class="block py-2 hover:gold-text">About</a>
+        <a href="/process" class="block py-2 hover:gold-text font-semibold">Process</a>
+        <a href="/faq" class="block py-2 hover:gold-text">FAQ</a>
+        <a href="/blog" class="block py-2 hover:gold-text">Blog</a>
+        <a href="/#contact" class="block py-2 hover:gold-text">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="w-full min-h-screen flex flex-col items-center justify-center text-center p-6 bg-black relative pt-20 md:pt-24">
+    <div class="absolute inset-0 bg-[url('assets/background/hero-loop.mp4')] bg-cover bg-center opacity-10"></div>
+    <div class="z-10 max-w-4xl mx-auto">
+      <h1 class="text-4xl md:text-6xl gold-text mb-6" data-aos="fade-up">Our Process 🧵</h1>
+      <p class="text-xl text-gray-300 mb-8" data-aos="fade-up" data-aos-delay="200">Precision. Craftsmanship. Perfection.</p>
+      <div class="mt-8 p-4 bg-[#1c1c1c] rounded-lg max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="400">
+        <p class="text-lg"><span class="gold-text font-semibold">4-Step Journey</span> from concept to creation in just 3 weeks</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process Benefits -->
+  <section class="py-20 px-6 section-dark">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-3xl md:text-4xl gold-text mb-16 text-center" data-aos="fade-down">Why Our Process Works</h2>
+      <div class="benefits-grid">
+        <div class="benefit-card" data-aos="fade-up">
+          <div class="benefit-icon">⏱️</div>
+          <h3 class="text-xl gold-text mb-2">Fast Turnaround</h3>
+          <p>Get your custom garments in just 3 weeks with our streamlined process</p>
+        </div>
+        <div class="benefit-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="benefit-icon">🎯</div>
+          <h3 class="text-xl gold-text mb-2">Perfect Fit Guarantee</h3>
+          <p>Over 20 detailed measurements ensure your garments fit flawlessly</p>
+        </div>
+        <div class="benefit-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="benefit-icon">🏠</div>
+          <h3 class="text-xl gold-text mb-2">Home Convenience</h3>
+          <p>Enjoy our service from the comfort of your home or office</p>
+        </div>
+        <div class="benefit-card" data-aos="fade-up" data-aos-delay="300">
+          <div class="benefit-icon">💎</div>
+          <h3 class="text-xl gold-text mb-2">Premium Quality</h3>
+          <p>Handcrafted by master tailors using the finest materials</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Detailed Process Steps -->
+  <section class="py-20 px-6 bg-black">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-3xl md:text-4xl gold-text mb-16 text-center" data-aos="fade-down">The Aurum Bespoke Journey</h2>
+      
+      <div class="space-y-16">
+        <!-- Step 1 -->
+        <div class="flex flex-col md:flex-row items-center gap-8" data-aos="fade-right">
+          <div class="md:w-1/3">
+            <div class="bg-gray-700 border-2 border-dashed rounded-xl w-full h-64 flex items-center justify-center">
+              <div class="text-5xl">📋</div>
+            </div>
+          </div>
+          <div class="md:w-2/3 process-step">
+            <div class="step-number">1</div>
+            <h3 class="text-2xl gold-text mb-4">Consultation & Design</h3>
+            <p class="text-lg mb-4">Our master tailor visits your home or office at your convenience to understand your style preferences, lifestyle needs, and specific requirements. We discuss fabric options from our curated collection of premium materials, design elements, and create a personalized plan for your garment with detailed sketches.</p>
+            <ul class="space-y-2">
+              <li class="flex items-start">
+                <span class="gold-text mr-2">✓</span>
+                <span><strong>In-depth style consultation:</strong> We understand your personal style, occasions, and preferences</span>
+              </li>
+              <li class="flex items-start">
+                <span class="gold-text mr-2">✓</span>
+                <span><strong>Fabric selection guidance:</strong> Access to premium fabrics from Italian and British mills</span>
+              </li>
+              <li class="flex items-start">
+                <span class="gold-text mr-2">✓</span>
+                <span><strong>Design customization options:</strong> Personalize every detail from lapel style to button choice</span>
+              </li>
+              <li class="flex items-start">
+                <span class="gold-text mr-2">✓</span>
+                <span><strong>Detailed sketches:</strong> Visual representation of your custom design before creation</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="flex flex-col md:flex-row-reverse items-center gap-8" data-aos="fade-left">
+          <div class="md:w-1/3">
+            <div class="bg-gray-700 border-2 border-dashed rounded-xl w-full h-64 flex items-center justify-center">
+              <div class="text-5xl">📐</div>
+            </div>
+          </div>
+          <div class="md:w-2/3 process-step">
+            <div class="step-number">2</div>
+            <h3 class="text-2xl gold-text mb-4">Precision Measurement</h3>
+            <p class="text-lg mb-4">Using traditional tailoring techniques combined with modern precision tools, we take over 20 detailed measurements to ensure a perfect fit. This meticulous process accounts for your body's unique proportions and posture.</p>
+            <ul class="space-y-2">
+              <li class="flex items-start">
+                <span class="gold-text mr-2">✓</span>
+                <span><strong>Over 20 detailed measurements:</strong> Including shoulder slope, arm length, and torso proportions</span>
+              </li>
+              <li class="flex items-start">
+                <span class="gold-text mr-2">✓</span>
+                <span><strong>Posture and movement analysis:</strong> Understanding how you sit, stand, and move</span>
+              </li>
+              <li class="flex items-start">
+                <span class="gold-text mr-2">✓</span>
+                <span><strong>Digital measurement recording:</strong> Ensuring consistency and accuracy for future garments</span>
+              </li>
+              <li class="flex items-start">
+                <span class="gold-text mr-2">✓</span>
+                <span><strong>Fit profile creation:</strong> Your unique measurements stored for future reference</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="flex flex-col md:flex-row items-center gap-8" data-aos="fade-right">
+          <div class="md:w-1/3">
+            <div class="bg-gray-700 border-2 border-dashed rounded-xl w-full h-64 flex items-center justify-center">
+              <div class="text-5xl">🧵</div>
+            </div>
+          </div>
+          <div class="md:w-2/3 process-step">
+            <div class="step-number">3</div>
+            <h3 class="text-2xl gold-text mb-4">Craftsmanship & Creation</h3>
+            <p class="text-lg mb-4">Our master tailors begin the meticulous crafting process, combining time-honored techniques with modern precision. Each garment undergoes multiple quality checks during the creation process to ensure it meets our exacting standards.</p>
+            <ul class="space-y-2">
+              <li class="flex items-start">
+                <span class="gold-text mr-2">✓</span>
+                <span><strong>Handcrafted construction:</strong> Each stitch placed with precision by experienced artisans</span>
+              </li>
+              <li class="flex items-start">
+                <span class="gold-text mr-2">✓</span>
+                <span><strong>Multiple quality checkpoints:</strong> Rigorous inspection at every stage of creation</span>
+              </li>
+              <li class="flex items-start">
+                <span class="gold-text mr-2">✓</span>
+                <span><strong>Premium fabric handling:</strong> Specialized techniques for different fabric types</span>
+              </li>
+              <li class="flex items-start">
+                <span class="gold-text mr-2">✓</span>
+                <span><strong>Attention to detail:</strong> Finishing touches that make the difference</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="flex flex-col md:flex-row-reverse items-center gap-8" data-aos="fade-left">
+          <div class="md:w-1/3">
+            <div class="bg-gray-700 border-2 border-dashed rounded-xl w-full h-64 flex items-center justify-center">
+              <div class="text-5xl">✅</div>
+            </div>
+          </div>
+          <div class="md:w-2/3 process-step">
+            <div class="step-number">4</div>
+            <h3 class="text-2xl gold-text mb-4">Fitting & Delivery</h3>
+            <p class="text-lg mb-4">We schedule a final fitting at your convenience to ensure perfection. Any necessary adjustments are made before the garment is carefully packaged and delivered to you. We also provide care instructions to maintain the garment's pristine condition.</p>
+            <ul class="space-y-2">
+              <li class="flex items-start">
+                <span class="gold-text mr-2">✓</span>
+                <span><strong>Final fitting session:</strong> Ensure the perfect fit and make any final adjustments</span>
+              </li>
+              <li class="flex items-start">
+                <span class="gold-text mr-2">✓</span>
+                <span><strong>Final adjustments if needed:</strong> Minor tweaks for absolute perfection</span>
+              </li>
+              <li class="flex items-start">
+                <span class="gold-text mr-2">✓</span>
+                <span><strong>Care instructions provided:</strong> Guidance on maintaining your garment's quality</span>
+              </li>
+              <li class="flex items-start">
+                <span class="gold-text mr-2">✓</span>
+                <span><strong>Premium packaging:</strong> Your garment delivered in protective luxury packaging</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <section class="py-20 px-6 section-dark">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-3xl md:text-4xl gold-text mb-16 text-center" data-aos="fade-down">Timeline Overview</h2>
+      <div class="relative timeline-container">
+        <!-- Timeline line -->
+        <div class="timeline-line"></div>
+        
+        <!-- Timeline items -->
+        <div class="space-y-12">
+          <div class="timeline-item" data-aos="fade-right">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <h3 class="text-xl gold-text">Day 1-2</h3>
+              <p class="text-gray-300 mt-2"><strong>Initial consultation and design selection</strong></p>
+              <p class="text-gray-400 mt-1">We visit you to understand your needs, select fabrics, and finalize designs with detailed sketches.</p>
+            </div>
+          </div>
+          
+          <div class="timeline-item" data-aos="fade-left">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <h3 class="text-xl gold-text">Day 3-5</h3>
+              <p class="text-gray-300 mt-2"><strong>Precision measurements and pattern creation</strong></p>
+              <p class="text-gray-400 mt-1">Detailed body measurements are taken and patterns are created specifically for your unique physique.</p>
+            </div>
+          </div>
+          
+          <div class="timeline-item" data-aos="fade-right">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <h3 class="text-xl gold-text">Week 1-3</h3>
+              <p class="text-gray-300 mt-2"><strong>Crafting and quality control process</strong></p>
+              <p class="text-gray-400 mt-1">Your garment is meticulously handcrafted with multiple quality checks throughout the process.</p>
+            </div>
+          </div>
+          
+          <div class="timeline-item" data-aos="fade-left">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <h3 class="text-xl gold-text">Week 3-4</h3>
+              <p class="text-gray-300 mt-2"><strong>Final fitting and garment delivery</strong></p>
+              <p class="text-gray-400 mt-1">We deliver your perfectly fitted garment along with care instructions and warranty information.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quality Assurance -->
+  <section class="py-20 px-6 bg-black">
+    <div class="max-w-5xl mx-auto text-center">
+      <h2 class="text-3xl md:text-4xl gold-text mb-10" data-aos="fade-down">Our Quality Promise</h2>
+      <div class="grid md:grid-cols-3 gap-8 mt-12">
+        <div class="bg-[#1c1c1c] p-6 rounded-lg" data-aos="fade-up">
+          <div class="text-4xl mb-4">💯</div>
+          <h3 class="text-xl gold-text mb-3">30-Day Fit Guarantee</h3>
+          <p class="text-gray-400">Unhappy with the fit? We'll make it right or your money back, no questions asked.</p>
+        </div>
+        <div class="bg-[#1c1c1c] p-6 rounded-lg" data-aos="fade-up" data-aos-delay="100">
+          <div class="text-4xl mb-4">🔄</div>
+          <h3 class="text-xl gold-text mb-3">Lifetime Alterations</h3>
+          <p class="text-gray-400">Need adjustments down the line? We offer complimentary alterations for life.</p>
+        </div>
+        <div class="bg-[#1c1c1c] p-6 rounded-lg" data-aos="fade-up" data-aos-delay="200">
+          <div class="text-4xl mb-4">🛡️</div>
+          <h3 class="text-xl gold-text mb-3">Premium Craftsmanship</h3>
+          <p class="text-gray-400">Each garment is built to last with premium materials and expert construction.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 px-6 section-dark text-center">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-3xl md:text-4xl gold-text mb-6" data-aos="fade-up">Begin Your Bespoke Journey</h2>
+      <p class="text-xl text-gray-300 mb-8" data-aos="fade-up" data-aos-delay="100">Experience the difference of true craftsmanship with a home visit consultation</p>
+      <a href="https://wa.me/918105508503" class="btn-glow px-8 py-4 rounded-full text-lg inline-block" data-aos="zoom-in" data-aos-delay="200">Book Consultation ➡️</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-[#0a0a0a] py-16 px-6 text-center">
+    <div class="max-w-4xl mx-auto">
+      <div class="flex justify-center gap-6 mb-10">
+        <a href="https://www.instagram.com/aurum.bespoke?igsh=czc2cnZ1NnMwdHdi" target="_blank" title="Instagram" data-aos="zoom-in" rel="noopener noreferrer">
+          <img src="assets/images/social-icons/instagram.svg" alt="Instagram" class="social-icon" loading="lazy">
+        </a>
+        <a href="https://x.com/Aurum_Bespoke?t=303eKb_ss5Dn4K0jiIGJHQ&s=35" target="_blank" title="Twitter" data-aos="zoom-in" data-aos-delay="100" rel="noopener noreferrer">
+          <img src="assets/images/social-icons/x.svg" alt="Twitter" class="social-icon" loading="lazy">
+        </a>
+        <a href="https://www.facebook.com/share/16mphUA4Qt/" target="_blank" title="Facebook" data-aos="zoom-in" data-aos-delay="200" rel="noopener noreferrer">
+          <img src="assets/images/social-icons/facebook.svg" alt="Facebook" class="social-icon" loading="lazy">
+        </a>
+        <a href="https://www.youtube.com/@aurumbespoke" target="_blank" title="YouTube" data-aos="zoom-in" data-aos-delay="300" rel="noopener noreferrer">
+          <img src="assets/images/social-icons/youtube.svg" alt="YouTube" class="social-icon" loading="lazy">
+        </a>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-6 mt-10 text-sm">
+        <a href="/about" class="hover:gold-text">About Us</a>
+        <a href="/process" class="hover:gold-text">Our Process</a>
+        <a href="/faq" class="hover:gold-text">FAQ</a>
+        <a href="/blog" class="hover:gold-text">Blog</a>
+        <a href="/privacy" class="hover:gold-text">Privacy Policy</a>
+        <a href="/terms" class="hover:gold-text">Terms of Service</a>
+      </div>
+
+      <p class="text-xs text-gray-600 mt-6">&copy; 2025 Aurum Bespoke. Site by <span class="text-blue-500 font-semibold">w3bhub.co.in</span></p>
+    </div>
+  </footer>
+
+  <!-- WhatsApp Floating Chat Widget -->
+  <div class="whatsapp-chat">
+    <a href="https://wa.me/918105508503?text=Hi%20Aurum%20Bespoke%2C%20I%20want%20to%20book%20a%20home%20appointment" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+      <img src="assets/images/social-icons/whatsapp.svg" alt="Chat on WhatsApp">
+    </a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.AOS && typeof AOS.init === 'function') {
+        AOS.init();
+      }
+    });
+  </script>
+  <script>
+    // Close mobile menu when clicking a link
+    document.querySelectorAll('#mobileMenu a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('mobileMenu').classList.add('hidden');
+      });
+    });
+
+    // Hide logo on scroll
+    const navLogo = document.getElementById('navLogo').querySelector('img');
+    
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 50) {
+        navLogo.classList.add('hidden');
+      } else {
+        navLogo.classList.remove('hidden');
+      }
+    });
+  </script>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Aurum Bespoke",
+    "url": "https://aurumbespoke.com/",
+    "image": "https://aurumbespoke.com/assets/logos/icons/logo-512.png",
+    "logo": "https://aurumbespoke.com/assets/logos/icons/logo-512.png",
+    "telephone": "+91 81055 08503",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Bangalore",
+      "addressCountry": "IN"
+    },
+    "sameAs": [
+      "https://www.instagram.com/aurum.bespoke",
+      "https://x.com/Aurum_Bespoke",
+      "https://www.facebook.com/share/16mphUA4Qt/",
+      "https://www.youtube.com/@aurumbespoke"
+    ]
+  }
+  </script>
+</body>
+</html>
