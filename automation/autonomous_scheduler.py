@@ -3,7 +3,7 @@
 AUTONOMOUS SCHEDULER FOR AURUM BESPOKE
 =====================================
 
-This script schedules the daily content generation to run automatically at 12:30 AM IST every day.
+This script schedules the daily content generation to run automatically at 6:00 AM IST every day.
 """
 
 import schedule
@@ -42,11 +42,11 @@ def main():
     print("==========================================")
     print(f"Current time: {datetime.now()}")
     
-    # Schedule the job to run at 12:30 AM IST every day
+    # Schedule the job to run at 6:00 AM IST every day (00:30 UTC)
     # Note: This requires the schedule library to be running continuously
     schedule.every().day.at("00:30").do(run_daily_generation)
     
-    print("Scheduled daily generation for 12:30 AM IST")
+    print("Scheduled daily generation for 6:00 AM IST")
     print("Scheduler is now running... Press Ctrl+C to stop")
     
     # Keep the scheduler running

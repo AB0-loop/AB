@@ -53,9 +53,6 @@ TEXT_TO_IMAGE_MODEL = "stabilityai/stable-diffusion-2-1"
 # Check if API key is provided
 HUGGING_FACE_ENABLED = bool(HUGGING_FACE_API_KEY and HUGGING_FACE_API_KEY != "YOUR_VALID_HUGGING_FACE_API_KEY_HERE")
 
-# Free Hugging Face Alternative
-FREE_HF_ALTERNATIVE_PATH = REPO_ROOT / "automation" / "free_huggingface_alternative.py"
-
 # Services configuration matching website products
 SERVICE_CONFIG = {
     "Bespoke Suits": {
@@ -305,11 +302,11 @@ def resolve_image_path(fname: str) -> Optional[Tuple[Path, str]]:
 
 
 def generate_ai_image(prompt: str, output_path: Path) -> bool:
-    """Generate an AI image using Hugging Face API with free alternatives as fallback"""
-    # If Hugging Face is not enabled, try free alternatives
+    """Generate an AI image using Hugging Face API - ONLY use API, no fallbacks"""
+    # Only proceed if Hugging Face is enabled
     if not HUGGING_FACE_ENABLED:
-        print("Hugging Face API not enabled - trying free alternatives")
-        return try_free_alternatives(prompt, output_path)
+        print("Hugging Face API not enabled - cannot generate AI image")
+        return False
         
     try:
         headers = {"Authorization": f"Bearer {HUGGING_FACE_API_KEY}"}
@@ -327,12 +324,10 @@ def generate_ai_image(prompt: str, output_path: Path) -> bool:
             return True
         else:
             print(f"Hugging Face API error: {response.status_code} - {response.text}")
-            # Try free alternatives as fallback
-            return try_free_alternatives(prompt, output_path)
+            return False
     except Exception as e:
         print(f"Error generating AI image: {e}")
-        # Try free alternatives as fallback
-        return try_free_alternatives(prompt, output_path)
+        return False
 
 
 def try_free_alternatives(prompt: str, output_path: Path) -> bool:
@@ -844,8 +839,8 @@ def build_post(service: str, image_path: Path, variant: str, style: str, color_n
     timestamp = dt.datetime.now().strftime("%Y%m%d")
     out_path = OUTPUT_DIR / f"{timestamp}_{service.replace(' ', '_').lower()}_image.jpg"
 
-    # Randomly decide whether to use AI-generated image (10% chance to reduce fake content)
-    if HUGGING_FACE_ENABLED and random.random() < 0.1:
+    # ONLY use AI-generated image - no fallback to real images
+    if HUGGING_FACE_ENABLED:
         # Generate AI image
         ai_image_path = OUTPUT_DIR / f"{timestamp}_{service.replace(' ', '_').lower()}_ai.jpg"
         prompt = generate_concept_based_prompt(service)
@@ -872,11 +867,11 @@ def build_post(service: str, image_path: Path, variant: str, style: str, color_n
             # Use watermarked image as final output
             out_path = watermarked_path
         else:
-            # Fallback to regular image processing
-            run_ffmpeg_build(image_path, out_path, variant, style, color_filter, theme)
+            # If AI generation fails, we don't send any content
+            raise RuntimeError("AI image generation failed - not sending fallback content")
     else:
-        # Use regular image processing
-        run_ffmpeg_build(image_path, out_path, variant, style, color_filter, theme)
+        # If Hugging Face is not enabled, we don't send any content
+        raise RuntimeError("Hugging Face API not enabled - not sending fallback content")
 
     sc = SERVICE_CONFIG[service]
     emojis = sc["emojis"]
@@ -900,15 +895,35 @@ def build_post(service: str, image_path: Path, variant: str, style: str, color_n
 
 
 def build_video_reel(service: str, image_paths: List[Path], variant: str, style: str, color_name: str, color_filter: str, theme: str) -> Tuple[Path, str]:
-    """Build a video reel showcasing multiple products for a service"""
+    """Build a video reel using ONLY AI-generated content"""
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     timestamp = dt.datetime.now().strftime("%Y%m%d")
-    out_path = OUTPUT_DIR / f"{timestamp}_{service.replace(' ', '_').lower()}_reel.mp4"
     
-    # Generate the video reel with more dynamic transitions
-    video_path = run_ffmpeg_video_build(image_paths, out_path, service)
-    if video_path:
-        out_path = video_path  # Use the returned path (could be GIF or MP4)
+    # ONLY generate video if Hugging Face is enabled
+    if not HUGGING_FACE_ENABLED:
+        raise RuntimeError("Hugging Face API not enabled - not sending fallback video content")
+    
+    # Generate AI images for the video reel
+    ai_image_paths = []
+    for i, _ in enumerate(image_paths[:4]):  # Limit to 4 images for the reel
+        ai_image_path = OUTPUT_DIR / f"{timestamp}_{service.replace(' ', '_').lower()}_ai_{i}.jpg"
+        prompt = generate_concept_based_prompt(service)
+        
+        if generate_ai_image(prompt, ai_image_path):
+            ai_image_paths.append(ai_image_path)
+        else:
+            # If any AI generation fails, we don't send any content
+            raise RuntimeError("AI image generation failed for video reel - not sending fallback content")
+    
+    # If we successfully generated AI images, create the video
+    if ai_image_paths:
+        out_path = OUTPUT_DIR / f"{timestamp}_{service.replace(' ', '_').lower()}_reel.mp4"
+        # Generate the video reel with more dynamic transitions
+        video_path = run_ffmpeg_video_build(ai_image_paths, out_path, service)
+        if video_path:
+            out_path = video_path  # Use the returned path (could be GIF or MP4)
+    else:
+        raise RuntimeError("No AI images generated for video reel - not sending fallback content")
     
     sc = SERVICE_CONFIG[service]
     emojis = sc["emojis"]
