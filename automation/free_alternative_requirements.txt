@@ -1,0 +1,36 @@
+# Free Hugging Face Alternative Requirements
+# These are optional dependencies for the free AI services
+
+# For local Stable Diffusion WebUI API access
+requests>=2.28.0
+
+# For video generation with moviepy (optional)
+# Note: moviepy requires additional system dependencies
+# Install with: pip install moviepy
+moviepy>=1.0.3
+
+# For image processing (already required by main script)
+Pillow>=9.0.0
+numpy>=1.21.0
+
+# For Replicate API (optional)
+# Install with: pip install replicate
+# replicate>=0.1.0
+
+# Instructions:
+# 1. For local Stable Diffusion: Install Stable Diffusion WebUI locally
+#    - GitHub: https://github.com/AUTOMATIC1111/stable-diffusion-webui
+#    - Run with API enabled: python launch.py --api
+#
+# 2. For Replicate: 
+#    - Sign up at https://replicate.com
+#    - Get free credits for new users
+#    - Set REPLICATE_API_TOKEN environment variable
+#
+# 3. For Hugging Face Free Tier:
+#    - No additional installation required
+#    - Limited to free quota
+#
+# 4. For MoviePy (video generation):
+#    - pip install moviepy
+#    - May require FFmpeg (free to download)

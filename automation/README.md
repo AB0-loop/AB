@@ -18,6 +18,12 @@
    - Download from https://ffmpeg.org/download.html
    - Add to your system PATH
 
+4. (Optional) Set up free AI alternatives:
+   - See `FREE_HUGGING_FACE_ALTERNATIVE.md` for detailed instructions
+   - Local Stable Diffusion WebUI for unlimited free generation
+   - Replicate for free credits
+   - Hugging Face free tier as fallback
+
 ## Running the System
 
 ### For daily autonomous generation:
@@ -47,5 +53,15 @@ The system uses the following environment variables:
 - `HUGGING_FACE_API_KEY`: Your Hugging Face API key for AI image generation
 - `TELEGRAM_TOKEN`: Your Telegram bot token for sending content
 - `TELEGRAM_CHAT_ID`: The chat ID where content should be sent
+
+## Free AI Alternatives
+
+The system includes built-in support for free AI alternatives:
+- Local Stable Diffusion WebUI (completely free)
+- Replicate (free credits for new users)
+- Hugging Face free tier
+- Enhanced real images as fallback
+
+See `FREE_HUGGING_FACE_ALTERNATIVE.md` for detailed setup instructions.
 
 These should be stored in a `.env` file in this directory.

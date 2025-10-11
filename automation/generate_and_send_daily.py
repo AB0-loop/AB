@@ -53,6 +53,9 @@ TEXT_TO_IMAGE_MODEL = "stabilityai/stable-diffusion-2-1"
 # Check if API key is provided
 HUGGING_FACE_ENABLED = bool(HUGGING_FACE_API_KEY and HUGGING_FACE_API_KEY != "YOUR_VALID_HUGGING_FACE_API_KEY_HERE")
 
+# Free Hugging Face Alternative
+FREE_HF_ALTERNATIVE_PATH = REPO_ROOT / "automation" / "free_huggingface_alternative.py"
+
 # Services configuration matching website products
 SERVICE_CONFIG = {
     "Bespoke Suits": {
@@ -302,11 +305,11 @@ def resolve_image_path(fname: str) -> Optional[Tuple[Path, str]]:
 
 
 def generate_ai_image(prompt: str, output_path: Path) -> bool:
-    """Generate an AI image using Hugging Face API"""
-    # If Hugging Face is not enabled, return False immediately
+    """Generate an AI image using Hugging Face API with free alternatives as fallback"""
+    # If Hugging Face is not enabled, try free alternatives
     if not HUGGING_FACE_ENABLED:
-        print("Hugging Face API not enabled - skipping AI image generation")
-        return False
+        print("Hugging Face API not enabled - trying free alternatives")
+        return try_free_alternatives(prompt, output_path)
         
     try:
         headers = {"Authorization": f"Bearer {HUGGING_FACE_API_KEY}"}
@@ -324,10 +327,151 @@ def generate_ai_image(prompt: str, output_path: Path) -> bool:
             return True
         else:
             print(f"Hugging Face API error: {response.status_code} - {response.text}")
-            return False
+            # Try free alternatives as fallback
+            return try_free_alternatives(prompt, output_path)
     except Exception as e:
         print(f"Error generating AI image: {e}")
-        return False
+        # Try free alternatives as fallback
+        return try_free_alternatives(prompt, output_path)
+
+
+def try_free_alternatives(prompt: str, output_path: Path) -> bool:
+    """Try free alternatives for AI image generation"""
+    print("Trying free alternatives for AI image generation...")
+    
+    # 1. Try local Stable Diffusion WebUI
+    try:
+        # Check if local SD WebUI is running
+        sd_url = "http://127.0.0.1:7860"
+        response = requests.get(f"{sd_url}/startup-events", timeout=5)
+        if response.status_code == 200:
+            # Generate image with local SD
+            payload = {
+                "prompt": prompt,
+                "steps": 20,
+                "width": CANVAS_W,
+                "height": CANVAS_H,
+                "cfg_scale": 7,
+                "sampler_name": "Euler a",
+                "n_iter": 1,
+                "batch_size": 1
+            }
+            
+            response = requests.post(
+                f"{sd_url}/sdapi/v1/txt2img",
+                json=payload,
+                timeout=300  # 5 minutes timeout
+            )
+            
+            if response.status_code == 200:
+                r = response.json()
+                # Save the first image
+                image_data = r['images'][0]
+                # Remove data URL prefix if present
+                if image_data.startswith("data:image"):
+                    image_data = image_data.split(",", 1)[1]
+                
+                import base64
+                image_bytes = base64.b64decode(image_data)
+                with open(output_path, "wb") as f:
+                    f.write(image_bytes)
+                print("Successfully generated image using local Stable Diffusion")
+                return True
+    except Exception as e:
+        print(f"Local Stable Diffusion not available: {e}")
+    
+    # 2. Try Replicate (if API token is available)
+    try:
+        api_token = os.getenv("REPLICATE_API_TOKEN", "").strip()
+        if api_token:
+            model = "stability-ai/stable-diffusion:db21e45d3f7023abc2a46ee38a23973f6dce16bb082a930b0c49861f96d1e5bf"
+            
+            headers = {
+                "Authorization": f"Token {api_token}",
+                "Content-Type": "application/json"
+            }
+            
+            payload = {
+                "input": {
+                    "prompt": prompt,
+                    "width": CANVAS_W,
+                    "height": CANVAS_H,
+                    "num_outputs": 1,
+                    "guidance_scale": 7.5,
+                    "num_inference_steps": 50
+                }
+            }
+            
+            # Start prediction
+            response = requests.post(
+                f"https://api.replicate.com/v1/models/{model}/predictions",
+                headers=headers,
+                json=payload,
+                timeout=30
+            )
+            
+            if response.status_code == 201:
+                # Get prediction ID
+                prediction_data = response.json()
+                get_url = prediction_data["urls"]["get"]
+                
+                # Poll for completion
+                timeout = time.time() + 300  # 5 minutes timeout
+                while time.time() < timeout:
+                    response = requests.get(get_url, headers=headers, timeout=30)
+                    if response.status_code == 200:
+                        result = response.json()
+                        if result["status"] == "succeeded":
+                            # Download the image
+                            output_url = result["output"][0]
+                            image_response = requests.get(output_url, timeout=30)
+                            if image_response.status_code == 200:
+                                with open(output_path, "wb") as f:
+                                    f.write(image_response.content)
+                                print("Successfully generated image using Replicate")
+                                return True
+                        elif result["status"] == "failed":
+                            break
+                    time.sleep(5)  # Wait 5 seconds before polling again
+    except Exception as e:
+        print(f"Replicate not available: {e}")
+    
+    # 3. Try Hugging Face free tier
+    try:
+        models = [
+            "stabilityai/stable-diffusion-2-1",
+            "prompthero/openjourney",
+            "runwayml/stable-diffusion-v1-5"
+        ]
+        
+        # Try each model until one works
+        for model in models:
+            try:
+                headers = {"Authorization": "Bearer "}  # No API key needed for free tier
+                
+                payload = {"inputs": prompt}
+                
+                response = requests.post(
+                    f"https://api-inference.huggingface.co/models/{model}",
+                    headers=headers,
+                    json=payload,
+                    timeout=120
+                )
+                
+                if response.status_code == 200:
+                    with open(output_path, "wb") as f:
+                        f.write(response.content)
+                    print(f"Successfully generated image using Hugging Face free tier ({model})")
+                    return True
+                elif response.status_code != 503:  # 503 means model is loading
+                    continue
+            except Exception:
+                continue
+    except Exception as e:
+        print(f"Hugging Face free tier not available: {e}")
+    
+    print("All free alternatives failed, falling back to enhanced real images")
+    return False
 
 
 def generate_concept_based_prompt(service: str) -> str:
