@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <meta name="description" content="Find answers to frequently asked questions about Aurum Bespoke's luxury tailoring services, pricing, process, and more." />
+  <title>FAQ | Aurum Bespoke – Luxury Tailoring</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/assets/logos/icons/favicon-32.png?v=2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/logos/icons/favicon-32.png?v=2" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/logos/icons/favicon-16.png?v=2" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/logos/icons/logo-180.png?v=2" />
+  <link rel="icon" href="/assets/logos/icons/favicon.ico?v=2" sizes="any">
+  <link rel="icon" href="/favicon.ico?v=2" sizes="any">
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="FAQ | Aurum Bespoke – Luxury Tailoring">
+  <meta property="og:description" content="Find answers to frequently asked questions about Aurum Bespoke's luxury tailoring services, pricing, process, and more.">
+  <meta property="og:image" content="https://aurumbespoke.com/assets/logos/aurum-logo.jpg">
+  <meta property="og:url" content="https://aurumbespoke.com/faq">
+  <meta property="og:type" content="website">
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="FAQ | Aurum Bespoke – Luxury Tailoring">
+  <meta name="twitter:description" content="Find answers to frequently asked questions about Aurum Bespoke's luxury tailoring services, pricing, process, and more.">
+  <meta name="twitter:image" content="https://aurumbespoke.com/assets/logos/aurum-logo.jpg">
+  
+  <!-- Canonical & PWA basics -->
+  <link rel="canonical" href="https://aurumbespoke.com/faq" />
+  <meta name="theme-color" content="#0e0d0d" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="/assets/logos/icons/logo-180.png" />
+
+  <!-- Resource Hints -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" />
+  <link rel="preconnect" href="https://unpkg.com" />
+
+  <!-- Fonts and CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Inter&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js" defer></script>
+  <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0e0d0d;
+      color: #e4e4e4;
+    }
+    h1, h2, h3 {
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .gold-text { color: #c99e67; }
+    .gold-bg { background-color: #c99e67; }
+    .section-dark { background-color: #141414; }
+    .hero-overlay {
+      background: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.9));
+    }
+    .btn-glow {
+      background-color: #c99e67;
+      color: #0e0d0d;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    .btn-glow:hover {
+      box-shadow: 0 0 15px #c99e67;
+      transform: translateY(-2px);
+    }
+    .whatsapp-chat {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+    }
+    .whatsapp-chat img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      cursor: pointer;
+      transition: box-shadow 0.2s;
+      padding: 8px;
+      background: black;
+    }
+    .whatsapp-chat img:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    }
+    .social-icon {
+      width: 24px;
+      height: 24px;
+      transition: all 0.3s ease;
+      opacity: 0.8;
+    }
+    .social-icon:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+    .nav-logo {
+      width: 175px;
+      height: 175px;
+      object-fit: contain;
+      transition: opacity 0.3s ease, transform 0.2s ease;
+      filter: drop-shadow(0 0 12px rgba(201, 158, 103, 0.35));
+      transform: translateY(6px);
+      margin-left: -34px;
+    }
+    @media (min-width: 768px) {
+      .nav-logo { width: 170px; height: 170px; transform: none; margin-left: 0; }
+    }
+    .nav-logo.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    /* FAQ styles */
+    .faq-item {
+      border-bottom: 1px solid #333;
+      padding: 1.5rem 0;
+    }
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    .faq-answer {
+      padding-top: 1rem;
+      color: #ccc;
+      line-height: 1.6;
+      display: none;
+    }
+    .faq-question.active .faq-answer {
+      display: block;
+    }
+    .toggle-icon {
+      transition: transform 0.3s ease;
+    }
+    .faq-question.active .toggle-icon {
+      transform: rotate(180deg);
+    }
+    .category-btn {
+      padding: 0.5rem 1rem;
+      border: 1px solid #c99e67;
+      color: #c99e67;
+      background: transparent;
+      border-radius: 9999px;
+      margin: 0.25rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .category-btn.active, .category-btn:hover {
+      background: #c99e67;
+      color: #0e0d0d;
+    }
+  </style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EV18G05FL2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-EV18G05FL2');
+</script>
+</head>
+<body class="overflow-x-hidden">
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-90 text-white px-6 py-4" aria-label="Main navigation">
+    <div class="flex items-center justify-between max-w-7xl mx-auto px-2">
+      <!-- Logo -->
+      <a href="/" aria-label="Aurum Bespoke Home" id="navLogo">
+        <picture>
+          <source type="image/webp" srcset="assets/logos/aurum-logo.jpg" />
+          <img src="assets/logos/aurum-logo.jpg" alt="Aurum Logo" class="nav-logo align-middle" width="170" height="170" />
+        </picture>
+      </a>
+      
+      <div class="flex items-center">
+        <div class="hidden md:flex space-x-6">
+          <a href="/" class="hover:gold-text">Home</a>
+          <a href="/#services" class="hover:gold-text">Services</a>
+          <a href="/#gallery" class="hover:gold-text">Gallery</a>
+          <a href="/about" class="hover:gold-text">About</a>
+          <a href="/process" class="hover:gold-text">Process</a>
+          <a href="/faq" class="hover:gold-text font-semibold">FAQ</a>
+          <a href="/blog" class="hover:gold-text">Blog</a>
+          <a href="/#contact" class="hover:gold-text">Contact</a>
+        </div>
+        
+        <!-- Mobile menu button (right aligned) -->
+        <button onclick="document.getElementById('mobileMenu').classList.toggle('hidden')" 
+                class="md:hidden ml-4 focus:outline-none" 
+                aria-label="Open menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="md:hidden hidden mt-4">
+      <div class="flex flex-col space-y-2">
+        <a href="/" class="block py-2 hover:gold-text">Home</a>
+        <a href="/#services" class="block py-2 hover:gold-text">Services</a>
+        <a href="/#gallery" class="block py-2 hover:gold-text">Gallery</a>
+        <a href="/about" class="block py-2 hover:gold-text">About</a>
+        <a href="/process" class="block py-2 hover:gold-text">Process</a>
+        <a href="/faq" class="block py-2 hover:gold-text font-semibold">FAQ</a>
+        <a href="/blog" class="block py-2 hover:gold-text">Blog</a>
+        <a href="/#contact" class="block py-2 hover:gold-text">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="w-full min-h-screen flex flex-col items-center justify-center text-center p-6 bg-black relative pt-20 md:pt-24">
+    <div class="absolute inset-0 bg-[url('assets/background/hero-loop.mp4')] bg-cover bg-center opacity-10"></div>
+    <div class="z-10 max-w-4xl mx-auto">
+      <h1 class="text-4xl md:text-6xl gold-text mb-6" data-aos="fade-up">Frequently Asked Questions ❓</h1>
+      <p class="text-xl text-gray-300 mb-8" data-aos="fade-up" data-aos-delay="200">Everything you need to know about our bespoke tailoring services</p>
+    </div>
+  </section>
+
+  <!-- FAQ Categories -->
+  <section class="py-10 px-6 bg-[#0a0a0a]">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-wrap justify-center" data-aos="fade-up">
+        <button class="category-btn active" data-category="all">All</button>
+        <button class="category-btn" data-category="services">Services</button>
+        <button class="category-btn" data-category="pricing">Pricing</button>
+        <button class="category-btn" data-category="process">Process</button>
+        <button class="category-btn" data-category="fabrics">Fabrics</button>
+        <button class="category-btn" data-category="alterations">Alterations</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Content -->
+  <section class="py-20 px-6 section-dark">
+    <div class="max-w-4xl mx-auto">
+      <div class="faq-container">
+        <!-- Services FAQ -->
+        <div class="faq-item" data-category="services" data-aos="fade-up">
+          <div class="faq-question">
+            <span>What types of garments do you create?</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>We specialize in bespoke menswear including suits, blazers, shirts, sherwanis, bandgalas, pathani suits, modi jackets, and indo-western fusion wear. Each garment is custom-made to your measurements and preferences.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="services" data-aos="fade-up" data-aos-delay="100">
+          <div class="faq-question">
+            <span>Do you offer women's wear or children's clothing?</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>Currently, we specialize exclusively in men's bespoke clothing. We focus on perfecting our craft for gentlemen's wear to ensure the highest quality and attention to detail.</p>
+          </div>
+        </div>
+
+        <!-- Pricing FAQ -->
+        <div class="faq-item" data-category="pricing" data-aos="fade-up" data-aos-delay="200">
+          <div class="faq-question">
+            <span>What is the price range for your garments?</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>Our pricing varies based on garment type and fabric selection:</p>
+            <ul class="list-disc pl-5 mt-2 space-y-1">
+              <li>Tailored Shirts: ₹3,500 - ₹8,000</li>
+              <li>Blazers: ₹12,000 - ₹25,000</li>
+              <li>Bespoke Suits: ₹25,000 - ₹60,000</li>
+              <li>Sherwanis: ₹18,000 - ₹45,000</li>
+              <li>Bandgalas: ₹15,000 - ₹35,000</li>
+            </ul>
+            <p class="mt-2">Premium fabrics and complex designs may increase the price. We offer a range of options to suit different budgets while maintaining our quality standards.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="pricing" data-aos="fade-up" data-aos-delay="300">
+          <div class="faq-question">
+            <span>Do you offer payment plans or financing options?</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>Yes, we offer flexible payment options including:</p>
+            <ul class="list-disc pl-5 mt-2 space-y-1">
+              <li>50% deposit at the time of booking, balance on delivery</li>
+              <li>EMI options through our payment partners</li>
+              <li>Special financing for wedding collections</li>
+            </ul>
+            <p class="mt-2">Contact us to discuss payment options that work for your budget.</p>
+          </div>
+        </div>
+
+        <!-- Process FAQ -->
+        <div class="faq-item" data-category="process" data-aos="fade-up" data-aos-delay="400">
+          <div class="faq-question">
+            <span>How long does the entire process take?</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>Our standard delivery time is 3 weeks from the initial consultation:</p>
+            <ul class="list-disc pl-5 mt-2 space-y-1">
+              <li>Day 1-2: Initial consultation and design selection</li>
+              <li>Day 3-5: Precision measurements and pattern creation</li>
+              <li>Week 1-3: Crafting and quality control process</li>
+              <li>Week 3-4: Final fitting and garment delivery</li>
+            </ul>
+            <p class="mt-2">For urgent requirements, we offer express service (2 weeks) with a nominal additional charge.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="process" data-aos="fade-up" data-aos-delay="500">
+          <div class="faq-question">
+            <span>How does the home visit consultation work?</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>Our home visit service is designed for your convenience:</p>
+            <ul class="list-disc pl-5 mt-2 space-y-1">
+              <li>Schedule a visit at your preferred time (morning, afternoon, or evening)</li>
+              <li>Our master tailor brings fabric samples and design books to your location</li>
+              <li>Consultation typically takes 45-60 minutes</li>
+              <li>We cover Bangalore metro area with no additional travel charges</li>
+              <li>For locations beyond our standard coverage, nominal travel fees may apply</li>
+            </ul>
+            <p class="mt-2">Book your consultation through WhatsApp, phone, or our website contact form.</p>
+          </div>
+        </div>
+
+        <!-- Fabrics FAQ -->
+        <div class="faq-item" data-category="fabrics" data-aos="fade-up" data-aos-delay="600">
+          <div class="faq-question">
+            <span>What fabric options do you offer?</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>We offer a curated selection of premium fabrics sourced from renowned mills:</p>
+            <ul class="list-disc pl-5 mt-2 space-y-1">
+              <li><strong>Italian Fabrics:</strong> Ermenegildo Zegna, Loro Piana, Carlo Barbera</li>
+              <li><strong>British Fabrics:</strong> Scabal, Holland & Sherry, Willsink & Co</li>
+              <li><strong>Indian Fabrics:</strong> Premium khadi, handwoven silks, and cottons</li>
+              <li><strong>Specialty Fabrics:</strong> Linen blends, velvet, and seasonal collections</li>
+            </ul>
+            <p class="mt-2">During your consultation, our tailor will guide you through fabric options based on garment type, season, and your preferences.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="fabrics" data-aos="fade-up" data-aos-delay="700">
+          <div class="faq-question">
+            <span>Can I provide my own fabric?</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>Yes, we welcome client-provided fabrics. However, please note:</p>
+            <ul class="list-disc pl-5 mt-2 space-y-1">
+              <li>Fabric must be of sufficient quantity for the garment type</li>
+              <li>We assess fabric quality to ensure it meets our standards</li>
+              <li>Some complex patterns may require additional planning</li>
+              <li>Client-provided fabric garments may have different warranty terms</li>
+            </ul>
+            <p class="mt-2">Discuss your fabric with our tailor during the consultation to ensure it's suitable for your chosen garment.</p>
+          </div>
+        </div>
+
+        <!-- Alterations FAQ -->
+        <div class="faq-item" data-category="alterations" data-aos="fade-up" data-aos-delay="800">
+          <div class="faq-question">
+            <span>What if my garment needs alterations after delivery?</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>We stand behind our craftsmanship with our alteration guarantee:</p>
+            <ul class="list-disc pl-5 mt-2 space-y-1">
+              <li><strong>Free alterations within 30 days</strong> of delivery for any fit issues</li>
+              <li><strong>Lifetime complimentary alterations</strong> for minor adjustments</li>
+              <li>Express alteration service available within 48 hours</li>
+              <li>Home visit for alterations in Bangalore metro area</li>
+            </ul>
+            <p class="mt-2">Contact us immediately if you notice any issues with your garment. We're committed to ensuring perfect fit and satisfaction.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="alterations" data-aos="fade-up" data-aos-delay="900">
+          <div class="faq-question">
+            <span>How should I care for my bespoke garments?</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>Proper care ensures your garments last for years:</p>
+            <ul class="list-disc pl-5 mt-2 space-y-1">
+              <li><strong>Shirts:</strong> Machine wash cold, tumble dry low or line dry</li>
+              <li><strong>Suits/Blazers:</strong> Dry clean only, use padded hangers</li>
+              <li><strong>Sherwanis/Bandgalas:</strong> Professional cleaning, store in garment bags</li>
+              <li>Rotate garments to prevent wear patterns</li>
+              <li>Address stains immediately to prevent setting</li>
+            </ul>
+            <p class="mt-2">We provide detailed care instructions with each garment and offer lifetime care guidance.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-12" data-aos="fade-up" data-aos-delay="200">
+        <h3 class="text-2xl gold-text mb-4">Still have questions?</h3>
+        <p class="text-gray-400 mb-6">Our team is here to help you with any additional inquiries</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="https://wa.me/918105508503" class="btn-glow px-6 py-3 rounded-full inline-block">Chat on WhatsApp</a>
+          <a href="#contact" class="border-2 border-[#c99e67] text-[#c99e67] px-6 py-3 rounded-full inline-block hover:bg-[#c99e67] hover:text-black transition-all">Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 px-6 bg-black text-center">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-3xl md:text-4xl gold-text mb-6" data-aos="fade-up">Ready to Experience Bespoke Tailoring?</h2>
+      <p class="text-xl text-gray-300 mb-8" data-aos="fade-up" data-aos-delay="100">Book a free consultation and let our master tailor visit you at home or office</p>
+      <a href="https://wa.me/918105508503" class="btn-glow px-8 py-4 rounded-full text-lg inline-block" data-aos="zoom-in" data-aos-delay="200">Book Home Visit ➡️</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-[#0a0a0a] py-16 px-6 text-center">
+    <div class="max-w-4xl mx-auto">
+      <div class="flex justify-center gap-6 mb-10">
+        <a href="https://www.instagram.com/aurum.bespoke?igsh=czc2cnZ1NnMwdHdi" target="_blank" title="Instagram" data-aos="zoom-in" rel="noopener noreferrer">
+          <img src="assets/images/social-icons/instagram.svg" alt="Instagram" class="social-icon" loading="lazy">
+        </a>
+        <a href="https://x.com/Aurum_Bespoke?t=303eKb_ss5Dn4K0jiIGJHQ&s=35" target="_blank" title="Twitter" data-aos="zoom-in" data-aos-delay="100" rel="noopener noreferrer">
+          <img src="assets/images/social-icons/x.svg" alt="Twitter" class="social-icon" loading="lazy">
+        </a>
+        <a href="https://www.facebook.com/share/16mphUA4Qt/" target="_blank" title="Facebook" data-aos="zoom-in" data-aos-delay="200" rel="noopener noreferrer">
+          <img src="assets/images/social-icons/facebook.svg" alt="Facebook" class="social-icon" loading="lazy">
+        </a>
+        <a href="https://www.youtube.com/@aurumbespoke" target="_blank" title="YouTube" data-aos="zoom-in" data-aos-delay="300" rel="noopener noreferrer">
+          <img src="assets/images/social-icons/youtube.svg" alt="YouTube" class="social-icon" loading="lazy">
+        </a>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-6 mt-10 text-sm">
+        <a href="/about" class="hover:gold-text">About Us</a>
+        <a href="/process" class="hover:gold-text">Our Process</a>
+        <a href="/faq" class="hover:gold-text">FAQ</a>
+        <a href="/blog" class="hover:gold-text">Blog</a>
+        <a href="/privacy" class="hover:gold-text">Privacy Policy</a>
+        <a href="/terms" class="hover:gold-text">Terms of Service</a>
+      </div>
+
+      <p class="text-xs text-gray-600 mt-6">&copy; 2025 Aurum Bespoke. Site by <span class="text-blue-500 font-semibold">w3bhub.co.in</span></p>
+    </div>
+  </footer>
+
+  <!-- WhatsApp Floating Chat Widget -->
+  <div class="whatsapp-chat">
+    <a href="https://wa.me/918105508503?text=Hi%20Aurum%20Bespoke%2C%20I%20want%20to%20book%20a%20home%20appointment" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+      <img src="assets/images/social-icons/whatsapp.svg" alt="Chat on WhatsApp">
+    </a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.AOS && typeof AOS.init === 'function') {
+        AOS.init();
+      }
+
+      // FAQ accordion functionality
+      const faqQuestions = document.querySelectorAll('.faq-question');
+      
+      faqQuestions.forEach(question => {
+        question.addEventListener('click', () => {
+          question.classList.toggle('active');
+        });
+      });
+
+      // Category filtering
+      const categoryButtons = document.querySelectorAll('.category-btn');
+      const faqItems = document.querySelectorAll('.faq-item');
+      
+      categoryButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          // Remove active class from all buttons
+          categoryButtons.forEach(btn => btn.classList.remove('active'));
+          // Add active class to clicked button
+          button.classList.add('active');
+          
+          const category = button.getAttribute('data-category');
+          
+          faqItems.forEach(item => {
+            if (category === 'all' || item.getAttribute('data-category') === category) {
+              item.style.display = 'block';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+  </script>
+  <script>
+    // Close mobile menu when clicking a link
+    document.querySelectorAll('#mobileMenu a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('mobileMenu').classList.add('hidden');
+      });
+    });
+
+    // Hide logo on scroll
+    const navLogo = document.getElementById('navLogo').querySelector('img');
+    
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 50) {
+        navLogo.classList.add('hidden');
+      } else {
+        navLogo.classList.remove('hidden');
+      }
+    });
+  </script>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Aurum Bespoke",
+    "url": "https://aurumbespoke.com/",
+    "image": "https://aurumbespoke.com/assets/logos/icons/logo-512.png",
+    "logo": "https://aurumbespoke.com/assets/logos/icons/logo-512.png",
+    "telephone": "+91 81055 08503",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Bangalore",
+      "addressCountry": "IN"
+    },
+    "sameAs": [
+      "https://www.instagram.com/aurum.bespoke",
+      "https://x.com/Aurum_Bespoke",
+      "https://www.facebook.com/share/16mphUA4Qt/",
+      "https://www.youtube.com/@aurumbespoke"
+    ]
+  }
+  </script>
+</body>
+</html>
