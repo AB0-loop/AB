@@ -46,9 +46,12 @@ TELEGRAM_API = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}"
 
 # Hugging Face API
 # HUGGING_FACE_API_KEY loaded from .env file
-HUGGING_FACE_API_KEY = os.getenv("HUGGING_FACE_API_KEY", "YOUR_VALID_HUGGING_FACE_API_KEY_HERE")
+HUGGING_FACE_API_KEY = os.getenv("HUGGING_FACE_API_KEY", "").strip()
 HUGGING_FACE_API_URL = "https://api-inference.huggingface.co/models"
 TEXT_TO_IMAGE_MODEL = "stabilityai/stable-diffusion-2-1"
+
+# Check if API key is provided
+HUGGING_FACE_ENABLED = bool(HUGGING_FACE_API_KEY and HUGGING_FACE_API_KEY != "YOUR_VALID_HUGGING_FACE_API_KEY_HERE")
 
 # Services configuration matching website products
 SERVICE_CONFIG = {
@@ -300,6 +303,11 @@ def resolve_image_path(fname: str) -> Optional[Tuple[Path, str]]:
 
 def generate_ai_image(prompt: str, output_path: Path) -> bool:
     """Generate an AI image using Hugging Face API"""
+    # If Hugging Face is not enabled, return False immediately
+    if not HUGGING_FACE_ENABLED:
+        print("Hugging Face API not enabled - skipping AI image generation")
+        return False
+        
     try:
         headers = {"Authorization": f"Bearer {HUGGING_FACE_API_KEY}"}
         payload = {"inputs": prompt}
@@ -414,109 +422,222 @@ def build_ffmpeg_filter(variant: str, style: str, wm_w: int, color_filter: str, 
 
 
 def run_ffmpeg_build(src_path: Path, out_path: Path, variant: str, style: str, color_filter: str, theme: str = "studio_portrait") -> None:
-    wm_target_w = int(CANVAS_W * WATERMARK_RELATIVE_WIDTH)
-    filter_complex, out_label = build_ffmpeg_filter(variant, style, wm_target_w, color_filter, theme)
-    cmd = [
-        "ffmpeg", "-y", "-loglevel", "error",
-        "-i", str(src_path),
-        "-i", str(LOGO_PATH),
-        "-filter_complex", filter_complex,
-        "-map", f"[{out_label}]",
-        "-frames:v", "1",
-        "-q:v", "3",
-        str(out_path),
-    ]
-    subprocess.run(cmd, check=True)
-
-
-def run_ffmpeg_video_build(src_paths: List[Path], out_path: Path, service: str) -> None:
-    """Generate a video reel from a list of images with dynamic transitions and effects"""
-    if not src_paths:
-        raise ValueError("No source images provided for video generation")
-    
-    # Create a temporary directory for intermediate files
-    temp_dir = OUTPUT_DIR / "temp"
-    temp_dir.mkdir(exist_ok=True)
-    
-    # Generate video segments for each image with different effects
-    segment_files = []
-    segment_duration = VIDEO_DURATION / len(src_paths)
-    
-    # Define different effects for variety
-    effects = [
-        "zoompan=z='min(zoom+0.0015,1.5)':x='(iw-iw/zoom)/2':y='(ih-ih/zoom)/2':d=250",  # Zoom in
-        "zoompan=z='max(zoom-0.0015,1.0)':x='(iw-iw/zoom)/2':y='(ih-ih/zoom)/2':d=250",  # Zoom out
-        "scale={VIDEO_WIDTH}*1.2:{VIDEO_HEIGHT}*1.2,crop={VIDEO_WIDTH}:{VIDEO_HEIGHT}:x=(iw-iw/1.2)/2+((iw/1.2-{VIDEO_WIDTH})/2)*sin(t*1.5):y=(ih-ih/1.2)/2+((ih/1.2-{VIDEO_HEIGHT})/2)*cos(t*1.5)",  # Panning
-        "scale={VIDEO_WIDTH}*1.3:{VIDEO_HEIGHT}*1.3,crop={VIDEO_WIDTH}:{VIDEO_HEIGHT}:x=(iw-{VIDEO_WIDTH})/2:y=(ih-{VIDEO_HEIGHT})/2+h*sin(t*2)*10",  # Vertical movement
-        "scale={VIDEO_WIDTH}*1.3:{VIDEO_HEIGHT}*1.3,crop={VIDEO_WIDTH}:{VIDEO_HEIGHT}:x=(iw-{VIDEO_WIDTH})/2+w*cos(t*2)*10:y=(ih-{VIDEO_HEIGHT})/2",  # Horizontal movement
-        "scale={VIDEO_WIDTH}:{VIDEO_HEIGHT},rotate=PI/180*sin(t*3)"  # Gentle rotation
-    ]
-    
-    for i, src_path in enumerate(src_paths):
-        segment_file = temp_dir / f"segment_{i:03d}.mp4"
-        segment_files.append(segment_file)
-        
-        # Select effect for this segment
-        effect = effects[i % len(effects)]
-        
-        # Build filter for this segment with dynamic effect
-        filter_complex = (
-            f"[0:v]scale={VIDEO_WIDTH}:{VIDEO_HEIGHT}:force_original_aspect_ratio=increase,"
-            f"crop={VIDEO_WIDTH}:{VIDEO_HEIGHT},"
-            f"{effect}"
-        )
-        
-        # Add fade in/out effects for smooth transitions
-        if i == 0:
-            filter_complex += f",fade=t=in:st=0:d=0.5"
-        if i == len(src_paths) - 1:
-            filter_complex += f",fade=t=out:st={segment_duration-0.5}:d=0.5"
-        
-        # Add watermark to each segment
-        wm_target_w = int(VIDEO_WIDTH * WATERMARK_RELATIVE_WIDTH)
-        filter_complex += f"[v];[v][1:v]overlay=x=main_w-overlay_w-{WATERMARK_MARGIN}:y=main_h-overlay_h-{WATERMARK_MARGIN}[out]"
-        
+    try:
+        wm_target_w = int(CANVAS_W * WATERMARK_RELATIVE_WIDTH)
+        filter_complex, out_label = build_ffmpeg_filter(variant, style, wm_target_w, color_filter, theme)
         cmd = [
             "ffmpeg", "-y", "-loglevel", "error",
             "-i", str(src_path),
             "-i", str(LOGO_PATH),
             "-filter_complex", filter_complex,
-            "-map", "[out]",
-            "-t", str(segment_duration),
-            "-r", str(VIDEO_FPS),
-            "-c:v", "libx264",
-            "-preset", "ultrafast",
-            "-crf", "23",
-            "-pix_fmt", "yuv420p",
-            str(segment_file),
+            "-map", f"[{out_label}]",
+            "-frames:v", "1",
+            "-q:v", "3",
+            str(out_path),
         ]
         subprocess.run(cmd, check=True)
-    
-    # Create a text file listing all segments
-    list_file = temp_dir / "segments.txt"
-    with open(list_file, "w") as f:
+    except FileNotFoundError:
+        # FFmpeg not installed, fall back to PIL
+        print("FFmpeg not found, falling back to PIL processing")
+        from PIL import Image, ImageEnhance, ImageFilter, ImageDraw
+        import numpy as np
+        
+        # Open source image
+        img = Image.open(src_path).convert('RGB')
+        
+        # Resize to canvas size
+        img = img.resize((CANVAS_W, CANVAS_H), Image.Resampling.LANCZOS)
+        
+        # Apply enhancements based on variant
+        if variant == "contrast_boost":
+            enhancer = ImageEnhance.Contrast(img)
+            img = enhancer.enhance(1.15)
+        elif variant == "warm_tone":
+            # Apply warm color balance
+            r, g, b = img.split()
+            r = ImageEnhance.Brightness(r).enhance(1.05)
+            img = Image.merge('RGB', (r, g, b))
+        elif variant == "cool_tone":
+            # Apply cool color balance
+            r, g, b = img.split()
+            b = ImageEnhance.Brightness(b).enhance(1.05)
+            img = Image.merge('RGB', (r, g, b))
+        
+        # Apply style effects
+        if style == "motion_blur":
+            img = img.filter(ImageFilter.GaussianBlur(radius=1))
+        elif style == "film_grain":
+            # Add noise
+            noise = np.random.randint(-10, 10, img.size[::-1] + (3,), dtype=np.int16)
+            img_array = np.array(img, dtype=np.int16)
+            img_array = np.clip(img_array + noise, 0, 255).astype(np.uint8)
+            img = Image.fromarray(img_array)
+        
+        # Add watermark
+        try:
+            logo = Image.open(LOGO_PATH).convert('RGBA')
+            logo = logo.resize((int(CANVAS_W * WATERMARK_RELATIVE_WIDTH), int(logo.height * (int(CANVAS_W * WATERMARK_RELATIVE_WIDTH) / logo.width))), Image.Resampling.LANCZOS)
+            
+            # Position watermark
+            x = CANVAS_W - logo.width - WATERMARK_MARGIN
+            y = CANVAS_H - logo.height - WATERMARK_MARGIN
+            
+            # Paste watermark
+            if logo.mode == 'RGBA':
+                img.paste(logo, (x, y), logo)
+            else:
+                img.paste(logo, (x, y))
+        except Exception as e:
+            print(f"Warning: Could not add watermark: {e}")
+        
+        # Save image
+        img.save(out_path, 'JPEG', quality=90)
+
+
+def run_ffmpeg_video_build(src_paths: List[Path], out_path: Path, service: str) -> Optional[Path]:
+    """Generate a video reel from a list of images with dynamic transitions and effects"""
+    try:
+        if not src_paths:
+            raise ValueError("No source images provided for video generation")
+        
+        # Create a temporary directory for intermediate files
+        temp_dir = OUTPUT_DIR / "temp"
+        temp_dir.mkdir(exist_ok=True)
+        
+        # Generate video segments for each image with different effects
+        segment_files = []
+        segment_duration = VIDEO_DURATION / len(src_paths)
+        
+        # Define different effects for variety
+        effects = [
+            "zoompan=z='min(zoom+0.0015,1.5)':x='(iw-iw/zoom)/2':y='(ih-ih/zoom)/2':d=250",  # Zoom in
+            "zoompan=z='max(zoom-0.0015,1.0)':x='(iw-iw/zoom)/2':y='(ih-ih/zoom)/2':d=250",  # Zoom out
+            "scale={VIDEO_WIDTH}*1.2:{VIDEO_HEIGHT}*1.2,crop={VIDEO_WIDTH}:{VIDEO_HEIGHT}:x=(iw-iw/1.2)/2+((iw/1.2-{VIDEO_WIDTH})/2)*sin(t*1.5):y=(ih-ih/1.2)/2+((ih/1.2-{VIDEO_HEIGHT})/2)*cos(t*1.5)",  # Panning
+            "scale={VIDEO_WIDTH}*1.3:{VIDEO_HEIGHT}*1.3,crop={VIDEO_WIDTH}:{VIDEO_HEIGHT}:x=(iw-{VIDEO_WIDTH})/2:y=(ih-{VIDEO_HEIGHT})/2+h*sin(t*2)*10",  # Vertical movement
+            "scale={VIDEO_WIDTH}*1.3:{VIDEO_HEIGHT}*1.3,crop={VIDEO_WIDTH}:{VIDEO_HEIGHT}:x=(iw-{VIDEO_WIDTH})/2+w*cos(t*2)*10:y=(ih-{VIDEO_HEIGHT})/2",  # Horizontal movement
+            "scale={VIDEO_WIDTH}:{VIDEO_HEIGHT},rotate=PI/180*sin(t*3)"  # Gentle rotation
+        ]
+        
+        for i, src_path in enumerate(src_paths):
+            segment_file = temp_dir / f"segment_{i:03d}.mp4"
+            segment_files.append(segment_file)
+            
+            # Select effect for this segment
+            effect = effects[i % len(effects)]
+            
+            # Build filter for this segment with dynamic effect
+            filter_complex = (
+                f"[0:v]scale={VIDEO_WIDTH}:{VIDEO_HEIGHT}:force_original_aspect_ratio=increase,"
+                f"crop={VIDEO_WIDTH}:{VIDEO_HEIGHT},"
+                f"{effect}"
+            )
+            
+            # Add fade in/out effects for smooth transitions
+            if i == 0:
+                filter_complex += f",fade=t=in:st=0:d=0.5"
+            if i == len(src_paths) - 1:
+                filter_complex += f",fade=t=out:st={segment_duration-0.5}:d=0.5"
+            
+            # Add watermark to each segment
+            wm_target_w = int(VIDEO_WIDTH * WATERMARK_RELATIVE_WIDTH)
+            filter_complex += f"[v];[v][1:v]overlay=x=main_w-overlay_w-{WATERMARK_MARGIN}:y=main_h-overlay_h-{WATERMARK_MARGIN}[out]"
+            
+            cmd = [
+                "ffmpeg", "-y", "-loglevel", "error",
+                "-i", str(src_path),
+                "-i", str(LOGO_PATH),
+                "-filter_complex", filter_complex,
+                "-map", "[out]",
+                "-t", str(segment_duration),
+                "-r", str(VIDEO_FPS),
+                "-c:v", "libx264",
+                "-preset", "ultrafast",
+                "-crf", "23",
+                "-pix_fmt", "yuv420p",
+                str(segment_file),
+            ]
+            subprocess.run(cmd, check=True)
+        
+        # Create a text file listing all segments
+        list_file = temp_dir / "segments.txt"
+        with open(list_file, "w") as f:
+            for segment_file in segment_files:
+                f.write(f"file '{segment_file}'\n")
+        
+        # Concatenate all segments into final video
+        cmd = [
+            "ffmpeg", "-y", "-loglevel", "error",
+            "-f", "concat",
+            "-safe", "0",
+            "-i", str(list_file),
+            "-c", "copy",
+            str(out_path),
+        ]
+        subprocess.run(cmd, check=True)
+        
+        # Clean up temporary files
         for segment_file in segment_files:
-            f.write(f"file '{segment_file}'\n")
-    
-    # Concatenate all segments into final video
-    cmd = [
-        "ffmpeg", "-y", "-loglevel", "error",
-        "-f", "concat",
-        "-safe", "0",
-        "-i", str(list_file),
-        "-c", "copy",
-        str(out_path),
-    ]
-    subprocess.run(cmd, check=True)
-    
-    # Clean up temporary files
-    for segment_file in segment_files:
-        if segment_file.exists():
-            segment_file.unlink()
-    if list_file.exists():
-        list_file.unlink()
-    if temp_dir.exists():
-        temp_dir.rmdir()
+            if segment_file.exists():
+                segment_file.unlink()
+        if list_file.exists():
+            list_file.unlink()
+        if temp_dir.exists():
+            temp_dir.rmdir()
+    except FileNotFoundError:
+        # FFmpeg not installed, create a simple slideshow instead
+        print("FFmpeg not found, creating simple slideshow")
+        from PIL import Image
+        import numpy as np
+        
+        # Create a simple slideshow with transitions
+        images = []
+        for src_path in src_paths[:6]:  # Limit to 6 images
+            try:
+                img = Image.open(src_path).convert('RGB')
+                img = img.resize((VIDEO_WIDTH, VIDEO_HEIGHT), Image.Resampling.LANCZOS)
+                images.append(img)
+            except Exception as e:
+                print(f"Warning: Could not load image {src_path}: {e}")
+        
+        if not images:
+            raise ValueError("No valid images found for video generation")
+        
+        # Create a simple slideshow with basic transitions
+        try:
+            # Try to use moviepy if available
+            from moviepy.editor import ImageSequenceClip
+            import tempfile
+            
+            # Save images temporarily
+            temp_images = []
+            for i, img in enumerate(images):
+                temp_img_path = temp_dir / f"temp_img_{i}.jpg"
+                img.save(temp_img_path, 'JPEG', quality=85)
+                temp_images.append(str(temp_img_path))
+            
+            # Create slideshow
+            clip = ImageSequenceClip(temp_images, fps=1)  # 1 image per second
+            clip = clip.set_duration(VIDEO_DURATION)
+            clip.write_videofile(str(out_path), fps=VIDEO_FPS, codec='libx264')
+            
+            # Clean up temp images
+            for temp_img_path in temp_images:
+                Path(temp_img_path).unlink()
+            return out_path  # Return the MP4 path
+        except ImportError:
+            # Fallback: create a simple animated GIF
+            print("MoviePy not available, creating animated GIF instead")
+            gif_path = out_path.with_suffix('.gif')
+            images[0].save(
+                gif_path,
+                save_all=True,
+                append_images=images[1:],
+                duration=1000,
+                loop=0
+            )
+            print(f"Created animated GIF at {gif_path}")
+            return gif_path  # Return the GIF path instead of MP4
+    return out_path  # Return the original MP4 path if successful
 
 
 def choose_different_service_for_video(image_service: str) -> str:
@@ -579,8 +700,8 @@ def build_post(service: str, image_path: Path, variant: str, style: str, color_n
     timestamp = dt.datetime.now().strftime("%Y%m%d")
     out_path = OUTPUT_DIR / f"{timestamp}_{service.replace(' ', '_').lower()}_image.jpg"
 
-    # Randomly decide whether to use AI-generated image (40% chance)
-    if random.random() < 0.4:
+    # Randomly decide whether to use AI-generated image (10% chance to reduce fake content)
+    if HUGGING_FACE_ENABLED and random.random() < 0.1:
         # Generate AI image
         ai_image_path = OUTPUT_DIR / f"{timestamp}_{service.replace(' ', '_').lower()}_ai.jpg"
         prompt = generate_concept_based_prompt(service)
@@ -641,7 +762,9 @@ def build_video_reel(service: str, image_paths: List[Path], variant: str, style:
     out_path = OUTPUT_DIR / f"{timestamp}_{service.replace(' ', '_').lower()}_reel.mp4"
     
     # Generate the video reel with more dynamic transitions
-    run_ffmpeg_video_build(image_paths, out_path, service)
+    video_path = run_ffmpeg_video_build(image_paths, out_path, service)
+    if video_path:
+        out_path = video_path  # Use the returned path (could be GIF or MP4)
     
     sc = SERVICE_CONFIG[service]
     emojis = sc["emojis"]
@@ -725,11 +848,18 @@ def send_video_to_telegram(video_path: Path, caption: str) -> None:
     if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
         raise RuntimeError("TELEGRAM_TOKEN/TELEGRAM_ID not set in environment.")
 
-    url = f"{TELEGRAM_API}/sendVideo"
+    # Check if it's a GIF or MP4
+    if video_path.suffix.lower() == '.gif':
+        url = f"{TELEGRAM_API}/sendAnimation"
+        file_key = "animation"
+    else:
+        url = f"{TELEGRAM_API}/sendVideo"
+        file_key = "video"
+        
     for attempt in range(3):
         try:
             with open(video_path, "rb") as f:
-                files = {"video": f}
+                files = {file_key: f}
                 data = {"chat_id": TELEGRAM_CHAT_ID, "caption": caption}
                 resp = requests.post(url, data=data, files=files, timeout=120)  # Longer timeout for videos
                 if resp.status_code == 200:
