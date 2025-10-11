@@ -2,8 +2,14 @@
 import requests
 import json
 
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
+
 # Hugging Face API configuration
-HUGGING_FACE_API_KEY = "YOUR_VALID_HUGGING_FACE_API_KEY_HERE"
+HUGGING_FACE_API_KEY = os.getenv("HUGGING_FACE_API_KEY", "YOUR_VALID_HUGGING_FACE_API_KEY_HERE")
 HUGGING_FACE_API_URL = "https://api-inference.huggingface.co/models"
 TEXT_TO_IMAGE_MODEL = "stabilityai/stable-diffusion-2-1"
 
