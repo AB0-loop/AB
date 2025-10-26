@@ -1,9 +1,10 @@
 {
-  "last_slno": 376,
+  "last_slno": 377,
   "last_post_date": "2025-10-26",
-  "count_today": 1,
+  "count_today": 2,
   "used_today": [
-    "Modi Jacket"
+    "Modi Jacket",
+    "Kurta Pathani"
   ],
   "used_images": [
     "services/suit.jpg",
@@ -386,11 +387,11 @@
     "gallery/kurta.jpg::white::golden_glow::vignette::4615",
     "services/suit.jpg::brown::contrast::soft_focus::1791",
     "services/suit.jpg::navy::cool::none::2251",
-    "gallery/indowestern.jpg::rust::contrast::vignette::9677"
+    "gallery/indowestern.jpg::rust::contrast::vignette::9677",
+    "gallery/kurta.jpg::black::none::vignette::5046"
   ],
-  "male_count_today": 1,
+  "male_count_today": 2,
   "recent_rels": [
-    "gallery/bandgalla.jpg",
     "gallery/kurta.jpg",
     "gallery/kurta.jpg",
     "services/suit.jpg",
@@ -509,6 +510,7 @@
     "gallery/kurta.jpg",
     "services/suit.jpg",
     "services/suit.jpg",
-    "gallery/indowestern.jpg"
+    "gallery/indowestern.jpg",
+    "gallery/kurta.jpg"
   ]
 }
