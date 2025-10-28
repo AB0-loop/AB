@@ -1,13 +1,9 @@
 {
-  "last_slno": 390,
-  "last_post_date": "2025-10-28",
-  "count_today": 5,
+  "last_slno": 391,
+  "last_post_date": "2025-10-29",
+  "count_today": 1,
   "used_today": [
-    "Kurta Pathani",
-    "Kurta Pathani",
-    "Kurta Pathani",
-    "Tailored Shirt",
-    "Modi Jacket"
+    "Kurta Pathani"
   ],
   "used_images": [
     "services/suit.jpg",
@@ -409,11 +405,11 @@
     "gallery/kurta.jpg::olive::golden_glow::soft_focus::2067",
     "gallery/kurta.jpg::olive::golden_glow::none::5176",
     "services/shirt.jpg.webp::white::cool::crop_zoom::2337",
-    "gallery/indowestern.jpg.webp::black::none::gold_border::6287"
+    "gallery/indowestern.jpg.webp::black::none::gold_border::6287",
+    "gallery/kurta.jpg::white::cool::vignette::4463"
   ],
-  "male_count_today": 3,
+  "male_count_today": 1,
   "recent_rels": [
-    "services/suit.jpg.webp",
     "gallery/kurta.jpg",
     "gallery/kurta.jpg",
     "gallery/kurta.jpg",
@@ -532,6 +528,7 @@
     "gallery/kurta.jpg",
     "gallery/kurta.jpg",
     "services/shirt.jpg.webp",
-    "gallery/indowestern.jpg.webp"
+    "gallery/indowestern.jpg.webp",
+    "gallery/kurta.jpg"
   ]
 }
