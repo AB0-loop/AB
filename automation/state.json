@@ -1,11 +1,12 @@
 {
-  "last_slno": 439,
+  "last_slno": 440,
   "last_post_date": "2025-11-07",
-  "count_today": 4,
+  "count_today": 5,
   "used_today": [
     "Kurta Pathani",
     "Kurta Pathani",
     "Kurta Pathani",
+    "Suit",
     "Suit"
   ],
   "used_images": [
@@ -451,11 +452,11 @@
     "gallery/kurta.jpg::olive::none::crop_zoom::4273",
     "gallery/kurta.jpg::black::none::soft_focus::5719",
     "gallery/kurta.jpg::olive::contrast::crop_zoom::930",
-    "services/suit.jpg::navy::cool::soft_focus::4121"
+    "services/suit.jpg::navy::cool::soft_focus::4121",
+    "services/suit.jpg::black::none::crop_zoom::7334"
   ],
   "male_count_today": 3,
   "recent_rels": [
-    "services/suit.jpg",
     "gallery/kurta.jpg",
     "gallery/kurta.jpg",
     "gallery/kurta.jpg",
@@ -574,6 +575,7 @@
     "gallery/kurta.jpg",
     "gallery/kurta.jpg",
     "gallery/kurta.jpg",
+    "services/suit.jpg",
     "services/suit.jpg"
   ]
 }
