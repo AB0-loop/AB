@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+@theme {
+  /* Surfaces - deep blacks */
+  --color-ink: #09090a;
+  --color-ink-2: #0f0f11;
+  --color-ink-3: #161618;
+  --color-line: #26262b;
+
+  /* Rich gold */
+  --color-gold: #c8a45c;
+  --color-gold-2: #e3c684;
+  --color-gold-3: #9a7b3e;
+
+  /* Type colours */
+  --color-bone: #ece7dc;
+  --color-body: #c9c3b8;
+  --color-mute: #9a958b;
+
+  /* Type families */
+  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-sans: "Jost", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-logo: "Cinzel", Georgia, serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-body);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    color: var(--color-bone);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  ::selection {
+    background: var(--color-gold);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+
+  /* Refined scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-gold-3) var(--color-ink);
+  }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--color-ink); }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-gold-3);
+    border: 2px solid var(--color-ink);
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-gold); }
+}
+
+@layer utilities {
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 800ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 800ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Thin gold rule used across headings */
+  .gold-rule {
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--color-gold) 30%,
+      var(--color-gold) 70%,
+      transparent
+    );
+  }
+
+  .tracking-luxe { letter-spacing: 0.35em; }
+  .tracking-wide-2 { letter-spacing: 0.2em; }
+
+  /* Subtle darkened map to sit inside the theme */
+  .map-dark {
+    filter: grayscale(1) invert(0.92) contrast(0.9) brightness(0.92)
+      hue-rotate(180deg);
+  }
+
+  .text-shadow-soft {
+    text-shadow: 0 2px 30px rgba(0, 0, 0, 0.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
