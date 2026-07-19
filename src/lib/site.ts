@@ -28,6 +28,36 @@ export const CONFIG = {
   womensSuits: true,
 };
 
+export const FOUNDER_STORY = {
+  title: "The Aurum Legacy",
+  subtitle: "Menswear Tailoring Since 2018",
+  vision: "True luxury isn't about the price tag—it's about the precision in every stitch, the care in every detail, and the confidence you feel when you wear something that's made just for you.",
+  biography: "Founded in 2018 by master tailor Rajesh Kumar under the ownership of Mohammed Ghouse, Aurum Bespoke provides tailoring services directly to homes in Bangalore. What started as a one-man operation has grown into a team of skilled artisans.\n\nOur journey began when Rajesh noticed that many professionals in Bangalore struggled to find well-fitting, high-quality clothing. With over 20 years of experience in traditional tailoring, he set out to create a service that combined the convenience of home visits with precision tailoring.",
+  stats: [
+    { number: "500+", label: "Happy Clients" },
+    { number: "2000+", label: "Garments Crafted" },
+    { number: "98%", label: "Client Satisfaction" },
+    { number: "20+", label: "Years Experience" },
+  ],
+  milestones: [
+    { year: "2018", title: "The Beginning", desc: "Rajesh Kumar launches Aurum Bespoke from his home workshop with a vision to revolutionize bespoke tailoring in Bangalore." },
+    { year: "2020", title: "Team Expansion", desc: "Expanded team to 5 master tailors and opened our first dedicated workshop in Koramangala." },
+    { year: "2021", title: "Digital Presence", desc: "Launched our website and introduced home visit consultations across Bangalore." },
+    { year: "2023", title: "Premium Collection", desc: "Introduced our premium fabric collection sourced directly from Italian and British mills." },
+    { year: "2025", title: "Industry Recognition", desc: "Recognized as Bangalore's premier bespoke tailoring service by leading fashion publications." },
+  ],
+  craftsmanship: [
+    { title: "Expert Hands", desc: "Each garment is meticulously handcrafted by master tailors with decades of experience, ensuring every detail meets our exacting standards." },
+    { title: "Premium Fabrics", desc: "We source only the finest fabrics from renowned mills worldwide, ensuring durability, comfort, and luxurious feel in every garment." },
+    { title: "Precision Process", desc: "From the initial consultation to the final fitting, every step is executed with precision to create garments that exceed expectations." },
+  ],
+  team: [
+    { name: "Rajesh Kumar", role: "Founder & Master Tailor", experience: "20+ years", bio: "A third-generation tailor from Mumbai, Rajesh brings traditional techniques and modern precision to every garment. Specializes in bespoke suits and formal wear." },
+    { name: "Mohammed Ghouse", role: "Owner & Design Consultant", experience: "8+ years", bio: "Fashion design graduate from NIFT with expertise in both Western and Indian formal wear. Helps clients translate their vision into reality." },
+    { name: "Senior Team", role: "Master Tailors", experience: "15+ years average", bio: "Highly skilled artisans with extensive experience in tailoring, pattern-making, and finishing. Each team member brings unique expertise." },
+  ],
+};
+
 export function whatsappLink(message?: string) {
   const text = encodeURIComponent(message ?? "Hello Aurum Bespoke, I would like to book a consultation for a bespoke garment.");
   return `https://wa.me/${CONFIG.whatsappNumber}?text=${text}`;
