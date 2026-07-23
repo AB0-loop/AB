@@ -1,42 +1,38 @@
 import { BLOG_POSTS } from "@/lib/site";
+import { Container } from "./ui";
 
 export function Blog() {
   return (
-    <section id="blog" className="py-20 px-4 bg-white">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-serif mb-4">The Aurum Journal</h2>
-          <p className="text-lg text-gray-600">Insights on tailoring, fabric, and the art of bespoke</p>
+    <section id="blog" className="scroll-mt-24 border-t border-line bg-ink py-24 md:py-32">
+      <Container>
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="text-[11px] uppercase tracking-[0.26em] text-gold">Insights</p>
+          <h2 className="mt-4 font-display text-4xl leading-tight text-bone sm:text-5xl">The Aurum Journal</h2>
+          <p className="mt-5 text-base leading-relaxed text-body sm:text-lg">Short notes on fit, fabric and the bespoke process to help you decide with confidence.</p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {BLOG_POSTS.map((post) => (
-            <article key={post.id} className="group border border-gray-200 rounded-lg overflow-hidden hover:border-[#c8a45c] transition">
-              <div className="h-48 bg-gradient-to-br from-[#09090a] to-[#c8a45c] flex items-center justify-center">
-                <div className="text-center text-white px-4">
-                  <p className="text-sm font-semibold text-gray-300">{post.category}</p>
-                  <h3 className="text-xl font-serif mt-2">{post.title}</h3>
-                </div>
+        <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {BLOG_POSTS.slice(0, 3).map((post) => (
+            <article key={post.id} className="rounded-[2rem] border border-line/70 bg-ink-2 p-6 transition hover:border-gold/50">
+              <div className="space-y-3">
+                <p className="text-[11px] uppercase tracking-[0.26em] text-gold">{post.category}</p>
+                <h3 className="font-display text-2xl text-bone">{post.title}</h3>
+                <p className="text-sm leading-relaxed text-body/80">{post.excerpt}</p>
               </div>
-              <div className="p-6">
-                <p className="text-gray-600 text-sm mb-4">{post.excerpt}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400">{new Date(post.date).toLocaleDateString()}</span>
-                  <a href={`#blog/${post.slug}`} className="text-[#c8a45c] font-semibold hover:underline text-sm">
-                    Read →
-                  </a>
-                </div>
+              <div className="mt-6 flex items-center justify-between text-[13px] text-mute">
+                <span>{new Date(post.date).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })}</span>
+                <a href="#contact" className="font-medium uppercase tracking-[0.2em] text-gold hover:text-gold-2">Enquire</a>
               </div>
             </article>
           ))}
         </div>
 
-        <div className="text-center mt-16">
-          <a href="#blog" className="inline-block px-8 py-3 bg-[#c8a45c] text-[#09090a] rounded font-semibold hover:bg-opacity-90 transition">
-            View All Articles
+        <div className="mt-16 text-center">
+          <a href="#contact" className="inline-flex items-center justify-center rounded-full bg-gold px-8 py-3 text-[13px] font-semibold uppercase tracking-[0.18em] text-ink transition hover:bg-gold-2">
+            Talk to us about your commission
           </a>
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

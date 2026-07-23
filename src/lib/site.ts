@@ -56,9 +56,9 @@ export const FOUNDER_STORY = {
     { title: "Precision Process", desc: "From the initial consultation to the final fitting, every step is executed with precision to create garments that exceed expectations." },
   ],
   team: [
-    { name: "Rajesh Kumar", role: "Founder & Master Tailor", experience: "20+ years", bio: "A third-generation tailor from Mumbai, Rajesh brings traditional techniques and modern precision to every garment. Specializes in bespoke suits and formal wear." },
-    { name: "Mohammed Ghouse", role: "Owner & Design Consultant", experience: "8+ years", bio: "Fashion design graduate from NIFT with expertise in both Western and Indian formal wear. Helps clients translate their vision into reality." },
-    { name: "Senior Team", role: "Master Tailors", experience: "15+ years average", bio: "Highly skilled artisans with extensive experience in tailoring, pattern-making, and finishing. Each team member brings unique expertise." },
+    { name: "Mohammed Ghouse", role: "Founder & Master Tailor", experience: "10+ years", bio: "Leads the atelier's tailoring standard with precision fit and cloth knowledge across formal and occasion wear." },
+    { name: "Mohammed Usman e Ghani", role: "Co-Founder & Client Experience Director", experience: "8+ years", bio: "Coordinates consultations, measurements and delivery for clients in Bangalore and remote UAE commissions." },
+    { name: "Senior Atelier Team", role: "Master Tailors", experience: "15+ years average", bio: "Experienced artisans with expertise in construction, pattern-making and couture finishing." },
   ],
 };
 
@@ -354,10 +354,10 @@ export const AEO_QUESTIONS = [
 
 // PRICING TIERS
 export const PRICING_TIERS = [
-  { name: "Essential Suite", price: "₹15,000", desc: "Bespoke suit with standard fit and basic customization" },
-  { name: "Premium Suite", price: "₹22,000", desc: "Premium fabrics with extended fit options and styling consultation" },
-  { name: "Prestige Suite", price: "₹35,000", desc: "Luxury fabrics (Italian, British mills) with full customization" },
-  { name: "Heritage Suite", price: "₹50,000+", desc: "Absoluto Elite fabrics with master tailor's full attention" },
+  { name: "Tailored Start", price: "₹15,000", desc: "A made-to-measure commission with essential finishing and 20+ point measurements." },
+  { name: "Executive Commission", price: "₹22,000", desc: "Premium fabrics with refined fit options, working cuffs and tailored styling guidance." },
+  { name: "Signature Bespoke", price: "₹35,000", desc: "Luxury Italian and British cloth with full construction, patterning and fit refinement." },
+  { name: "Elite Collection", price: "₹50,000+", desc: "Absoluto Elite and Huddersfield fabrics with advanced finishing, detailing and master tailor review." },
 ];
 
 // BLOG POSTS

@@ -1,4 +1,4 @@
-import { SUITS } from "../lib/site";
+import { FABRIC_BRANDS, SUITS } from "../lib/site";
 import { Container, Eyebrow, Reveal, SectionHeading } from "./ui";
 import { Check } from "./icons";
 
@@ -21,6 +21,39 @@ export function Suits() {
           <div className="grid gap-4 sm:grid-cols-2">
             {SUITS.details.map((d, i) => <Reveal key={d.title} delay={(i % 2) * 70}><div className="rounded-[1.5rem] border border-line/70 bg-ink-2 p-5"><div className="flex items-start gap-3"><span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center bg-gold/15 text-gold"><Check className="h-3.5 w-3.5" /></span><div><h4 className="font-display text-lg text-bone">{d.title}</h4><p className="mt-1 text-[13.5px] leading-relaxed text-mute">{d.desc}</p></div></div></div></Reveal>)}
           </div>
+        </div>
+        <div className="mt-12 grid gap-6 lg:grid-cols-2">
+          <Reveal>
+            <div className="rounded-[2rem] border border-line/70 bg-ink-2 p-7 sm:p-8">
+              <p className="text-[11px] uppercase tracking-[0.24em] text-gold">Premium fabric partners</p>
+              <div className="mt-6 space-y-3">
+                {FABRIC_BRANDS.map((brand) => (
+                  <div key={brand.name}>
+                    <p className="text-[15px] font-medium text-bone">{brand.name}</p>
+                    <p className="text-sm text-mute">{brand.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+          <Reveal delay={90}>
+            <div className="rounded-[2rem] border border-line/70 bg-ink-2 p-7 sm:p-8">
+              <p className="text-[11px] uppercase tracking-[0.24em] text-gold">Fit directions</p>
+              <div className="mt-6 space-y-3">
+                {[
+                  "English fit",
+                  "Italian fit",
+                  "British fit",
+                  "American fit",
+                  "Classic fit",
+                  "Modern fit",
+                  "Custom fit"
+                ].map((fit) => (
+                  <p key={fit} className="text-sm leading-relaxed text-body/80">• {fit}</p>
+                ))}
+              </div>
+            </div>
+          </Reveal>
         </div>
         <Reveal delay={120}><p className="mx-auto mt-16 max-w-xl text-center font-display text-xl italic leading-snug text-bone/85 sm:text-2xl">A suit is the quietest way to be remembered. We'd be glad to make yours.</p></Reveal>
       </Container>

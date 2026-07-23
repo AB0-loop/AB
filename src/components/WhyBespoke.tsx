@@ -1,4 +1,4 @@
-import { FIT_PROFILES } from "../lib/site";
+import { FIT_PROFILES, FABRIC_BRANDS, FUNCTIONAL_DETAILS } from "../lib/site";
 import { Container, Reveal, SectionHeading } from "./ui";
 import { Check } from "./icons";
 
@@ -45,7 +45,33 @@ export function WhyBespoke() {
             </div>
           </Reveal>
         </div>
-        <Reveal delay={120}><p className="mx-auto mt-10 max-w-xl text-center font-display text-xl italic leading-snug text-bone/85 sm:text-2xl">We don't sell clothes off a shelf. We build a wardrobe around the way you live - and the way you want to be remembered.</p></Reveal>
+        <Reveal delay={180}>
+          <div className="mt-10 grid gap-6 lg:grid-cols-2">
+            <div className="rounded-[2rem] border border-line/70 bg-ink p-7 sm:p-8">
+              <p className="text-[11px] uppercase tracking-[0.24em] text-gold">Selected fabric partners</p>
+              <div className="mt-6 space-y-4">
+                {FABRIC_BRANDS.map((brand) => (
+                  <div key={brand.name}>
+                    <p className="text-[15px] font-medium text-bone">{brand.name}</p>
+                    <p className="mt-1 text-sm leading-relaxed text-mute">{brand.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-[2rem] border border-line/70 bg-ink p-7 sm:p-8">
+              <p className="text-[11px] uppercase tracking-[0.24em] text-gold">Everything is functional</p>
+              <div className="mt-6 space-y-4">
+                {FUNCTIONAL_DETAILS.options.map((option) => (
+                  <div key={option.feature} className="rounded-2xl border border-line/70 bg-ink/60 p-4">
+                    <p className="text-sm font-medium text-bone">{option.feature}</p>
+                    <p className="mt-2 text-sm leading-relaxed text-mute">{option.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Reveal>
+        <Reveal delay={260}><p className="mx-auto mt-10 max-w-xl text-center font-display text-xl italic leading-snug text-bone/85 sm:text-2xl">We don't sell clothes off a shelf. We build a wardrobe around the way you live - and the way you want to be remembered.</p></Reveal>
       </Container>
     </section>
   );
