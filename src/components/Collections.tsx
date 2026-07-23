@@ -15,7 +15,7 @@ export function Collections() {
             <Reveal><Eyebrow>The Collections</Eyebrow></Reveal>
             <Reveal delay={80}><h2 className="mt-5 max-w-xl font-display text-4xl leading-[1.08] text-bone sm:text-5xl">A wardrobe, made to measure.</h2></Reveal>
           </div>
-            <Reveal delay={140}><p className="max-w-sm text-[15px] leading-relaxed text-mute">Seven disciplines of bespoke tailoring - each crafted to your measurements, your cloth and your occasion, including women's tuxedos, pantsuits, occasion wear and corporate uniforms for women.</p></Reveal>
+            <Reveal delay={140}><p className="max-w-sm text-[15px] leading-relaxed text-mute">Tailored disciplines for every bespoke occasion: suits, tuxedos, sherwanis, shirts, kurtas, women's formalwear and children's formal wear. Every piece is built to your measurements, your cloth and your use case.</p></Reveal>
         </div>
 
         <Reveal delay={120}><a href="#booking" className="group mt-14 block overflow-hidden border border-line">

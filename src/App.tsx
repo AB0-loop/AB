@@ -72,7 +72,7 @@ function BackToTop() {
     <button
       type="button"
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      className={`fixed right-6 bottom-24 z-40 hidden h-12 w-12 place-items-center rounded-full border border-gold/40 bg-ink text-gold transition-all duration-500 hover:border-gold hover:bg-gold hover:text-ink lg:grid ${show ? "opacity-100" : "pointer-events-none opacity-0"}`}
+      className={`fixed right-6 bottom-24 z-40 grid h-12 w-12 place-items-center rounded-full border border-gold/40 bg-ink text-gold transition-all duration-500 hover:border-gold hover:bg-gold hover:text-ink ${show ? "opacity-100" : "pointer-events-none opacity-0"}`}
       aria-label="Return to top"
     >
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden>

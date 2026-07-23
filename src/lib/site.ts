@@ -72,9 +72,7 @@ export const COLLECTIONS: Collection[] = [
   { id: "sherwanis", name: "Sherwanis", tagline: "Regal occasion", blurb: "Heritage-led silhouettes with hand-finished detailing and modern drape. Custom embroidery and fabric options.", image: "https://images.pexels.com/photos/36248984/pexels-photo-36248984.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800" },
   { id: "shirts", name: "Shirts", tagline: "Everyday elegance", blurb: "Made-to-measure shirts with tailored collars, cuffs, pocket choices, buttons, sleeve length, fit direction and optional monogramming.", image: "https://images.pexels.com/photos/37825460/pexels-photo-37825460.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800" },
   { id: "kurta-pajama", name: "Kurta Pajama", tagline: "Festive classic", blurb: "Comfortable, elegant, and structured for weddings, festivities and special occasions. Modern cuts with traditional craftsmanship.", image: "https://images.pexels.com/photos/25786314/pexels-photo-25786314.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800" },
-  { id: "corporate-uniforms", name: "Corporate Uniforms", tagline: "The house style", blurb: "Coordinated wardrobes and branded uniforms for premium teams and hospitality. Consistent fit and finish across entire teams.", image: "https://images.pexels.com/photos/9077996/pexels-photo-9077996.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1200" },
   { id: "womens-formal-suits", name: "Women's Formal Suits", tagline: "For the modern woman", blurb: "Tailored formal suiting for women, designed to feel powerful, polished and effortless. Boardroom to evening wear.", image: "https://images.pexels.com/photos/10141164/pexels-photo-10141164.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800" },
-  { id: "womens-tuxedos", name: "Women's Tuxedos", tagline: "Modern evening", blurb: "Tuxedos, pantsuits, occasion wear and formal separates for women who want authority and line.", image: "https://images.pexels.com/photos/7691168/pexels-photo-7691168.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800" },
   { id: "childrens-formal-suits", name: "Children's Formal Suits", tagline: "Young elegance", blurb: "Bespoke formal wear for children, crafted with the same attention to detail and fit as adult garments.", image: "https://images.pexels.com/photos/37148349/pexels-photo-37148349.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800" },
 ];
 
@@ -152,20 +150,16 @@ export const FEATURES: Feature[] = [
   { icon: "refresh", title: "Made-To-Order Only", desc: "No ready collections and no alteration-only positioning. Every commission is built around the client." },
 ];
 
-export type PortfolioItem = { id: string; title: string; category: "Business" | "Wedding" | "Ethnic" | "Evening" | "Craft" | "Women" | "Children"; image: string; tall?: boolean; };
+export type PortfolioItem = { id: string; title: string; category: "Business" | "Wedding" | "Ethnic" | "Evening" | "Women" | "Children"; image: string; tall?: boolean; };
 
 export const PORTFOLIO: PortfolioItem[] = [
   { id: "p1", title: "Pinstripe Authority", category: "Business", tall: true, image: "https://images.pexels.com/photos/35462550/pexels-photo-35462550.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1100&w=800" },
   { id: "p2", title: "The Grey Plaid", category: "Business", image: "https://images.pexels.com/photos/15352659/pexels-photo-15352659.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=800" },
   { id: "p3", title: "Royal Heritage", category: "Wedding", tall: true, image: "https://images.pexels.com/photos/35043829/pexels-photo-35043829.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1100&w=800" },
-  { id: "p4", title: "The Cutting Table", category: "Craft", image: "https://images.pexels.com/photos/2974110/pexels-photo-2974110.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=620&w=1000" },
   { id: "p5", title: "Festive Sherwani", category: "Ethnic", image: "https://images.pexels.com/photos/36862009/pexels-photo-36862009.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1000&w=800" },
-  { id: "p6", title: "Hand-Finished Buttonhole", category: "Craft", image: "https://images.pexels.com/photos/6461156/pexels-photo-6461156.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=620&w=1000" },
   { id: "p7", title: "Evening Tuxedo", category: "Evening", image: "https://images.pexels.com/photos/16388958/pexels-photo-16388958.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1000&w=800" },
-  { id: "p8", title: "Precision Measurements", category: "Craft", image: "https://images.pexels.com/photos/8517098/pexels-photo-8517098.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=620&w=1000" },
   { id: "p9", title: "The Groom", category: "Wedding", image: "https://images.pexels.com/photos/33049965/pexels-photo-33049965.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1000&w=800" },
   { id: "p10", title: "Midnight Bandhgala", category: "Ethnic", tall: true, image: "https://images.pexels.com/photos/18166785/pexels-photo-18166785.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1100&w=800" },
-  { id: "p11", title: "The Atelier Fit", category: "Craft", image: "https://images.pexels.com/photos/6765643/pexels-photo-6765643.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1000&w=800" },
   { id: "p12", title: "After Dark", category: "Evening", image: "https://images.pexels.com/photos/19287301/pexels-photo-19287301.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1000&w=800" },
   { id: "p13", title: "The Brown Three-Piece", category: "Business", tall: true, image: "https://images.pexels.com/photos/37148349/pexels-photo-37148349.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1100&w=800" },
   { id: "p14", title: "Onyx Tailoring", category: "Evening", tall: true, image: "https://images.pexels.com/photos/13773240/pexels-photo-13773240.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1100&w=800" },
@@ -179,20 +173,16 @@ export const PORTFOLIO: PortfolioItem[] = [
   { id: "p22", title: "Heritage Attire", category: "Ethnic", image: "https://images.pexels.com/photos/35542189/pexels-photo-35542189.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1000&w=800" },
 ];
 
-export const PORTFOLIO_FILTERS = ["All", "Business", "Wedding", "Ethnic", "Evening", "Craft", "Women", "Children"] as const;
+export const PORTFOLIO_FILTERS = ["All", "Business", "Wedding", "Ethnic", "Evening", "Women", "Children"] as const;
 
 export const PORTFOLIO_NOTES: Record<string, string> = {
   p1: "A two-piece in fine Italian wool with a structured shoulder and a clean, uninterrupted drape for the modern professional.",
   p2: "A relaxed Prince-of-Wales check, softened for day-long wear without ever losing its line.",
   p3: "An ivory ceremony ensemble with a hand-finished placket and regalia-ready tailoring.",
-  p4: "Pattern and cloth meet the blade - the first moments a garment takes shape.",
   p5: "Hand-embroidered motifs across a regal silhouette, balanced for movement and poise.",
-  p6: "A working buttonhole, sewn entirely by hand - the quiet signature of true bespoke.",
   p7: "Satin-faced peak lapels and a suppressed waist, cut for black-tie occasions.",
-  p8: "Over twenty points of measure translate posture and proportion into pattern.",
   p9: "Coordinated wedding-day tailoring, cut to photograph as beautifully as it wears.",
   p10: "A deep bandhgala with mandarin collar - heritage form, contemporary fit.",
-  p11: "The trial fitting, where drape and proportion are refined by hand before finishing.",
   p12: "An after-hours suit in midnight tones, lean through the chest and leg.",
   p13: "A brown three-piece in warm tonal cloth - half-canvas build, softly structured.",
   p14: "An onyx evening suit, close-cut with a satin sheen for after-dark occasions.",
