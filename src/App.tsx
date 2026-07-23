@@ -11,6 +11,10 @@ import { Process } from "./components/Process";
 import { TrustProof } from "./components/TrustProof";
 import { Testimonials } from "./components/Testimonials";
 import { FAQSection } from "./components/FAQ";
+import { Pricing } from "./components/Pricing";
+import { BeforeAfter } from "./components/BeforeAfter";
+import { Blog } from "./components/Blog";
+import { Newsletter } from "./components/Newsletter";
 import { Booking } from "./components/Booking";
 import { Contact } from "./components/Contact";
 import { LegalDisclaimer } from "./components/LegalDisclaimer";
@@ -115,6 +119,10 @@ export default function App() {
         <Process />
         <TrustProof />
         <Testimonials />
+        <Pricing />
+        <BeforeAfter />
+        <Blog />
+        <Newsletter />
         <FAQSection />
         <Booking />
         <Contact />

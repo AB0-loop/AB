@@ -16,9 +16,11 @@ export const CONFIG = {
   email: "hello@aurumbespoke.com",
   emailHref: "mailto:hello@aurumbespoke.com",
   formEndpoint: "https://formsubmit.co/ajax/hello@aurumbespoke.com",
+  newsletterEndpoint: "https://api.web3forms.com/submit",
+  newsletterAccessKey: "2a7aeddb-6483-40e4-a1aa-1ec46ba22a64",
   city: "Bangalore, Karnataka",
   address: "#17/1 Sardar Complex, Venkatesh Pura, Arabic College Post, Bengaluru 560045",
-  addressNote: "Warehouse address. Consultations are held by appointment at the client's home or office.",
+  addressNote: "Warehouse only. All client appointments are conducted at your home or office.",
   googleBusinessProfileUrl: "https://share.google/v4mBSOxk5qlljYpMV",
   geo: { lat: 12.9716, lng: 77.5946 },
   hours: "By appointment. Monday-Saturday, 10:00-20:00",
@@ -26,6 +28,8 @@ export const CONFIG = {
   internationalDelivery: true,
   childrenSuits: true,
   womensSuits: true,
+  priceStarting: "₹15,000",
+  priceNote: "Starting price. Final cost varies based on fabric choice and customizations.",
 };
 
 export const FOUNDER_STORY = {
@@ -75,8 +79,10 @@ export const SOCIALS = [
 export const NAV = [
   { label: "Home", href: "#home" },
   { label: "Collections", href: "#collections" },
+  { label: "Pricing", href: "#pricing" },
   { label: "Portfolio", href: "#portfolio" },
   { label: "The Process", href: "#process" },
+  { label: "Blog", href: "#blog" },
   { label: "Contact", href: "#contact" },
 ] as const;
 
@@ -140,6 +146,14 @@ export const FIT_PROFILES = [
 
 export const FABRIC_TAGS = ["Worsted Wool", "Flannel", "Linen", "Twill", "Silk", "Velvet", "Cashmere Blends", "Cotton", "Tropical Weave", "Super Wool Grades", "Mohair", "Tweed", "Herringbone", "Hopsack"];
 
+export const FABRIC_BRANDS = [
+  { name: "Vitale Barberis Canonico", origin: "Italy", desc: "Premium Italian woolens renowned for quality and heritage." },
+  { name: "BBC (Barbero Brothers Cassano)", origin: "Italy", desc: "Superior Italian fabrics crafted with traditional expertise." },
+  { name: "Roger La Viele", origin: "Europe", desc: "Refined European textiles for sophisticated tailoring." },
+  { name: "Absoluto Elite", origin: "Premium", desc: "Exclusive selection of elite fabrics for luxury commissions." },
+  { name: "Huddersfield", origin: "UK", desc: "British textile excellence and classic craftsmanship." },
+];
+
 export const CUSTOMIZATION_GROUPS = [
   { title: "Jacket options", items: ["Single breasted", "Double breasted", "One button", "Two button", "Three button", "Side vents", "Center vent", "Ventless"] },
   { title: "Lapels", items: ["Notch", "Peak", "Shawl", "Slim lapel", "Wide lapel", "Pick stitching"] },
@@ -150,6 +164,27 @@ export const CUSTOMIZATION_GROUPS = [
   { title: "Shirts", items: ["Spread collar", "Cutaway collar", "Point collar", "Button-down collar", "French cuff", "Barrel cuff", "Pocket options", "Monogram"] },
   { title: "Fabric education", items: ["Wool", "Super wool grades", "Cashmere blends", "Mohair", "Linen", "Cotton", "Silk", "Velvet", "Tweed", "Twill", "Plain weave", "Herringbone", "Birdseye", "Hopsack", "Sharkskin", "Flannel", "Fresco", "Gabardine"] },
 ];
+
+// FIT DETAILS WITH SEO
+export const FIT_DETAILS = [
+  { fitName: "English Fit", seoKeywords: "English fit suits, structured business suits, formal tailoring Bangalore", description: "Structured silhouette with shape through the chest and waist. Perfect for formal business wear and special occasions." },
+  { fitName: "Italian Fit", seoKeywords: "Italian fit bespoke, soft drape tailoring, refined suits Bangalore", description: "Cleaner drape with softer structure. Refined elegance without stiffness—ideal for modern professionals." },
+  { fitName: "British Fit", seoKeywords: "British fit suits, sharp tailored suits, formal wear Bangalore", description: "Sharper shoulders and defined waist. The traditional boardroom fit for commanding presence." },
+  { fitName: "American Fit", seoKeywords: "American fit custom suits, comfortable tailoring, relaxed fit Bangalore", description: "Cleaner comfort through the body with practical, relaxed proportions. Great for all-day wear." },
+  { fitName: "Custom Fit", seoKeywords: "custom fit tailoring, bespoke measurement, personalized suits Bangalore", description: "Completely custom pattern drafted from your body shape, posture, and preferences." },
+];
+
+// FUNCTIONAL CUSTOMIZATIONS WITH SEO
+export const FUNCTIONAL_DETAILS = {
+  title: "Everything Is Functional",
+  description: "Every element—buttons, cuffs, vents, pleats—is fully functional and tailored to your specifications.",
+  options: [
+    { feature: "Surgeon Cuffs", seoKeywords: "functional surgeon cuffs, real working sleeves", desc: "Fully functional working cuffs with working sleeve buttons" },
+    { feature: "Jacket Vents", seoKeywords: "jacket vents, center vent vs side vents, ventless jackets", desc: "Choose single center vent, side vents, or ventless for movement and style" },
+    { feature: "Trouser Pleats", seoKeywords: "pleated trousers, flat front trousers, functional tailoring", desc: "Fully functional flat front or pleated styles crafted to your preference" },
+    { feature: "Button Details", seoKeywords: "functional buttons, real button holes, bespoke tailoring details", desc: "Real working buttons and button holes throughout your garments" },
+  ],
+};
 
 export const AUTHORITY_TOPICS = [
   { title: "Bespoke vs ready-made", desc: "Ready-made starts with a standard size. Bespoke starts with your measurements, posture, cloth, use case and preferred silhouette." },
@@ -315,4 +350,35 @@ export const AEO_QUESTIONS = [
   "Bespoke vs ready-made suits?",
   "Home visit tailor Bangalore?",
   "Wedding suit tailor Bangalore?",
+];
+
+// PRICING TIERS
+export const PRICING_TIERS = [
+  { name: "Essential Suite", price: "₹15,000", desc: "Bespoke suit with standard fit and basic customization" },
+  { name: "Premium Suite", price: "₹22,000", desc: "Premium fabrics with extended fit options and styling consultation" },
+  { name: "Prestige Suite", price: "₹35,000", desc: "Luxury fabrics (Italian, British mills) with full customization" },
+  { name: "Heritage Suite", price: "₹50,000+", desc: "Absoluto Elite fabrics with master tailor's full attention" },
+];
+
+// BLOG POSTS
+export const BLOG_POSTS = [
+  { id: "1", title: "The Art of Bespoke Tailoring", slug: "art-of-bespoke", excerpt: "Understanding the difference between bespoke and ready-made.", date: "2026-07-20", category: "Tailoring" },
+  { id: "2", title: "British vs Italian Fit: Which Suits You?", slug: "british-vs-italian", excerpt: "Explore the differences and find your perfect silhouette.", date: "2026-07-19", category: "Fit Guide" },
+  { id: "3", title: "Premium Fabric Brands: Vitale Barberis Canonico & More", slug: "premium-fabrics", excerpt: "Deep dive into world-class textile mills and what makes them special.", date: "2026-07-18", category: "Fabrics" },
+  { id: "4", title: "How to Maintain Your Bespoke Suits", slug: "suit-care", excerpt: "Essential care tips to keep your investment looking pristine.", date: "2026-07-17", category: "Care" },
+  { id: "5", title: "The Bespoke Process: 5 Steps to Your Perfect Suit", slug: "bespoke-process", excerpt: "Our workflow from consultation to delivery explained.", date: "2026-07-16", category: "Process" },
+];
+
+// BEFORE/AFTER SHOWCASE
+export const BEFORE_AFTER = [
+  { id: "1", title: "Business Suit Transformation", before: "https://via.placeholder.com/400x600?text=Before", after: "https://via.placeholder.com/400x600?text=After+Bespoke" },
+];
+
+// SEO LANDING PAGE ROUTES
+export const LANDING_PAGES = [
+  { path: "/suits-bangalore", title: "Custom Bespoke Suits in Bangalore", description: "Premium handcrafted bespoke suits tailored to your measurements in Bangalore" },
+  { path: "/wedding-suits", title: "Bespoke Wedding Suits & Sherwanis", description: "Ceremonial tailoring for grooms and wedding parties" },
+  { path: "/women-formal-wear", title: "Women's Bespoke Formal Wear", description: "Tailored formal suits and evening wear for women" },
+  { path: "/fabric-selection", title: "Premium Fabric Selection Guide", description: "Vitale Barberis Canonico, BBC, Roger La Viale, and more" },
+  { path: "/fit-guide", title: "Bespoke Fit Styles Explained", description: "English, Italian, British, American, and custom fits" },
 ];
