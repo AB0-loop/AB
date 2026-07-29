@@ -12,7 +12,7 @@ type LogoProps = {
  * Aurum Bespoke lockup — the gold needle-and-jacket mark paired with the
  * engraved "AURUM BESPOKE" wordmark and tagline.
  *
- * Swap `/brand/aurum-mark.png` with the official artwork (transparent PNG or
+ * Swap `/brand/aurum-mark-v2.png` with the official artwork (transparent PNG or
  * SVG) at any time; nothing else needs to change.
  */
 export function Logo({ className, markOnly = false }: LogoProps) {
@@ -24,7 +24,7 @@ export function Logo({ className, markOnly = false }: LogoProps) {
     >
       <span className="relative grid h-11 w-11 shrink-0 place-items-center overflow-hidden border border-gold/30 transition-colors group-hover:border-gold/70">
         <Image
-          src="/brand/aurum-mark.png"
+          src="/brand/aurum-mark-v2.png"
           alt=""
           width={88}
           height={88}
