@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "aurum-bespoke",
+  "account_id": "fbe4fcdfebd217c45bfb1a788dc5ec08",
+  "main": "worker/index.ts",
+  "compatibility_date": "2025-09-23",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./out",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+    // Without this, Cloudflare's asset server answers HTML directly and the
+    // Worker never runs: no security headers, and www would serve a duplicate
+    // of the apex instead of redirecting to it.
+    "run_worker_first": true
+  },
+  "observability": { "enabled": true },
+  "routes": [
+    { "pattern": "aurumbespoke.com", "custom_domain": true },
+    { "pattern": "www.aurumbespoke.com", "custom_domain": true }
+  ]
+}
