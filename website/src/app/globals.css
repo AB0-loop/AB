@@ -106,3 +106,14 @@
     transition-duration: 0.001ms !important;
   }
 }
+
+/* Hide native scrollbar site-wide (scrolling still works) */
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
