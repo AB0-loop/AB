@@ -95,11 +95,7 @@
 
   /* Horizontal strips (filter chips) that scroll without a visible bar */
   .no-scrollbar {
-    scrollbar-width: none;
     -ms-overflow-style: none;
-  }
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
   }
 }
 
