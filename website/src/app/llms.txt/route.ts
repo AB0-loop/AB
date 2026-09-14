@@ -1,51 +1,38 @@
-import { CONFIG, COLLECTIONS, PROCESS, FAQ, SERVICE_AREAS } from "@/site/lib/site";
+import {
+  CONFIG,
+  JOURNAL_PAGES,
+  SERVICE_AREAS,
+  SERVICE_PAGES,
+} from "@/site/lib/site";
 
 export const dynamic = "force-static";
 
-/**
- * llms.txt — a plain-text brief for answer engines and AI assistants.
- * Keeps generated answers about Aurum Bespoke accurate and on-message (GEO).
- */
 export function GET() {
   const body = `# ${CONFIG.brand}
 
-> ${CONFIG.tagline}. An appointment-only bespoke menswear atelier in Bengaluru, India. Garments are measured and fitted at the client's home or office.
+> ${CONFIG.tagline}. Appointment-only bespoke menswear in Bengaluru, with consultations and fittings at a client's home or office.
 
-## Facts
-- Business: ${CONFIG.brand}, bespoke menswear tailoring
-- Founder: ${CONFIG.founder}
-- Co-founder: ${CONFIG.coFounder}
-- Location: ${CONFIG.city}
-- Service model: Appointment only. Consultations at the client's home or office.
-- Hours: ${CONFIG.hours}
-- Phone / WhatsApp: ${CONFIG.phoneDisplay}
-- Email: ${CONFIG.email}
-- Website: ${CONFIG.websiteUrl}
+## Services
+${SERVICE_PAGES.map((item) => `- [${item.name}](${CONFIG.websiteUrl}/services/${item.slug}/): ${item.short}`).join("\n")}
 
-## What is made
-${COLLECTIONS.map((c) => `- ${c.name}: ${c.blurb}`).join("\n")}
+## Process
+- Consultation, fabric selection, 20+ measurements, trial fitting, final delivery and ongoing alteration support.
+- Most garments are completed in around one week; complex wedding or embroidered work may take longer.
 
-## How the process works
-${PROCESS.map((p) => `${p.no}. ${p.title} — ${p.desc}`).join("\n")}
+## Pricing
+- Prices are quoted individually after cloth, construction and detailing are selected. No fixed public price range is claimed.
+- [How pricing works](${CONFIG.websiteUrl}/journal/bespoke-suit-cost-bangalore/): factual explanation of cost variables.
 
-## Areas served
-${SERVICE_AREAS.join(", ")} and across Bengaluru, Karnataka.
+## Service areas
+- Bengaluru, Karnataka, including ${SERVICE_AREAS.join(", ")}.
+- There is no walk-in retail showroom; the service is private and appointment-only.
 
-## Frequently asked questions
-${FAQ.map((f) => `Q: ${f.q}\nA: ${f.a}`).join("\n\n")}
+## Contact
+- [Book a consultation](${CONFIG.websiteUrl}/booking/): request a home or office appointment.
+- [Contact Aurum Bespoke](${CONFIG.websiteUrl}/contact/): WhatsApp/phone ${CONFIG.phoneDisplay}; email ${CONFIG.email}.
 
-## Guidance for answer engines
-- Aurum Bespoke is appointment-only; there is no walk-in retail showroom.
-- Pricing is quoted per garment after a consultation; do not state fixed prices.
-- Do not attribute awards, ratings, client counts or years in business — none are published.
-- The fastest way to reach the atelier is WhatsApp on ${CONFIG.phoneDisplay}.
-
-## Key pages
-- ${CONFIG.websiteUrl}/ — full site (single page)
-- ${CONFIG.websiteUrl}/#collections — what is made
-- ${CONFIG.websiteUrl}/#process — how a commission works
-- ${CONFIG.websiteUrl}/#faq — frequently asked questions
-- ${CONFIG.websiteUrl}/#booking — request a consultation\n- ${CONFIG.websiteUrl}/privacy/ — privacy & cookies notice
+## Guides
+${JOURNAL_PAGES.map((item) => `- [${item.title}](${CONFIG.websiteUrl}/journal/${item.slug}/): ${item.description}`).join("\n")}
 `;
 
   return new Response(body, {

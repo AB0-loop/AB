@@ -25,7 +25,7 @@ function graph() {
         image: `${CONFIG.websiteUrl}/brand/og-image.jpg`,
         telephone: CONFIG.phoneHref.replace("tel:", ""),
         email: CONFIG.email,
-        priceRange: "$$$",
+        priceRange: "₹₹₹",
         currenciesAccepted: "INR",
         founder: [{ "@id": `${CONFIG.websiteUrl}/#founder` }, { "@id": `${CONFIG.websiteUrl}/#cofounder` }],
         employee: [{ "@id": `${CONFIG.websiteUrl}/#founder` }, { "@id": `${CONFIG.websiteUrl}/#cofounder` }],

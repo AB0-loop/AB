@@ -1,36 +1,42 @@
 import type { MetadataRoute } from "next";
-import { CONFIG, COLLECTIONS, PORTFOLIO } from "@/site/lib/site";
+import {
+  CONFIG,
+  JOURNAL_PAGES,
+  LOCATION_PAGES,
+  SERVICE_PAGES,
+} from "@/site/lib/site";
 
 export const dynamic = "force-static";
 
-/**
- * Only canonical, indexable URLs belong in a sitemap. Hash fragments are not
- * separate documents — listing them makes a sitemap look like duplicate
- * content and dilutes crawl budget, so the homepage is declared once and
- * enriched with an image sitemap for Google Images discovery.
- */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date();
-
-  const images = [
-    `${CONFIG.websiteUrl}/brand/og-image.jpg`,
-    ...COLLECTIONS.map((c) => c.image),
-    ...PORTFOLIO.map((p) => p.image),
+  const fixed = [
+    { path: "/", priority: 1, changeFrequency: "weekly" as const },
+    { path: "/about/", priority: 0.7, changeFrequency: "monthly" as const },
+    { path: "/contact/", priority: 0.8, changeFrequency: "monthly" as const },
+    { path: "/booking/", priority: 0.9, changeFrequency: "monthly" as const },
+    { path: "/privacy/", priority: 0.2, changeFrequency: "yearly" as const },
   ];
 
   return [
-    {
-      url: `${CONFIG.websiteUrl}/`,
-      lastModified,
-      changeFrequency: "weekly",
-      priority: 1,
-      images,
-    },
-    {
-      url: `${CONFIG.websiteUrl}/privacy/`,
-      lastModified,
-      changeFrequency: "yearly",
-      priority: 0.2,
-    },
+    ...fixed.map((item) => ({
+      url: `${CONFIG.websiteUrl}${item.path}`,
+      priority: item.priority,
+      changeFrequency: item.changeFrequency,
+    })),
+    ...SERVICE_PAGES.map((item) => ({
+      url: `${CONFIG.websiteUrl}/services/${item.slug}/`,
+      priority: 0.9,
+      changeFrequency: "monthly" as const,
+    })),
+    ...LOCATION_PAGES.map((item) => ({
+      url: `${CONFIG.websiteUrl}/locations/${item.slug}/`,
+      priority: 0.8,
+      changeFrequency: "monthly" as const,
+    })),
+    ...JOURNAL_PAGES.map((item) => ({
+      url: `${CONFIG.websiteUrl}/journal/${item.slug}/`,
+      priority: 0.7,
+      changeFrequency: "monthly" as const,
+    })),
   ];
 }

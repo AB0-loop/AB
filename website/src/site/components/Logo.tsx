@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { cn } from "../utils/cn";
 import { CONFIG } from "../lib/site";
 
@@ -17,8 +18,8 @@ type LogoProps = {
  */
 export function Logo({ className, markOnly = false }: LogoProps) {
   return (
-    <a
-      href="#home"
+    <Link
+      href="/"
       aria-label={`${CONFIG.brand} — return to home`}
       className={cn("group inline-flex shrink-0 items-center gap-3.5", className)}
     >
@@ -48,6 +49,6 @@ export function Logo({ className, markOnly = false }: LogoProps) {
           </span>
         </span>
       )}
-    </a>
+    </Link>
   );
 }

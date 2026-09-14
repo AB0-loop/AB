@@ -47,7 +47,7 @@ const nextConfig: NextConfig = {
       },
       // Crawl files must always be fresh, cacheable at the edge, and indexable.
       {
-        source: "/:file(sitemap.xml|robots.txt|llms.txt|manifest.webmanifest)",
+        source: "/:file(sitemap.xml|robots.txt|llms.txt|llms-full.txt|brand.json|entity.json|manifest.webmanifest)",
         headers: [
           {
             key: "Cache-Control",

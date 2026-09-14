@@ -2,13 +2,12 @@
  * Aurum Bespoke — Cloudflare Worker.
  *
  * Serves the statically exported site straight from Cloudflare's edge and
- * handles the two API endpoints. Secrets (the Web3Forms key) live in Worker
- * secrets, never in the bundle or the repository.
+ * handles the two API endpoints. Secrets live in Worker secrets, never in the
+ * bundle or the repository.
  */
 
 interface Env {
   ASSETS: { fetch: (request: Request) => Promise<Response> };
-  /** Optional sink for enquiry records (KV worker, Zapier, n8n, Sheets…). */
   BOOKING_WEBHOOK_URL?: string;
 }
 
@@ -20,6 +19,30 @@ const SECURITY_HEADERS: Record<string, string> = {
   "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
 };
 
+const ROBOTS = `User-agent: Googlebot
+User-agent: Googlebot-Image
+User-agent: Bingbot
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: Google-Extended
+Allow: /
+Disallow: /api/
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /thank-you
+Disallow: /thank-you/
+
+Host: https://aurumbespoke.com
+Sitemap: https://aurumbespoke.com/sitemap.xml
+`;
+
 function clean(value: unknown, max: number) {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
 }
@@ -27,7 +50,12 @@ function clean(value: unknown, max: number) {
 function json(data: unknown, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
-    headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "X-Robots-Tag": "noindex, nofollow",
+      ...SECURITY_HEADERS,
+    },
   });
 }
 
@@ -41,13 +69,12 @@ async function handleBooking(request: Request, env: Env): Promise<Response> {
     return json({ ok: false, error: "Invalid request" }, 400);
   }
 
-  // Honeypot — accept silently so bots learn nothing.
   if (clean(body.company, 80)) return json({ ok: true, id: null }, 201);
 
   const name = clean(body.name, 120);
   const phone = clean(body.phone, 40);
-  const city = clean(body.city, 160);
-  const requirement = clean(body.requirement, 160);
+  const city = clean(body.city, 160) || clean(body.area, 160);
+  const requirement = clean(body.requirement, 160) || clean(body.service, 160);
   const email = clean(body.email, 160);
 
   if (!name || !phone || !city || !requirement) {
@@ -57,9 +84,6 @@ async function handleBooking(request: Request, env: Env): Promise<Response> {
     return json({ ok: false, error: "Invalid phone number." }, 422);
   }
 
-  // Email delivery happens in the browser via Web3Forms. This endpoint exists
-  // so the site keeps a durable acknowledgement path and can be extended with
-  // a KV / D1 / webhook sink without touching the front-end.
   const sink = env.BOOKING_WEBHOOK_URL;
   if (sink) {
     await fetch(sink, {
@@ -81,55 +105,76 @@ async function handleBooking(request: Request, env: Env): Promise<Response> {
   return json({ ok: true }, 201);
 }
 
+const LEGACY: Record<string, string> = {
+  "/collections": "/services/bespoke-suits-bangalore/",
+  "/portfolio": "/#portfolio",
+  "/process": "/about/",
+  "/faq": "/contact/",
+  "/book": "/booking/",
+  "/index.html": "/",
+};
+
 const handler = {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
 
-    // Canonical host is the APEX — that is what the live site serves today and
-    // what Google has indexed. www folds into it so link equity never splits.
+    if (url.protocol === "http:") {
+      url.protocol = "https:";
+      return Response.redirect(url.toString(), 301);
+    }
+
     if (url.hostname === "www.aurumbespoke.com") {
       url.hostname = "aurumbespoke.com";
       return Response.redirect(url.toString(), 301);
     }
 
-    // Paths the previous sitemap advertised. They 404 on the old site today,
-    // so anything Google or a backlink still points at is recovered here
-    // instead of dying. 301 keeps whatever equity they hold.
-    const LEGACY: Record<string, string> = {
-      "/about": "/#story",
-      "/services": "/#collections",
-      "/collections": "/#collections",
-      "/portfolio": "/#portfolio",
-      "/process": "/#process",
-      "/faq": "/#faq",
-      "/contact": "/#contact",
-      "/booking": "/#booking",
-      "/book": "/#booking",
-      "/index.html": "/",
-    };
-    const legacy = LEGACY[url.pathname.replace(/\/+$/, "") || "/"];
-    if (legacy) {
-      return Response.redirect(new URL(legacy, url.origin).toString(), 301);
+    const bare = url.pathname.replace(/\/+$/, "") || "/";
+    if (LEGACY[bare]) {
+      return Response.redirect(new URL(LEGACY[bare], url.origin).toString(), 301);
     }
 
-    if (url.pathname === "/api/bookings") {
+    if (url.pathname === "/robots.txt") {
+      return new Response(ROBOTS, {
+        headers: {
+          "Content-Type": "text/plain; charset=utf-8",
+          "Cache-Control": "public, max-age=300, s-maxage=3600",
+          "X-Robots-Tag": "all",
+          ...SECURITY_HEADERS,
+        },
+      });
+    }
+
+    if (url.pathname === "/api/bookings" || url.pathname === "/api/bookings/") {
       const res = await handleBooking(request, env);
       const headers = new Headers(res.headers);
       headers.set("X-Robots-Tag", "noindex, nofollow");
       return new Response(res.body, { status: res.status, headers });
     }
 
-    if (url.pathname === "/api/health") {
+    if (url.pathname === "/api/health" || url.pathname === "/api/health/") {
       return json({ ok: true, runtime: "cloudflare-workers" });
     }
 
     const assetResponse = await env.ASSETS.fetch(request);
     const headers = new Headers(assetResponse.headers);
-    for (const [k, v] of Object.entries(SECURITY_HEADERS)) headers.set(k, v);
+    for (const [key, value] of Object.entries(SECURITY_HEADERS)) headers.set(key, value);
 
-    // Long-lived immutable caching for fingerprinted build output and brand art.
     if (url.pathname.startsWith("/_next/static/") || url.pathname.startsWith("/brand/")) {
       headers.set("Cache-Control", "public, max-age=31536000, immutable");
+    }
+
+    if (
+      [
+        "/sitemap.xml",
+        "/llms.txt",
+        "/llms-full.txt",
+        "/brand.json",
+        "/entity.json",
+        "/manifest.webmanifest",
+      ].includes(url.pathname)
+    ) {
+      headers.set("Cache-Control", "public, max-age=3600, s-maxage=86400");
+      headers.set("X-Robots-Tag", "all");
     }
 
     return new Response(assetResponse.body, {

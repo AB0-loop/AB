@@ -48,6 +48,20 @@ export function Booking() {
   const honeypotRef = useRef<HTMLInputElement>(null);
   const today = new Date().toISOString().slice(0, 10);
 
+  // Deep links from multipage CTAs can prefill city/area and requirement.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const city = params.get("city") || params.get("area") || "";
+    const requirement = params.get("requirement") || params.get("service") || "";
+    if (!city && !requirement) return;
+    setForm((current) => ({
+      ...current,
+      city: city || current.city,
+      requirement: requirement || current.requirement,
+    }));
+  }, []);
+
   // Any collection / look / project card can pre-fill the requirement.
   useEffect(
     () =>

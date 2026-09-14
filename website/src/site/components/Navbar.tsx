@@ -2,10 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { cn } from "../utils/cn";
+import Link from "next/link";
 import { NAV, SOCIALS, CONFIG } from "../lib/site";
 import { Logo } from "./Logo";
 import { Button } from "./ui";
 import { Brand, Close, Menu, Phone } from "./icons";
+
+const EXTRA_LINKS = [
+  { label: "Services", href: "/services/bespoke-suits-bangalore" },
+  { label: "Journal", href: "/journal/bespoke-vs-made-to-measure" },
+  { label: "Contact", href: "/contact" },
+] as const;
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -65,7 +72,7 @@ export function Navbar() {
               return (
                 <a
                   key={item.href}
-                  href={item.href}
+                  href={item.href.startsWith("#") ? `/${item.href}` : item.href}
                   className={cn(
                     "relative text-[12px] font-medium uppercase tracking-[0.18em] transition-colors duration-300",
                     "after:absolute after:-bottom-1.5 after:left-0 after:h-px after:bg-gold after:transition-all after:duration-300",
@@ -78,6 +85,15 @@ export function Navbar() {
                 </a>
               );
             })}
+            {EXTRA_LINKS.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="relative text-[12px] font-medium uppercase tracking-[0.18em] text-body transition-colors duration-300 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:text-bone hover:after:w-full"
+              >
+                {item.label}
+              </Link>
+            ))}
           </nav>
 
           <div className="hidden items-center gap-4 lg:flex xl:gap-5">
@@ -88,7 +104,7 @@ export function Navbar() {
               <Phone className="h-4 w-4 text-gold" />
               {CONFIG.phoneDisplay}
             </a>
-            <Button href="#booking" className="px-5 py-3 xl:px-6">
+            <Button href="/booking" className="px-5 py-3 xl:px-6">
               Book Consultation
             </Button>
           </div>
@@ -128,20 +144,30 @@ export function Navbar() {
           {NAV.map((item) => (
             <a
               key={item.href}
-              href={item.href}
+              href={item.href.startsWith("#") ? `/${item.href}` : item.href}
               onClick={() => setOpen(false)}
               className="border-b border-line/60 py-3 font-display text-2xl text-bone transition-colors hover:text-gold sm:py-4 sm:text-3xl"
             >
               {item.label}
             </a>
           ))}
-          <a
-            href="#booking"
+          {EXTRA_LINKS.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setOpen(false)}
+              className="border-b border-line/60 py-3 font-display text-2xl text-bone transition-colors hover:text-gold sm:py-4 sm:text-3xl"
+            >
+              {item.label}
+            </Link>
+          ))}
+          <Link
+            href="/booking"
             onClick={() => setOpen(false)}
             className="mt-4 font-display text-2xl text-gold sm:text-3xl"
           >
             Book Consultation
-          </a>
+          </Link>
         </nav>
 
         <div className="flex flex-col gap-4 border-t border-line px-8 py-6" style={{ paddingBottom: "calc(1.5rem + env(safe-area-inset-bottom))" }}>

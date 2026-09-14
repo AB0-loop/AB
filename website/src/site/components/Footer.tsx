@@ -1,5 +1,5 @@
-import { CONFIG, SOCIALS, SITE_SECTIONS, COLLECTIONS } from "../lib/site";
-import { CommissionLink } from "./CommissionLink";
+import Link from "next/link";
+import { CONFIG, SOCIALS, SITE_SECTIONS, FOOTER_AREAS, FOOTER_GUIDES, FOOTER_SERVICES } from "../lib/site";
 import { Logo } from "./Logo";
 import { Container } from "./ui";
 import { Brand, Phone, Mail, MapPin } from "./icons";
@@ -10,7 +10,7 @@ export function Footer() {
   return (
     <footer className="border-t border-line bg-ink">
       <Container className="py-16">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr_1.1fr]">
           {/* Brand */}
           <div>
             <Logo />
@@ -48,21 +48,49 @@ export function Footer() {
                   </a>
                 </li>
               ))}
+              <li>
+                <Link href="/about" className="text-[14px] text-body transition-colors hover:text-gold">
+                  About the atelier
+                </Link>
+              </li>
+              <li>
+                <Link href="/booking" className="text-[14px] text-body transition-colors hover:text-gold">
+                  Book consultation
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Collections */}
+          {/* Services */}
           <div>
-            <h3 className="text-[11px] font-medium uppercase tracking-[0.25em] text-gold">Collections</h3>
+            <h3 className="text-[11px] font-medium uppercase tracking-[0.25em] text-gold">Services</h3>
             <ul className="mt-5 space-y-3">
-              {COLLECTIONS.map((c) => (
-                <li key={c.id}>
-                  <CommissionLink
-                    requirement={c.name}
-                    className="text-[14px] text-body transition-colors hover:text-gold"
-                  >
-                    {c.name}
-                  </CommissionLink>
+              {FOOTER_SERVICES.map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href} className="text-[14px] text-body transition-colors hover:text-gold">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Areas & guides */}
+          <div>
+            <h3 className="text-[11px] font-medium uppercase tracking-[0.25em] text-gold">Areas & guides</h3>
+            <ul className="mt-5 space-y-3">
+              {FOOTER_AREAS.map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href} className="text-[14px] text-body transition-colors hover:text-gold">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+              {FOOTER_GUIDES.slice(0, 2).map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href} className="text-[14px] text-body transition-colors hover:text-gold">
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -86,12 +114,12 @@ export function Footer() {
                 <MapPin className="h-4 w-4 shrink-0 text-gold" /> {CONFIG.city}
               </li>
               <li>
-                <a
-                  href={CONFIG.websiteUrl}
+                <Link
+                  href="/contact"
                   className="mt-1 inline-block border border-gold/30 px-4 py-2 text-[12px] uppercase tracking-[0.18em] text-gold transition-colors hover:border-gold hover:bg-gold hover:text-ink"
                 >
-                  {CONFIG.websiteLabel}
-                </a>
+                  Contact page
+                </Link>
               </li>
             </ul>
           </div>
