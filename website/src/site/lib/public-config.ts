@@ -37,7 +37,7 @@ export const GSC_VERIFICATION =
  * aurumbespoke.com under Domain Restriction in the Web3Forms dashboard.
  */
 export const WEB3FORMS_KEY =
-  process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? "81489f13-e7cc-44b3-b005-8e58b2a46246";
+  process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? "4d160734-a357-4f16-a19b-e287f81d84c2";
 
 /**
  * IndexNow key — instant URL submission to Bing, Yandex, Seznam and Naver.
