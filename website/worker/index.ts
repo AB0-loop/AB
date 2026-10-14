@@ -108,6 +108,7 @@ async function handleBooking(request: Request, env: Env): Promise<Response> {
 const LEGACY: Record<string, string> = {
   "/collections": "/services/bespoke-suits-bangalore/",
   "/portfolio": "/#portfolio",
+  "/gallery": "/#portfolio",
   "/process": "/about/",
   "/faq": "/contact/",
   "/book": "/booking/",
@@ -118,19 +119,17 @@ const handler = {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
 
-    if (url.protocol === "http:") {
+    if (url.protocol === "http:" || url.hostname === "www.aurumbespoke.com") {
       url.protocol = "https:";
-      return Response.redirect(url.toString(), 301);
-    }
-
-    if (url.hostname === "www.aurumbespoke.com") {
-      url.hostname = "aurumbespoke.com";
+      if (url.hostname === "www.aurumbespoke.com") url.hostname = "aurumbespoke.com";
       return Response.redirect(url.toString(), 301);
     }
 
     const bare = url.pathname.replace(/\/+$/, "") || "/";
     if (LEGACY[bare]) {
-      return Response.redirect(new URL(LEGACY[bare], url.origin).toString(), 301);
+      const destination = new URL(LEGACY[bare], url.origin);
+      destination.search = url.search;
+      return Response.redirect(destination.toString(), 301);
     }
 
     if (url.pathname === "/robots.txt") {
